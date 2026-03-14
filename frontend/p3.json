@@ -1,0 +1,373 @@
+{
+  "name": "Custom Gift box ",
+  "description": "Perfect gift for anniversaries and celebrations",
+  "price": 150.0,
+  "stock": 10,
+  "category_id": 3,
+  "customization_type": "GiftBox",
+  "has_customization": true,
+  "customization_schema": {
+    "items": [
+      "Dairy Milk",
+      "Ferrero Rocher",
+      "Teddy Bear",
+      {
+        "name": "Assorted Chocolates",
+        "type": "chocolates",
+        "emoji": "\ud83c\udf6b",
+        "price": 250,
+        "enabled": false,
+        "isPreset": true
+      },
+      {
+        "name": "Luxury Perfume",
+        "type": "perfume",
+        "emoji": "\ud83c\udf3a",
+        "price": 899,
+        "enabled": false,
+        "isPreset": true
+      },
+      {
+        "name": "Scented Candle",
+        "type": "candle",
+        "emoji": "\ud83d\udd6f\ufe0f",
+        "price": 349,
+        "enabled": false,
+        "isPreset": true
+      },
+      {
+        "name": "Silver Bracelet",
+        "type": "jewelry",
+        "emoji": "\ud83d\udc8e",
+        "price": 1299,
+        "enabled": false,
+        "isPreset": true
+      },
+      {
+        "name": "Greeting Card",
+        "type": "greeting_card",
+        "emoji": "\ud83d\udc8c",
+        "price": 99,
+        "enabled": false,
+        "isPreset": true
+      },
+      {
+        "name": "Mini Photo Frame",
+        "type": "photo_frame",
+        "emoji": "\ud83d\uddbc\ufe0f",
+        "price": 199,
+        "enabled": false,
+        "isPreset": true
+      }
+    ],
+    "sizes": [
+      {
+        "label": "4x4 \u2013 Mini",
+        "price": 99,
+        "value": "4x4 \u2013 Mini",
+        "width": 4,
+        "height": 4,
+        "enabled": true,
+        "isPreset": true
+      },
+      {
+        "label": "5x5 \u2013 Mini",
+        "price": 129,
+        "value": "5x5 \u2013 Mini",
+        "width": 5,
+        "height": 5,
+        "enabled": true,
+        "isPreset": true
+      },
+      {
+        "label": "8x6 \u2013 A5",
+        "price": 250,
+        "value": "8x6 \u2013 A5",
+        "width": 8,
+        "height": 6,
+        "enabled": true,
+        "isPreset": true
+      },
+      {
+        "label": "12x8 \u2013 A4",
+        "price": 380,
+        "value": "12x8 \u2013 A4",
+        "width": 12,
+        "height": 8,
+        "enabled": true,
+        "isPreset": true
+      },
+      {
+        "label": "12x18 \u2013 A3",
+        "price": 680,
+        "value": "12x18 \u2013 A3",
+        "width": 12,
+        "height": 18,
+        "enabled": true,
+        "isPreset": true
+      },
+      {
+        "label": "16.5x23.4 \u2013 A2",
+        "price": 1499,
+        "value": "16.5x23.4 \u2013 A2",
+        "width": 16.5,
+        "height": 23.4,
+        "enabled": true,
+        "isPreset": true
+      }
+    ],
+    "styles": [
+      "Basket",
+      "Luxury Box",
+      {
+        "type": "canvas",
+        "label": "Canvas Frame",
+        "enabled": false,
+        "isPreset": true
+      },
+      {
+        "type": "wooden",
+        "label": "Wooden Frame",
+        "enabled": false,
+        "isPreset": true
+      },
+      {
+        "type": "normal",
+        "label": "Normal Frame",
+        "enabled": false,
+        "isPreset": true
+      }
+    ],
+    "boxTypes": [
+      {
+        "icon": "\ud83d\udce6",
+        "label": "Small Box",
+        "price": 199,
+        "value": "small",
+        "enabled": true,
+        "isPreset": true
+      },
+      {
+        "icon": "\ud83d\udce6",
+        "label": "Medium Box",
+        "price": 349,
+        "value": "medium",
+        "enabled": true,
+        "isPreset": true
+      },
+      {
+        "icon": "\ud83d\udce6",
+        "label": "Large Box",
+        "price": 549,
+        "value": "large",
+        "enabled": true,
+        "isPreset": true
+      },
+      {
+        "icon": "\ud83e\uddf2",
+        "label": "Premium Magnetic Lid",
+        "price": 899,
+        "value": "magnetic",
+        "enabled": true,
+        "isPreset": true
+      },
+      {
+        "icon": "\ud83d\uddc4\ufe0f",
+        "label": "Drawer Style Box",
+        "price": 799,
+        "value": "drawer",
+        "enabled": true,
+        "isPreset": true
+      },
+      {
+        "icon": "\ud83d\udc8c",
+        "label": "Foldable Gift Box",
+        "price": 699,
+        "value": "foldable",
+        "enabled": true,
+        "isPreset": true
+      }
+    ],
+    "mugTypes": [
+      {
+        "label": "Classic Mug (11oz)",
+        "price": 0,
+        "value": "Classic Mug (11oz)",
+        "enabled": true,
+        "isPreset": true
+      },
+      {
+        "label": "Large Mug (15oz)",
+        "price": 3,
+        "value": "Large Mug (15oz)",
+        "enabled": true,
+        "isPreset": true
+      },
+      {
+        "label": "Travel Mug",
+        "price": 8,
+        "value": "Travel Mug",
+        "enabled": true,
+        "isPreset": true
+      }
+    ],
+    "materials": [
+      {
+        "label": "Kraft Paper",
+        "price": 0,
+        "value": "kraft",
+        "enabled": true,
+        "isPreset": true
+      },
+      {
+        "label": "Premium Matte",
+        "price": 50,
+        "value": "matte",
+        "enabled": true,
+        "isPreset": true
+      },
+      {
+        "label": "Glossy Finish",
+        "price": 50,
+        "value": "glossy",
+        "enabled": true,
+        "isPreset": true
+      },
+      {
+        "label": "Velvet Texture",
+        "price": 150,
+        "value": "velvet",
+        "enabled": true,
+        "isPreset": true
+      },
+      {
+        "label": "Luxury Gold Foil",
+        "price": 200,
+        "value": "gold_foil",
+        "enabled": true,
+        "isPreset": true
+      }
+    ],
+    "mugColors": [
+      {
+        "hex": "#f5f5f0",
+        "label": "White",
+        "value": "White",
+        "enabled": true,
+        "isPreset": true,
+        "textColor": "#333"
+      },
+      {
+        "hex": "#222222",
+        "label": "Black",
+        "value": "Black",
+        "enabled": true,
+        "isPreset": true,
+        "textColor": "#fff"
+      },
+      {
+        "hex": "#cc3333",
+        "label": "Red Inside",
+        "value": "Red Inside",
+        "enabled": true,
+        "isPreset": true,
+        "textColor": "#fff"
+      },
+      {
+        "hex": "#3366cc",
+        "label": "Blue Inside",
+        "value": "Blue Inside",
+        "enabled": true,
+        "isPreset": true,
+        "textColor": "#fff"
+      }
+    ],
+    "decorations": [
+      {
+        "type": "ribbon_cross",
+        "emoji": "\ud83c\udf80",
+        "label": "Cross Ribbon",
+        "price": 60,
+        "enabled": true,
+        "category": "Ribbon",
+        "isPreset": true
+      },
+      {
+        "type": "ribbon_vert",
+        "emoji": "\ud83c\udf80",
+        "label": "Vertical Ribbon",
+        "price": 40,
+        "enabled": true,
+        "category": "Ribbon",
+        "isPreset": true
+      },
+      {
+        "type": "ribbon_horiz",
+        "emoji": "\ud83c\udf80",
+        "label": "Horizontal Ribbon",
+        "price": 40,
+        "enabled": true,
+        "category": "Ribbon",
+        "isPreset": true
+      },
+      {
+        "type": "sticker_bday",
+        "emoji": "\ud83c\udf82",
+        "label": "Birthday Sticker",
+        "price": 20,
+        "enabled": true,
+        "category": "Sticker",
+        "isPreset": true
+      },
+      {
+        "type": "sticker_love",
+        "emoji": "\u2764\ufe0f",
+        "label": "Love Sticker",
+        "price": 20,
+        "enabled": true,
+        "category": "Sticker",
+        "isPreset": true
+      },
+      {
+        "type": "sticker_ty",
+        "emoji": "\ud83d\ude4f",
+        "label": "Thank You Sticker",
+        "price": 20,
+        "enabled": true,
+        "category": "Sticker",
+        "isPreset": true
+      },
+      {
+        "type": "flower_topper",
+        "emoji": "\ud83c\udf38",
+        "label": "Flower Topper",
+        "price": 99,
+        "enabled": true,
+        "category": "Top Decor",
+        "isPreset": true
+      },
+      {
+        "type": "wax_seal",
+        "emoji": "\ud83c\udfee",
+        "label": "Wax Seal",
+        "price": 49,
+        "enabled": true,
+        "category": "Top Decor",
+        "isPreset": true
+      },
+      {
+        "type": "tag_hanging",
+        "emoji": "\ud83c\udff7\ufe0f",
+        "label": "Hanging Tag",
+        "price": 35,
+        "enabled": true,
+        "category": "Tags",
+        "isPreset": true
+      }
+    ]
+  },
+  "image_url": "/uploads/7be268243f654333b6fdaaf0b89d4003_OPTIMIZE_BACKUP_PRODUCT_RedGiftBox_7de5b13a-bfd1-461c-949f-c094cda99a29_1024x1024.webp",
+  "is_on_home": true,
+  "is_on_shop": true,
+  "id": 3
+}

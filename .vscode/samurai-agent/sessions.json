@@ -1,0 +1,97 @@
+[
+  {
+    "id": "6240cecb-ba54-4fd5-aa7d-3b3dfb9f0f3b",
+    "title": "New Conversation",
+    "status": "active",
+    "messageCount": 0,
+    "totalTokens": 0,
+    "totalCost": 0,
+    "lastMessageAt": "2026-03-12T15:45:53.863Z",
+    "tags": [],
+    "metadata": {
+      "projectId": "default-project",
+      "model": "free-trial-model-with-daily-limit",
+      "mode": "debugging",
+      "connectedCodebasePath": "d:\\project\\photoframe website"
+    },
+    "codeContextIds": [],
+    "previous_session_intent": "pure_discussion",
+    "pinnedFilePaths": [],
+    "createdAt": "2026-03-12T15:45:53.863Z",
+    "updatedAt": "2026-03-12T15:45:53.863Z"
+  },
+  {
+    "id": "61bd0017-8f6a-44d1-be9f-429b3d3890af",
+    "title": "New Conversation",
+    "status": "active",
+    "messageCount": 0,
+    "totalTokens": 0,
+    "totalCost": 0,
+    "lastMessageAt": "2026-03-12T15:45:54.070Z",
+    "tags": [],
+    "metadata": {
+      "projectId": "default-project",
+      "model": "free-trial-model-with-daily-limit",
+      "mode": "debugging",
+      "connectedCodebasePath": "d:\\project\\photoframe website"
+    },
+    "codeContextIds": [],
+    "previous_session_intent": "pure_discussion",
+    "pinnedFilePaths": [],
+    "createdAt": "2026-03-12T15:45:54.070Z",
+    "updatedAt": "2026-03-12T15:45:54.070Z"
+  },
+  {
+    "id": "c65f120b-9eaa-4d80-b74e-fec9ba126938",
+    "title": "Code Review - 3/14/2026, 12:31:40 PM",
+    "status": "active",
+    "messageCount": 0,
+    "totalTokens": 0,
+    "totalCost": 0,
+    "lastMessageAt": "2026-03-14T07:01:40.729Z",
+    "tags": [],
+    "metadata": {
+      "projectId": "default-project",
+      "model": "free-trial-model-with-daily-limit",
+      "mode": "debugging",
+      "connectedCodebasePath": "d:\\project\\photoframe website"
+    },
+    "codeContextIds": [],
+    "previous_session_intent": "pure_discussion",
+    "pinnedFilePaths": [
+      "d:\\project\\photoframe website\\frontend\\dist\\assets\\OrbitControls-cL-zBEdk.js",
+      "d:\\project\\photoframe website\\frontend\\dist\\assets\\RoundedBox-Coa9p9N_.js",
+      "d:\\project\\photoframe website\\frontend\\dist\\assets\\Mug3DPreview-CuPDR5DT.js",
+      "d:\\project\\photoframe website\\frontend\\dist\\assets\\Frame3DPreview-uxNPTddh.js",
+      "d:\\project\\photoframe website\\frontend\\dist\\assets\\Frame3DPreviewAdmin-DywiilU1.js"
+    ],
+    "createdAt": "2026-03-14T07:01:40.729Z",
+    "updatedAt": "2026-03-14T07:01:40.825Z",
+    "type": "code-review"
+  },
+  {
+    "id": "e1c39f97-4046-47a1-b1a5-a10f2791dd83",
+    "title": "Code Review - 3/14/2026, 12:35:15 PM",
+    "status": "active",
+    "messageCount": 2,
+    "totalTokens": 0,
+    "totalCost": 0,
+    "lastMessageAt": "2026-03-14T07:06:44.459Z",
+    "tags": [],
+    "metadata": {
+      "projectId": "default-project",
+      "model": "free-trial-model-with-daily-limit",
+      "mode": "debugging",
+      "connectedCodebasePath": "d:\\project\\photoframe website"
+    },
+    "codeContextIds": [],
+    "previous_session_intent": "pure_discussion",
+    "pinnedFilePaths": [
+      "d:\\project\\photoframe website\\frontend\\src\\pages\\Shop.jsx",
+      "d:\\project\\photoframe website\\frontend\\src\\pages\\Home.jsx"
+    ],
+    "createdAt": "2026-03-14T07:05:15.511Z",
+    "updatedAt": "2026-03-14T07:06:44.460Z",
+    "type": "code-review"
+  }
+]
