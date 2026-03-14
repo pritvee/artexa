@@ -14,6 +14,7 @@ import ReceiptIcon from '@mui/icons-material/Receipt';
 import { motion } from 'framer-motion';
 import { useParams, useSearchParams, Link as RouterLink } from 'react-router-dom';
 import { useOrders, ORDER_STATUSES } from '../store/OrderContext';
+import { getPublicUrl } from '../api/axios';
 
 // Colored step connector
 const ColorConnector = styled(StepConnector)(({ theme }) => ({
@@ -193,7 +194,7 @@ const OrderTracking = () => {
                                             {order.items.map((item, i) => (
                                                 <Box key={i} sx={{ display: 'flex', alignItems: 'center', gap: 3, p: 2, borderRadius: '20px', '&:hover': { bgcolor: 'rgba(124, 58, 237, 0.05)' }, transition: 'all 0.3s' }}>
                                                     <Avatar 
-                                                        src={item.product?.image_url} 
+                                                        src={getPublicUrl(item.product?.image_url)} 
                                                         variant="rounded" 
                                                         sx={{ width: 64, height: 64, borderRadius: '14px', boxShadow: '0 8px 20px -8px rgba(0,0,0,0.2)' }} 
                                                     />

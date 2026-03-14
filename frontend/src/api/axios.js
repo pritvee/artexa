@@ -1,8 +1,18 @@
 import axios from 'axios';
 
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api/v1';
+export const BASE_URL = API_BASE_URL.replace(/\/api\/v1\/?$/, '');
+
 const api = axios.create({
-    baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api/v1',
+    baseURL: API_BASE_URL,
 });
+
+export const getPublicUrl = (path) => {
+    if (!path) return '';
+    if (path.startsWith('http')) return path;
+    const cleanPath = path.startsWith('/') ? path : `/${path}`;
+    return `${BASE_URL}${cleanPath}`;
+};
 
 // Add a request interceptor to include the auth token
 api.interceptors.request.use((config) => {

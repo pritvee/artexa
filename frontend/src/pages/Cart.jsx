@@ -12,6 +12,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../store/CartContext';
+import { getPublicUrl } from '../api/axios';
 
 const Cart = () => {
     const { cart, removeFromCart, updateQuantity, clearCart, loading } = useCart();
@@ -155,7 +156,7 @@ const Cart = () => {
                                                 bgcolor: 'background.default'
                                             }}>
                                                 <img 
-                                                    src={item.preview_image_url || item.product?.image_url} 
+                                                    src={getPublicUrl(item.preview_image_url || item.product?.image_url)} 
                                                     style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
                                                     alt={item.product?.name || 'Product Preview'}
                                                 />

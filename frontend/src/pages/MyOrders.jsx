@@ -15,6 +15,7 @@ import InfoIcon from '@mui/icons-material/Info';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PaymentIcon from '@mui/icons-material/Payment';
+import { getPublicUrl } from '../api/axios';
 
 const MyOrders = () => {
     const { orders, loading, fetchMyOrders } = useOrders();
@@ -193,7 +194,7 @@ const MyOrders = () => {
                                                             {order.items?.map((item, i) => (
                                                                 <Box key={i} sx={{ display: 'flex', alignItems: 'center', gap: 2.5 }}>
                                                                     <Avatar 
-                                                                        src={item.product?.image_url} 
+                                                                        src={getPublicUrl(item.product?.image_url)} 
                                                                         variant="rounded" 
                                                                         sx={{ width: 60, height: 60, borderRadius: '14px', border: '1px solid divider' }} 
                                                                     />

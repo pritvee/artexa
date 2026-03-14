@@ -3,6 +3,7 @@ import { Card, CardContent, CardMedia, Typography, Box, Button, IconButton, Chip
 import { FavoriteBorder as FavoriteIcon, ShoppingCartOutlined as CartIcon, PreviewOutlined as ViewIcon } from '@mui/icons-material';
 import { motion } from 'framer-motion';
 import { useNavigate, Link as RouterLink } from 'react-router-dom';
+import { getPublicUrl } from '../api/axios';
 
 const cardVariants = {
     hidden: { opacity: 0, y: 30 },
@@ -33,7 +34,7 @@ const ProductCard = ({ product }) => {
                     <motion.div whileHover={{ scale: 1.05 }} transition={{ duration: 0.6 }}>
                         <CardMedia
                             component="img"
-                            image={product.image_url || "https://picsum.photos/seed/gift/400/500"}
+                            image={getPublicUrl(product.image_url) || "https://picsum.photos/seed/gift/400/500"}
                             alt={product.name}
                             loading="lazy"
                             sx={{ height: '100%', objectFit: 'cover' }}

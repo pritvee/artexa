@@ -11,6 +11,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import VerifiedIcon from '@mui/icons-material/Verified';
 import TimerIcon from '@mui/icons-material/Timer';
+import { getPublicUrl } from '../api/axios';
 
 const fadeUp = {
     hidden: { opacity: 0, y: 30 },
@@ -245,7 +246,7 @@ const Home = () => {
                                                 bgcolor: 'background.default', 
                                                 mb: { xs: 1.5, md: 3 } 
                                             }}>
-                                                <CardMedia component="img" image={product.image_url} loading="lazy" sx={{ height: '100%', objectFit: 'cover' }} />
+                                                <CardMedia component="img" image={getPublicUrl(product.image_url)} loading="lazy" sx={{ height: '100%', objectFit: 'cover' }} />
                                                 <Box sx={{ position: 'absolute', top: 10, left: 10 }}>
                                                     <Chip 
                                                         label="Bestseller" 

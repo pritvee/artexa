@@ -6,7 +6,7 @@ import {
 import { useParams, useNavigate, useLocation, Link as RouterLink } from 'react-router-dom';
 import ViewInArIcon from '@mui/icons-material/ViewInAr';
 import { motion } from 'framer-motion';
-import api from '../api/axios';
+import api, { getPublicUrl } from '../api/axios';
 import { useCart } from '../store/CartContext';
 import { useAuth } from '../store/AuthContext';
 
@@ -23,7 +23,7 @@ const ProductDetail = () => {
     const [selectedImage, setSelectedImage] = useState(0);
 
     const allImages = product ? [product.image_url, ...(product.secondary_images || [])].filter(Boolean) : [];
-    const selectedImageUrl = allImages[selectedImage] || product?.image_url;
+    const selectedImageUrl = getPublicUrl(allImages[selectedImage]) || getPublicUrl(product?.image_url);
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -162,7 +162,7 @@ const ProductDetail = () => {
                                                 aspectRatio: '1/1'
                                             }}
                                         >
-                                            <img src={img || "https://picsum.photos/seed/product/200/200"} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="thumb" />
+                                            <img src={getPublicUrl(img) || "https://picsum.photos/seed/product/200/200"} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="thumb" />
                                         </Paper>
                                     </Grid>
                                 ))}

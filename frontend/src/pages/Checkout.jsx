@@ -19,6 +19,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useCart } from '../store/CartContext';
 import { useOrders } from '../store/OrderContext';
 import api from '../api/axios';
+import { getPublicUrl } from '../api/axios';
 import { useAuth } from '../store/AuthContext';
 import { motion } from 'framer-motion';
 
@@ -382,7 +383,7 @@ const Checkout = () => {
                                 {checkoutCart.slice(0, 3).map(item => (
                                     <Box key={item.id} sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
                                         <Box sx={{ width: 50, height: 50, borderRadius: '12px', bgcolor: 'rgba(0,0,0,0.05)', overflow: 'hidden' }}>
-                                            <img src={item.preview_image_url || item.product?.image_url} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                            <img src={getPublicUrl(item.preview_image_url || item.product?.image_url)} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                         </Box>
                                         <Box sx={{ flexGrow: 1 }}>
                                             <Typography variant="body2" sx={{ fontWeight: 700, lineHeight: 1.2 }}>{item.product?.name}</Typography>
