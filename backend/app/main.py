@@ -45,13 +45,13 @@ app.include_router(api_router, prefix="/api/v1")
 # Create tables in development
 @app.on_event("startup")
 def on_startup():
-    print("DEBUG: Startup event triggered. Skipping auto-table creation to prevent crash.")
-    # try:
-    #     print("DEBUG: Attempting to connect to database and create tables...")
-    #     Base.metadata.create_all(bind=engine)
-    #     print("DEBUG: Database connection successful and tables verified.")
-    # except Exception as e:
-    #     print(f"ERROR: Database connection failed: {str(e)}")
-    #     print("CRITICAL: The application may not function correctly without a database connection.")
+    try:
+        print("DEBUG: Attempting to connect to database and create tables...")
+        Base.metadata.create_all(bind=engine)
+        print("DEBUG: Database connection successful and tables verified.")
+    except Exception as e:
+        print(f"ERROR: Database connection failed: {str(e)}")
+        print("CRITICAL: The application may not function correctly without a database connection.")
+
 
 
