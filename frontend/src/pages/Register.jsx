@@ -15,26 +15,34 @@ const Register = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        
+        if (password.length < 6) {
+            setError('Password must be at least 6 characters long');
+            return;
+        }
+
         setLoading(true);
         setError('');
         try {
             await api.post('/auth/register', {
                 name: name.trim(),
-                email: email.trim(),
+                email: email.trim().toLowerCase(),
                 password,
-                phone: '', // Added dummy phone to fix required field from backend UserCreate model
-                role: 'user' // Default role
+                phone: '', 
+                role: 'user'
             });
-            alert('Registered successfully! Please login.');
+            alert('Registered successfully! Redirecting to login...');
             navigate('/login');
         } catch (err) {
-            let errorMsg = 'Registration failed. Try a different email.';
+            let errorMsg = 'Registration failed. Please try again.';
             if (err.response?.data?.detail) {
                 if (Array.isArray(err.response.data.detail)) {
                     errorMsg = err.response.data.detail.map(d => d.msg).join(', ');
                 } else {
                     errorMsg = err.response.data.detail;
                 }
+            } else if (err.message === 'Network Error') {
+                errorMsg = 'Cannot connect to server. Please check your internet or try again later.';
             }
             setError(errorMsg);
         } finally {

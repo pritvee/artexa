@@ -20,7 +20,7 @@ class AddressOut(AddressBase):
 class UserBase(BaseModel):
     email: EmailStr
     name: str
-    phone: str
+    phone: Optional[str] = None
 
 class UserCreate(UserBase):
     password: str

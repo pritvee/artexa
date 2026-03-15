@@ -26,7 +26,13 @@ def update_me(
 
 @router.get("/me/addresses", response_model=list[AddressOut])
 def get_my_addresses(current_user: User = Depends(get_current_user)):
-    return current_user.addresses
+    try:
+        if not current_user.addresses:
+            return []
+        return current_user.addresses
+    except Exception as e:
+        print(f"ERROR fetching addresses for user {current_user.id}: {str(e)}")
+        return []
 
 @router.post("/me/addresses", response_model=AddressOut)
 def add_address(

@@ -36,7 +36,7 @@ const Login = () => {
             const res = await api.post('/auth/login', formData);
             const { access_token, user_data } = res.data;
 
-            login(access_token, user_data.role, user_data.email, user_data.name, user_data.id);
+            login(access_token, user_data.role, user_data.email, user_data.name, user_data.id, user_data.phone);
             
             // Redirect based on role
             const redirectPath = user_data.role === 'admin' ? '/admin' : '/';

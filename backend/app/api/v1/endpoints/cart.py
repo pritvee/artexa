@@ -9,12 +9,20 @@ router = APIRouter()
 
 @router.get("/", response_model=CartOut)
 def get_cart(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
-    cart = db.query(Cart).filter(Cart.user_id == current_user.id).first()
-    if not cart:
-        cart = Cart(user_id=current_user.id)
-        db.add(cart)
-        db.commit()
-    return cart
+    try:
+        cart = db.query(Cart).filter(Cart.user_id == current_user.id).first()
+        if not cart:
+            # Fallback for if registration cart creation failed or for older users
+            cart = Cart(user_id=current_user.id)
+            db.add(cart)
+            db.commit()
+            db.refresh(cart)
+        return cart
+    except Exception as e:
+        db.rollback()
+        print(f"ERROR fetching cart for user {current_user.id}: {str(e)}")
+        # Raise 404 or returning a dummy cart could be an option, but 500 with a message is safer for debugging here
+        raise HTTPException(status_code=500, detail="Could not retrieve cart information.")
 
 @router.post("/items/")
 def add_to_cart(

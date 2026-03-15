@@ -19,19 +19,21 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
     if not hashed_password:
         return False
     try:
-        # Strip trailing whitespace and handle b'' prefix if stored as string representation of bytes
+        # Standardize hash format: handle string representation of bytes and extra whitespace
         cleaned_hash = hashed_password.strip()
-        if cleaned_hash.startswith("b'") and cleaned_hash.endswith("'"):
-            cleaned_hash = cleaned_hash[2:-1]
-        elif cleaned_hash.startswith('b"') and cleaned_hash.endswith('"'):
+        
+        # Strip b'' or b"" prefixes if the hash was stored as a string representation of bytes
+        if (cleaned_hash.startswith("b'") and cleaned_hash.endswith("'")) or \
+           (cleaned_hash.startswith('b"') and cleaned_hash.endswith('"')):
             cleaned_hash = cleaned_hash[2:-1]
             
         return pwd_context.verify(plain_password, cleaned_hash)
-    except Exception:
-        # Fallback for plain text or malformed hashes
+    except Exception as e:
+        # Fallback to direct verification if standardization fails
         try:
             return pwd_context.verify(plain_password, hashed_password)
         except Exception:
+            print(f"DEBUG: Password verification failed for hash starting with {hashed_password[:10]}...")
             return False
 
 def get_password_hash(password: str) -> str:

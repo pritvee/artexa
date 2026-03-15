@@ -24,34 +24,46 @@ def get_products(
     limit: int = 10,
     db: Session = Depends(get_db)
 ):
-    skip = (page - 1) * limit
-    query = db.query(Product)
-    if category_id:
-        query = query.filter(Product.category_id == category_id)
-    if on_home is not None:
-        query = query.filter(Product.is_on_home == on_home)
-    if on_shop is not None:
-        query = query.filter(Product.is_on_shop == on_shop)
-    if search:
-        query = query.filter(Product.name.contains(search))
-    
-    total = query.count()
-    items = query.offset(skip).limit(limit).all()
-    
-    print(f"DEBUG: Successfully fetched {len(items)} products")
-    return {
-        "items": items,
-        "total": total,
-        "page": page,
-        "limit": limit
-    }
+    try:
+        skip = (page - 1) * limit
+        query = db.query(Product)
+        if category_id:
+            query = query.filter(Product.category_id == category_id)
+        if on_home is not None:
+            query = query.filter(Product.is_on_home == on_home)
+        if on_shop is not None:
+            query = query.filter(Product.is_on_shop == on_shop)
+        if search:
+            query = query.filter(Product.name.ilike(f"%{search}%"))
+        
+        total = query.count()
+        items = query.offset(skip).limit(limit).all()
+        
+        return {
+            "items": items,
+            "total": total,
+            "page": page,
+            "limit": limit
+        }
+    except Exception as e:
+        print(f"ERROR fetching products: {str(e)}")
+        # Return empty list instead of 500 if database is not ready
+        return {
+            "items": [],
+            "total": 0,
+            "page": page,
+            "limit": limit
+        }
 
 
 @router.get("/categories", response_model=List[CategoryOut])
 def get_categories(db: Session = Depends(get_db)):
-    categories = db.query(Category).all()
-    print(f"DEBUG: Successfully fetched {len(categories)} categories")
-    return categories
+    try:
+        categories = db.query(Category).all()
+        return categories
+    except Exception as e:
+        print(f"ERROR fetching categories: {str(e)}")
+        return []
 
 @router.get("/{product_id}", response_model=ProductOut)
 def get_product(product_id: int, db: Session = Depends(get_db)):

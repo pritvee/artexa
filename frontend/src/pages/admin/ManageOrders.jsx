@@ -24,6 +24,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import RestoreFromTrashIcon from '@mui/icons-material/RestoreFromTrash';
 import ImageDownloadPanel from './components/ImageDownloadPanel';
 import { useOrders, ORDER_STATUSES } from '../../store/OrderContext';
+import { getPublicUrl } from '../../api/axios';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const Mug3DPreview = lazy(() => import('../../components/Customization/MugBuilder/Mug3DPreview'));
@@ -181,10 +182,7 @@ const ManageOrders = () => {
     };
     const triggerSafeDownload = async (url, filename) => {
         try {
-            // If URL is relative, prepend origin to make it fetchable if needed, 
-            // but fetch works fine with relative paths too.
-            const fullUrl = url.startsWith('http') ? url : window.location.origin + url;
-            const response = await fetch(fullUrl, { mode: 'cors' });
+            const response = await fetch(url, { mode: 'cors' });
             if (!response.ok) throw new Error('Fetch failed');
             const blob = await response.blob();
             const blobUrl = window.URL.createObjectURL(blob);
@@ -604,7 +602,7 @@ const ManageOrders = () => {
                                                                 <Button
                                                                     variant="outlined" size="small" fullWidth
                                                                     startIcon={<DownloadIcon />}
-                                                                    onClick={() => triggerSafeDownload(`http://${window.location.hostname}:8000${item.customization_details.image}`, `order_${selectedOrder.id}_original_asset.png`)}
+                                                                    onClick={() => triggerSafeDownload(getPublicUrl(item.customization_details.image), `order_${selectedOrder.id}_original_asset.png`)}
                                                                     sx={{ borderRadius: 2, textTransform: 'none', justifyContent: 'flex-start' }}
                                                                 >
                                                                     Download Original User Upload
@@ -614,7 +612,7 @@ const ManageOrders = () => {
                                                                 <Button
                                                                     key={imgIdx} variant="outlined" size="small" fullWidth
                                                                     startIcon={<DownloadIcon />}
-                                                                    onClick={() => triggerSafeDownload(`http://${window.location.hostname}:8000${imgUrl}`, `order_${selectedOrder.id}_upload_${imgIdx + 1}.png`)}
+                                                                    onClick={() => triggerSafeDownload(getPublicUrl(imgUrl), `order_${selectedOrder.id}_upload_${imgIdx + 1}.png`)}
                                                                     sx={{ borderRadius: 2, textTransform: 'none', justifyContent: 'flex-start', mt: 0.5 }}
                                                                 >
                                                                     Download Upload {imgIdx + 1}
@@ -634,7 +632,7 @@ const ManageOrders = () => {
                                                                     <Button
                                                                         variant="contained" size="small" color="secondary" fullWidth
                                                                         startIcon={<DownloadIcon />}
-                                                                        onClick={() => triggerSafeDownload(`http://${window.location.hostname}:8000${item.customization_details.flat_design_image}`, `order_${selectedOrder.id}_hq_print.png`)}
+                                                                        onClick={() => triggerSafeDownload(getPublicUrl(item.customization_details.flat_design_image), `order_${selectedOrder.id}_hq_print.png`)}
                                                                         sx={{ borderRadius: 2, textTransform: 'none' }}
                                                                     >
                                                                         Print Texture
@@ -644,7 +642,7 @@ const ManageOrders = () => {
                                                                     <Button
                                                                         variant="contained" size="small" color="primary" fullWidth
                                                                         startIcon={<VisibilityIcon />}
-                                                                        onClick={() => triggerSafeDownload(`http://${window.location.hostname}:8000${item.customization_details.model_3d_screenshot}`, `order_${selectedOrder.id}_mockup_snapshot.png`)}
+                                                                        onClick={() => triggerSafeDownload(getPublicUrl(item.customization_details.model_3d_screenshot), `order_${selectedOrder.id}_mockup_snapshot.png`)}
                                                                         sx={{ borderRadius: 2, textTransform: 'none' }}
                                                                     >
                                                                         3D Mockup
@@ -719,15 +717,6 @@ const ManageOrders = () => {
                                             const isHamper = productType === 'chocolate_hamper';
                                             const isGiftBox = productType === 'pro_gift_box';
 
-                                            // Use relative paths to leverage Vite proxy and avoid CORS issues
-                                            const backendUrl = ""; 
-
-                                            const getFullUrl = (path) => {
-                                                if (!path) return null;
-                                                if (path.startsWith('http')) return path;
-                                                return `${backendUrl}${path.startsWith('/') ? '' : '/'}${path}`;
-                                            };
-
                                             if (isFrame) {
                                                 return (
                                                     <>
@@ -747,7 +736,7 @@ const ManageOrders = () => {
                                                                 </Box>
                                                                 <Suspense fallback={<Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', color: '#aaa', flexDirection: 'column', gap: 1 }}><CameraAltIcon /><Typography variant="caption">Loading 3D model...</Typography></Box>}>
                                                                     <Frame3DPreviewAdmin
-                                                                        textureUrl={getFullUrl(item.customization_details.flat_design_image || item.customization_details.images?.[0])}
+                                                                        textureUrl={getPublicUrl(item.customization_details.flat_design_image || item.customization_details.images?.[0])}
                                                                         frameColor={item.customization_details.frame_color || '#111111'}
                                                                         frameStyle={item.customization_details.frame_style || 'wooden'}
                                                                         frameSize={{
@@ -767,12 +756,12 @@ const ManageOrders = () => {
                                                         <Grid item xs={12} md={4}>
                                                             <Typography variant="caption" sx={{ opacity: 0.6, display: 'block', mb: 1, letterSpacing: 1 }}>EDITED DESIGN (PRINT READY)</Typography>
                                                             
-                                                            <Box id={`frame-flat-${idx}`} className="fullscreen-support" sx={{ position: 'relative', borderRadius: 2, overflow: 'hidden', border: '2px solid rgba(255,255,255,0.1)', bgcolor: '#fff', boxShadow: '0 8px 24px rgba(0,0,0,0.3)', '&:hover .img-actions': { opacity: 1 } }}>
+                                                                    <Box id={`frame-flat-${idx}`} className="fullscreen-support" sx={{ position: 'relative', borderRadius: 2, overflow: 'hidden', border: '2px solid rgba(255,255,255,0.1)', bgcolor: '#fff', boxShadow: '0 8px 24px rgba(0,0,0,0.3)', '&:hover .img-actions': { opacity: 1 } }}>
                                                                 {item.customization_details.flat_design_image ? (
-                                                                    <img src={getFullUrl(item.customization_details.flat_design_image)} style={{ width: '100%', height: 'auto', display: 'block', objectFit: 'contain', maxHeight: 350 }} className="preview-image" alt="Print" />
+                                                                    <img src={getPublicUrl(item.customization_details.flat_design_image)} style={{ width: '100%', height: 'auto', display: 'block', objectFit: 'contain', maxHeight: 350 }} className="preview-image" alt="Print" />
                                                                 ) : item.customization_details.images?.[0] ? (
                                                                     <Box sx={{ position: 'relative' }}>
-                                                                        <img src={getFullUrl(item.customization_details.images[0])} style={{ width: '100%', height: 'auto', display: 'block', objectFit: 'contain', maxHeight: 350 }} className="preview-image" alt="Fallback" />
+                                                                        <img src={getPublicUrl(item.customization_details.images[0])} style={{ width: '100%', height: 'auto', display: 'block', objectFit: 'contain', maxHeight: 350 }} className="preview-image" alt="Fallback" />
                                                                         <Box sx={{ position: 'absolute', top: 12, left: 12, bgcolor: 'error.main', color: '#fff', px: 1.5, py: 0.5, borderRadius: 1, boxShadow: 2 }}>
                                                                             <Typography variant="caption" sx={{ fontWeight: 800, fontSize: '10px' }}>FALLBACK: RAW PHOTO</Typography>
                                                                         </Box>
@@ -790,7 +779,7 @@ const ManageOrders = () => {
                                                             {/* UNIVERSAL DOWNLOAD PANEL */}
                                                             {(item.customization_details.flat_design_image || item.customization_details.images?.[0]) && (
                                                                 <ImageDownloadPanel 
-                                                                    imageUrl={getFullUrl(item.customization_details.flat_design_image || item.customization_details.images?.[0])}
+                                                                    imageUrl={getPublicUrl(item.customization_details.flat_design_image || item.customization_details.images?.[0])}
                                                                     productName={item.product?.name}
                                                                     type="design"
                                                                 />
@@ -800,12 +789,12 @@ const ManageOrders = () => {
                                                                 <Box sx={{ mt: 2 }}>
                                                                     <Typography variant="caption" sx={{ opacity: 0.5, display: 'block', mb: 1 }}>3D MOCKUP SNAPSHOT</Typography>
                                                                     <Box sx={{ position: 'relative', borderRadius: 2, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.1)', '&:hover .img-actions': { opacity: 1 } }}>
-                                                                        <img src={getFullUrl(item.customization_details.model_3d_screenshot)} style={{ width: '100%', display: 'block', borderRadius: 8 }} alt="3D Snapshot" />
+                                                                        <img src={getPublicUrl(item.customization_details.model_3d_screenshot)} style={{ width: '100%', display: 'block', borderRadius: 8 }} alt="3D Snapshot" />
                                                                         <Box className="img-actions" sx={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 1, bgcolor: 'rgba(0,0,0,0.6)', opacity: 0, transition: '0.2s' }}>
                                                                             <Tooltip title="Download Snapshot">
                                                                                 <IconButton 
                                                                                     color="inherit" 
-                                                                                    onClick={() => triggerSafeDownload(getFullUrl(item.customization_details.model_3d_screenshot), `style-snapshot-${previewOrder.id}.png`)}
+                                                                                    onClick={() => triggerSafeDownload(getPublicUrl(item.customization_details.model_3d_screenshot), `style-snapshot-${previewOrder.id}.png`)}
                                                                                 >
                                                                                     <DownloadIcon />
                                                                                 </IconButton>
@@ -824,13 +813,13 @@ const ManageOrders = () => {
                                                                     {item.customization_details.images.map((imgUrl, imgIdx) => (
                                                                         <Box key={imgIdx}>
                                                                             <Box id={`frame-upload-${idx}-${imgIdx}`} className="fullscreen-support" sx={{ position: 'relative', borderRadius: 2, overflow: 'hidden', '&:hover .img-actions': { opacity: 1 } }}>
-                                                                                <img src={getFullUrl(imgUrl)} style={{ width: '100%', display: 'block' }} alt="Upload" />
+                                                                                <img src={getPublicUrl(imgUrl)} style={{ width: '100%', display: 'block' }} alt="Upload" />
                                                                                 <Box className="img-actions" sx={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 1, bgcolor: 'rgba(0,0,0,0.65)', opacity: 0, transition: '0.25s' }}>
                                                                                     <Tooltip title="Fullscreen"><IconButton color="secondary" onClick={() => toggleFullscreen3D(`frame-upload-${idx}-${imgIdx}`)} size="small" sx={{ bgcolor: 'rgba(255,255,255,0.15)' }}><FullscreenIcon /></IconButton></Tooltip>
                                                                                 </Box>
                                                                             </Box>
                                                                             <ImageDownloadPanel 
-                                                                                imageUrl={getFullUrl(imgUrl)}
+                                                                                imageUrl={getPublicUrl(imgUrl)}
                                                                                 productName={item.product?.name}
                                                                                 type="upload"
                                                                             />
@@ -870,7 +859,7 @@ const ManageOrders = () => {
                                                                         if (isMug) {
                                                                             return (
                                                                                 <Mug3DPreview
-                                                                                    textureUrl={getFullUrl(item.customization_details.flat_design_image || item.customization_details.image || item.customization_details.images?.[0])}
+                                                                                    textureUrl={getPublicUrl(item.customization_details.flat_design_image || item.customization_details.image || item.customization_details.images?.[0])}
                                                                                     mugColor={item.customization_details.mug_color || 'White'}
                                                                                     mugType={item.customization_details.mug_type || 'Classic'}
                                                                                 />
@@ -949,7 +938,7 @@ const ManageOrders = () => {
 
                                                                                 {unifiedDesignImage ? (
                                                                                     <img
-                                                                                        src={getFullUrl(unifiedDesignImage)}
+                                                                                        src={getPublicUrl(unifiedDesignImage)}
                                                                                         style={{ width: '100%', display: 'block', background: '#fff' }}
                                                                                         alt="Design"
                                                                                     />
@@ -964,7 +953,7 @@ const ManageOrders = () => {
                                                                             </Box>
                                                                             {unifiedDesignImage && (
                                                                                 <ImageDownloadPanel 
-                                                                                    imageUrl={getFullUrl(unifiedDesignImage)}
+                                                                                    imageUrl={getPublicUrl(unifiedDesignImage)}
                                                                                     productName={item.product?.name}
                                                                                     type="design"
                                                                                 />
@@ -992,14 +981,14 @@ const ManageOrders = () => {
                                                                                 {uploads.map((imgUrl, imgIdx) => (
                                                                                     <Box key={imgIdx}>
                                                                                         <Box id={`upload-preview-${idx}-${imgIdx}`} className="fullscreen-support" sx={{ position: 'relative', borderRadius: 3, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.1)', '&:hover .img-actions': { opacity: 1 } }}>
-                                                                                            <img src={getFullUrl(imgUrl)} style={{ width: '100%', display: 'block' }} alt="Upload" />
+                                                                                            <img src={getPublicUrl(imgUrl)} style={{ width: '100%', display: 'block' }} alt="Upload" />
                                                                                             <Box className="img-actions" sx={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 1.5, bgcolor: 'rgba(0,0,0,0.6)', opacity: 0, transition: '0.3s' }}>
                                                                                                 <Tooltip title="Fullscreen"><IconButton color="inherit" onClick={() => toggleFullscreen3D(`upload-preview-${idx}-${imgIdx}`)}><FullscreenIcon /></IconButton></Tooltip>
                                                                                             </Box>
                                                                                         </Box>
 
                                                                                         <ImageDownloadPanel 
-                                                                                            imageUrl={getFullUrl(imgUrl)}
+                                                                                            imageUrl={getPublicUrl(imgUrl)}
                                                                                             productName={item.product?.name}
                                                                                             type="upload"
                                                                                         />

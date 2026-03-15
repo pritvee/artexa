@@ -12,7 +12,7 @@ const Profile = () => {
     const { user, logout } = useAuth();
     const [name, setName] = useState(user?.name || "");
     const [email, setEmail] = useState(user?.email || "");
-    const [phone, setPhone] = useState(user?.phone_number || "");
+    const [phone, setPhone] = useState(user?.phone || "");
     const [addresses, setAddresses] = useState([]);
     const [newAddress, setNewAddress] = useState({ street: '', city: '', state: '', zip_code: '' });
     const [showAddrForm, setShowAddrForm] = useState(false);

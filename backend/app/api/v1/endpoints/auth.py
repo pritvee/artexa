@@ -7,7 +7,7 @@ from datetime import timedelta
 from app.db.session import get_db
 from app.core import security
 from app.core.config import settings
-from app.models.models import User
+from app.models.models import User, Cart
 from app.schemas.token import Token, TokenPayload
 from app.schemas.user import UserCreate, UserOut
 
@@ -63,7 +63,8 @@ def login(db: Session = Depends(get_db), form_data: OAuth2PasswordRequestForm = 
             "id": user.id,
             "role": user.role,
             "email": user.email,
-            "name": user.name
+            "name": user.name,
+            "phone": user.phone
         }
     }
 
@@ -75,14 +76,32 @@ def register(user_in: UserCreate, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.email == email).first()
     if user:
         raise HTTPException(status_code=400, detail="User with this email already exists.")
-    db_user = User(
-        email=email,
-        hashed_password=security.get_password_hash(user_in.password),
-        name=user_in.name,
-        phone=user_in.phone,
-        role="user"
-    )
-    db.add(db_user)
-    db.commit()
-    db.refresh(db_user)
-    return db_user
+    
+    # Use a transaction for atomic user + cart creation
+    try:
+        db_user = User(
+            email=email,
+            hashed_password=security.get_password_hash(user_in.password),
+            name=user_in.name,
+            phone=user_in.phone,
+            role="user"
+        )
+        db.add(db_user)
+        db.flush() # Get the user ID without committing yet
+        
+        # Automatically create a cart for the new user
+        db_cart = Cart(user_id=db_user.id)
+        db.add(db_cart)
+        
+        db.commit()
+        db.refresh(db_user)
+        return db_user
+    except Exception as e:
+        db.rollback()
+        print(f"CRITICAL ERROR during registration: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Registration failed due to a server error."
+        )

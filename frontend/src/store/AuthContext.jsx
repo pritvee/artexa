@@ -14,26 +14,29 @@ export const AuthProvider = ({ children }) => {
         const storedName = localStorage.getItem('user_name');
         const storedId = localStorage.getItem('user_id');
         const storedRole = localStorage.getItem('role');
+        const storedPhone = localStorage.getItem('user_phone');
 
         if (storedToken && storedEmail && storedRole) {
             setUser({ 
                 id: storedId ? parseInt(storedId) : null, 
                 email: storedEmail, 
                 role: storedRole, 
-                name: storedName || 'User' 
+                name: storedName || 'User',
+                phone: storedPhone || ''
             });
             setToken(storedToken);
         }
     }, []);
 
-    const login = (newToken, role, email, name, id) => {
+    const login = (newToken, role, email, name, id, phone) => {
         localStorage.setItem('token', newToken);
         localStorage.setItem('role', role);
         localStorage.setItem('user_email', email);
         localStorage.setItem('user_name', name || 'User');
         localStorage.setItem('user_id', id);
+        localStorage.setItem('user_phone', phone || '');
         setToken(newToken);
-        setUser({ id, email, role, name: name || 'User' });
+        setUser({ id, email, role, name: name || 'User', phone: phone || '' });
     };
 
     const logout = () => {
@@ -42,6 +45,7 @@ export const AuthProvider = ({ children }) => {
         localStorage.removeItem('user_email');
         localStorage.removeItem('user_name');
         localStorage.removeItem('user_id');
+        localStorage.removeItem('user_phone');
         setToken(null);
         setUser(null);
     };
