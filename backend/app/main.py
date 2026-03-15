@@ -17,8 +17,7 @@ app.add_middleware(
         "http://127.0.0.1:5173",
         "https://pritvee.github.io",
         "https://artexa.in",
-        "https://www.artexa.in",
-        "*", # Fallback for other origins not requiring credentials, though specific origins are preferred
+        "https://www.artexa.in"
     ],
     allow_credentials=True,
     allow_methods=["*"],
