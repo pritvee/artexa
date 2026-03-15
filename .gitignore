@@ -3,7 +3,11 @@ __pycache__/
 *.py[cod]
 *$py.class
 venv/
+.venv/
+*.env
 .env
+.env.local
+.env.production
 sql_app.db
 backend/uploads/*
 !backend/uploads/.gitkeep
@@ -13,3 +17,11 @@ node_modules/
 dist/
 .DS_Store
 *.local
+
+# IDE
+.vscode/
+.qodo/
+
+# Python large files
+artexa_full_code.pdf
+artexa_full_code.md
