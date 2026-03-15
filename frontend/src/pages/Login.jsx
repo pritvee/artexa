@@ -71,6 +71,18 @@ const Login = () => {
 
 
                 {error && <Alert severity="error" sx={{ mb: 3 }}>{error}</Alert>}
+                {loading && (
+                    <Alert severity="info" sx={{ mb: 3, '& .MuiAlert-message': { width: '100%' } }}>
+                        <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                            Authenticating...
+                        </Typography>
+                        <Box sx={{ mt: 1, opacity: 0.8 }}>
+                            <Typography variant="caption" sx={{ display: 'block' }}>
+                                (Note: Backend may take a minute to wake up on first visit)
+                            </Typography>
+                        </Box>
+                    </Alert>
+                )}
 
                 <form onSubmit={handleSubmit}>
                     <TextField
