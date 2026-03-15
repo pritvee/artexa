@@ -16,11 +16,13 @@ export const AuthProvider = ({ children }) => {
         const storedRole = localStorage.getItem('role');
 
         if (storedToken && storedEmail && storedRole) {
-            setUser({ id: storedId ? parseInt(storedId) : null, email: storedEmail, role: storedRole, name: storedName || 'User' });
+            setUser({ 
+                id: storedId ? parseInt(storedId) : null, 
+                email: storedEmail, 
+                role: storedRole, 
+                name: storedName || 'User' 
+            });
             setToken(storedToken);
-        } else {
-            setUser(null);
-            setToken(null);
         }
     }, []);
 

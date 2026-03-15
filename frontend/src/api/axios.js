@@ -10,7 +10,22 @@ const api = axios.create({
 export const getPublicUrl = (path) => {
     if (!path) return '';
     if (path.startsWith('http')) return path;
+    
     const cleanPath = path.startsWith('/') ? path : `/${path}`;
+    
+    // Check if it's a frontend asset (typically in /assets/ or /images/ or /models/)
+    const isFrontendAsset = cleanPath.startsWith('/assets/') || 
+                            cleanPath.startsWith('/images/') || 
+                            cleanPath.startsWith('/models/');
+
+    if (isFrontendAsset) {
+        const viteBase = import.meta.env.BASE_URL || '/';
+        const base = viteBase.endsWith('/') ? viteBase.slice(0, -1) : viteBase;
+        return `${base}${cleanPath}`;
+    }
+
+    // Otherwise, assume it's a backend asset (like /uploads/...)
+    // If BASE_URL is empty (relative API), it will naturally be relative to frontend
     return `${BASE_URL}${cleanPath}`;
 };
 

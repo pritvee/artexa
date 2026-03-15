@@ -37,6 +37,10 @@ const Login = () => {
             const { access_token, user_data } = res.data;
 
             login(access_token, user_data.role, user_data.email, user_data.name, user_data.id);
+            
+            // Redirect based on role
+            const redirectPath = user_data.role === 'admin' ? '/admin' : '/';
+            navigate(redirectPath, { replace: true });
         } catch (err) {
             let errorMsg = 'Invalid email or password';
             if (err.response?.data?.detail) {

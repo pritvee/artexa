@@ -26,15 +26,15 @@ const fadeUp = {
 };
 
 const CATEGORIES_DATA = [
-    { name: 'Frames',   img: '/assets/cat_frames.png', count: 24, path: '/shop?category=frames' },
-    { name: 'Mugs',     img: '/assets/cat_mugs.png',   count: 18, path: '/shop?category=mugs' },
-    { name: 'Hampers',  img: '/assets/perfect_chocolate_hamper.png', count: 12, path: '/shop?category=hampers' },
-    { name: 'Gifts',    img: '/assets/luxury_giftbox.png', count: 32, path: '/shop?category=gifts' },
+    { name: 'Frames',   img: getPublicUrl('/assets/cat_frames.png'), count: 24, path: '/shop?category=frames' },
+    { name: 'Mugs',     img: getPublicUrl('/assets/cat_mugs.png'),   count: 18, path: '/shop?category=mugs' },
+    { name: 'Hampers',  img: getPublicUrl('/assets/perfect_chocolate_hamper.png'), count: 12, path: '/shop?category=hampers' },
+    { name: 'Gifts',    img: getPublicUrl('/assets/luxury_giftbox.png'), count: 32, path: '/shop?category=gifts' },
 ];
 
 const REVIEWS = [
     { name: 'Sarah M.', text: 'Best anniversary gift I ordered! The quality is amazing and it arrived so fast.', rating: 5, avatar: 'S' },
-    { name: 'Rahul K.', text: 'The custom mug turned out perfect. My wife loved it! Highly recommend Arteza.', rating: 5, avatar: 'R' },
+    { name: 'Rahul K.', text: 'The custom mug turned out perfect. My wife loved it! Highly recommend Artexa.', rating: 5, avatar: 'R' },
     { name: 'Priya S.', text: 'Elegant design and very emotional gifting experience. Packaging was premium.', rating: 4, avatar: 'P' },
 ];
 
@@ -139,7 +139,7 @@ const Home = () => {
                                     WebkitBackdropFilter: 'blur(10px)',
                                 }}>
                                     <img 
-                                        src="/assets/hero.png" 
+                                        src={getPublicUrl("/assets/hero.png")} 
                                         alt="Premium Gifts" 
                                         loading="lazy"
                                         style={{ width: '100%', borderRadius: '14px', display: 'block' }} 
@@ -265,7 +265,7 @@ const Home = () => {
                                                     {product.name}
                                                 </Typography>
                                                 <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'space-between', alignItems: { xs: 'flex-start', sm: 'center' }, mt: 'auto', mb: 2, gap: 0.5 }}>
-                                                    <Typography variant="h6" color="primary" sx={{ fontWeight: 900, fontSize: { xs: '1rem', md: '1.25rem' } }}>₹{product.price.toFixed(0)}</Typography>
+                                                    <Typography variant="h6" color="primary" sx={{ fontWeight: 900, fontSize: { xs: '1.1rem', md: '1.25rem' } }}>₹{(product.price || 0).toFixed(0)}</Typography>
                                                     <Stack direction="row" spacing={0.5} alignItems="center">
                                                         <Rating value={5} readOnly size="small" sx={{ fontSize: '0.8rem' }} />
                                                     </Stack>

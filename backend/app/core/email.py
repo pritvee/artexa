@@ -46,7 +46,7 @@ class EmailService:
         body = f"""
         <h1>Hi {user.name},</h1>
         <p>Your order #{order_id} status has been updated to: <strong>{status}</strong></p>
-        <p>Thank you for shopping with Arteza!</p>
+        <p>Thank you for shopping with Artexa!</p>
         """
         cls.send_email(user.email, subject, body)
 

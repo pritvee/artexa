@@ -66,7 +66,7 @@ const MyOrders = () => {
                     <Inventory2Icon sx={{ fontSize: 100, color: 'primary.main', mb: 3, opacity: 0.2 }} />
                     <Typography variant="h4" sx={{ fontWeight: 800, mb: 2 }}>No orders yet</Typography>
                     <Typography variant="body1" sx={{ color: 'text.secondary', mb: 4, maxWidth: 400, mx: 'auto' }}>
-                        Your journey with Arteza hasn't started yet. Create something beautiful today!
+                        Your journey with Artexa hasn't started yet. Create something beautiful today!
                     </Typography>
                     <Button 
                         variant="contained" 
@@ -201,10 +201,10 @@ const MyOrders = () => {
                                                                     <Box sx={{ flex: 1 }}>
                                                                         <Typography variant="body1" sx={{ fontWeight: 700 }}>{item.product?.name}</Typography>
                                                                         <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 600 }}>
-                                                                            Quantity: {item.quantity} • ₹{item.price.toFixed(0)} each
+                                                                            Quantity: {item.quantity} • ₹{(item.price || 0).toFixed(0)} each
                                                                         </Typography>
                                                                     </Box>
-                                                                    <Typography variant="body1" sx={{ fontWeight: 800 }}>₹{(item.price * item.quantity).toFixed(0)}</Typography>
+                                                                    <Typography variant="body1" sx={{ fontWeight: 800 }}>₹{((item.price || 0) * item.quantity).toFixed(0)}</Typography>
                                                                 </Box>
                                                             ))}
                                                         </Stack>
@@ -244,7 +244,7 @@ const MyOrders = () => {
                                                                 <Divider sx={{ mb: 2, borderStyle: 'dashed' }} />
                                                                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                                                     <Typography sx={{ fontWeight: 700, opacity: 0.6 }}>Total Amount</Typography>
-                                                                    <Typography variant="h5" sx={{ fontWeight: 900, color: 'primary.main' }}>₹{order.total_price.toFixed(0)}</Typography>
+                                                                    <Typography variant="h5" sx={{ fontWeight: 900, color: 'primary.main' }}>₹{(order.total_price || 0).toFixed(0)}</Typography>
                                                                 </Box>
                                                             </Box>
                                                         </Box>

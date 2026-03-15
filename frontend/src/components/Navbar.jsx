@@ -162,7 +162,7 @@ const Navbar = () => {
                                 }
                             }}
                         >
-                            ARTEZA
+                            ARTEXA
                         </Typography>
                     </Box>
 
@@ -296,7 +296,7 @@ const Navbar = () => {
                                     textTransform: 'none'
                                 }}
                             >
-                                Join ARTEZA
+                                Join ARTEXA
                             </Button>
                         )}
                         
@@ -326,7 +326,7 @@ const Navbar = () => {
             >
                 <Box sx={{ mb: 4, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <Typography variant="h5" sx={{ fontWeight: 900, color: 'white' }}>
-                        ARTEZA
+                        ARTEXA
                     </Typography>
                     <IconButton onClick={toggleMobileMenu} sx={{ color: 'white' }}>
                         <ArrowBackIcon />

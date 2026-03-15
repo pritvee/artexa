@@ -187,10 +187,10 @@ const ProductDetail = () => {
                             
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 3 }}>
                                 <Typography variant="h3" color="primary" sx={{ fontWeight: 900 }}>
-                                    ₹{product.price.toLocaleString()}
+                                    ₹{(product.price || 0).toLocaleString()}
                                 </Typography>
                                 <Typography variant="body1" color="text.secondary" sx={{ textDecoration: 'line-through' }}>
-                                    ₹{(product.price * 1.2).toLocaleString()}
+                                    ₹{((product.price || 0) * 1.2).toLocaleString()}
                                 </Typography>
                                 <Chip label="20% OFF" color="success" size="small" sx={{ fontWeight: 700, borderRadius: 1 }} />
                             </Box>

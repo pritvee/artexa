@@ -257,7 +257,7 @@ const ChatWidget = () => {
                             </Avatar>
                             <Box>
                                 <Typography variant="subtitle1" fontWeight="900" lineHeight={1.2}>
-                                    Arteza Support
+                                    Artexa Support
                                 </Typography>
                                 <Typography variant="caption" sx={{ opacity: 0.9, display: 'flex', alignItems: 'center', gap: 0.5 }}>
                                     <Box sx={{ width: 6, height: 6, bgcolor: '#4ade80', borderRadius: '50%' }} />

@@ -20,7 +20,7 @@ const Footer = () => {
                                 mb: 3
                             }}
                         >
-                            Art<Box component="span" sx={{ color: '#6C63FF' }}>eza</Box>
+                            Art<Box component="span" sx={{ color: '#6C63FF' }}>exa</Box>
                         </Typography>
                         <Typography variant="body1" color="text.secondary" sx={{ mb: 4, maxWidth: 350, lineHeight: 1.8 }}>
                             Handcrafted high-quality photo gifts for every occasion. We help you preserve your most precious memories through art and personalization.
@@ -28,7 +28,7 @@ const Footer = () => {
                         <Stack direction="row" spacing={2}>
                             {[
                                 { Icon: FacebookIcon, url: '#' },
-                                { Icon: InstagramIcon, url: 'https://www.instagram.com/arteza.in/' },
+                                { Icon: InstagramIcon, url: 'https://www.instagram.com/artexa.in/' },
                                 { Icon: TwitterIcon, url: '#' }
                             ].map((social, i) => (
                                 <IconButton 
@@ -94,7 +94,7 @@ const Footer = () => {
                         <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 2, mb: 3 }}>
                             123 Design Street, Creative Valley<br />
                             New Delhi, India 110001<br />
-                            Email: hello@arteza.in<br />
+                            Email: hello@artexa.in<br />
                             Phone: +91 98765 43210
                         </Typography>
                         <Box sx={{ p: 2, borderRadius: 3, bgcolor: '#F6F7FF', display: 'flex', alignItems: 'center', gap: 2 }}>
@@ -107,7 +107,7 @@ const Footer = () => {
                 <Divider sx={{ opacity: 0.1 }} />
                 <Stack direction={{ xs: 'column', md: 'row' }} justifyContent="space-between" alignItems="center" sx={{ mt: 4, gap: 2 }}>
                     <Typography variant="body2" color="text.secondary">
-                        © {new Date().getFullYear()} Arteza Personalization Lab. All rights reserved.
+                        © {new Date().getFullYear()} Artexa Personalization Lab. All rights reserved.
                     </Typography>
                     <Stack direction="row" spacing={3}>
                         <Link href="#" underline="none" color="text.secondary" variant="caption">Privacy Policy</Link>

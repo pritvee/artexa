@@ -94,7 +94,7 @@ const ProductCard = ({ product }) => {
                     <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'space-between', alignItems: { xs: 'flex-start', sm: 'center' }, mt: 'auto', gap: { xs: 1.5, md: 0 } }}>
                         <Box>
                             <Typography variant="h5" color="primary" sx={{ fontWeight: 900, fontSize: { xs: '1.1rem', md: '1.5rem' } }}>
-                                ₹{product.price.toFixed(0)}
+                                ₹{(product.price || 0).toFixed(0)}
                             </Typography>
                             <Typography variant="caption" sx={{ color: 'success.main', fontWeight: 800, fontSize: '0.65rem' }}>Free Delivery</Typography>
                         </Box>

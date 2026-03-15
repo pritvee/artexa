@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 class Settings(BaseSettings):
-    PROJECT_NAME: str = "Arteza – Custom Photo & Gift Studio"
+    PROJECT_NAME: str = "Artexa – Custom Photo & Gift Studio"
     DATABASE_URL: str = os.getenv("DATABASE_URL", "mysql+pymysql://root:Root%40123@localhost:3306/artexa_db")
     SECRET_KEY: str = os.getenv("SECRET_KEY", "your-secret-key-goes-here-make-it-long-and-secure")
     ALGORITHM: str = "HS256"
@@ -22,7 +22,7 @@ class Settings(BaseSettings):
     SMTP_PORT: int = int(os.getenv("SMTP_PORT", "587"))
     SMTP_USER: str = os.getenv("SMTP_USER", "")
     SMTP_PASSWORD: str = os.getenv("SMTP_PASSWORD", "")
-    EMAILS_FROM_NAME: str = os.getenv("EMAILS_FROM_NAME", "Arteza Notification")
+    EMAILS_FROM_NAME: str = os.getenv("EMAILS_FROM_NAME", "Artexa Notification")
 
     class Config:
         case_sensitive = True

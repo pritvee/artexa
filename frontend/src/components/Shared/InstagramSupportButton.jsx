@@ -4,7 +4,7 @@ import InstagramIcon from '@mui/icons-material/Instagram';
 
 const InstagramSupportButton = () => {
     const openInstagramChat = () => {
-        const instagramUrl = "https://ig.me/m/arteza.in";
+        const instagramUrl = "https://ig.me/m/artexa.in";
         window.open(instagramUrl, "_blank");
     };
 

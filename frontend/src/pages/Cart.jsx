@@ -170,7 +170,7 @@ const Cart = () => {
                                                             Handcrafted Gift
                                                         </Typography>
                                                     </Box>
-                                                    <Typography variant="h5" sx={{ fontWeight: 900 }}>₹{item.product?.price.toFixed(0)}</Typography>
+                                                    <Typography variant="h5" sx={{ fontWeight: 900 }}>₹{(item.product?.price || 0).toFixed(0)}</Typography>
                                                 </Stack>
 
                                                 <Stack direction="row" spacing={2} sx={{ mt: 3 }} alignItems="center" flexWrap="wrap" gap={2}>
