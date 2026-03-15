@@ -37,10 +37,8 @@ def get_products(
     
     total = query.count()
     items = query.offset(skip).limit(limit).all()
-    print(f"DEBUG: Found {len(items)} products")
-    for item in items:
-        print(f"DEBUG: Product {item.id}: {item.name}, customization: {item.has_customization}")
     
+    print(f"DEBUG: Successfully fetched {len(items)} products")
     return {
         "items": items,
         "total": total,
@@ -51,7 +49,9 @@ def get_products(
 
 @router.get("/categories", response_model=List[CategoryOut])
 def get_categories(db: Session = Depends(get_db)):
-    return db.query(Category).all()
+    categories = db.query(Category).all()
+    print(f"DEBUG: Successfully fetched {len(categories)} categories")
+    return categories
 
 @router.get("/{product_id}", response_model=ProductOut)
 def get_product(product_id: int, db: Session = Depends(get_db)):
