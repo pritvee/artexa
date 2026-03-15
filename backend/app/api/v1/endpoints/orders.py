@@ -3,14 +3,15 @@ from sqlalchemy.orm import Session
 from typing import List, Optional
 from app.db.session import get_db
 from app.models.models import Order, OrderItem, Cart, CartItem, User
-import razorpay
 from app.core.config import settings
+
 from app.schemas.order import OrderCreate, OrderOut, OrderItemOut, PaymentVerify
 from app.api.v1.endpoints.auth import get_current_user
 
 router = APIRouter()
 
-client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
+# Razorpay client removed
+
 
 @router.post("/", response_model=OrderOut)
 def create_order(
@@ -45,21 +46,10 @@ def create_order(
     db.add(order)
     db.flush() # To get order.id
     
-    # Create Razorpay Order
+    # Create Order ID (Mocked since Razorpay is removed)
     if order_in.payment_method == "online":
-        if settings.RAZORPAY_KEY_SECRET == "razorpay_secret_key_here" or not settings.RAZORPAY_KEY_SECRET:
-            order.razorpay_order_id = f"mock_rzp_order_{order.id}"
-        else:
-            try:
-                razorpay_order = client.order.create({
-                    "amount": int(total_price * 100), # Amount in paise
-                    "currency": "INR",
-                    "receipt": f"order_{order.id}"
-                })
-                order.razorpay_order_id = razorpay_order['id']
-            except Exception as e:
-                db.rollback()
-                raise HTTPException(status_code=500, detail=f"Razorpay Error: {str(e)}")
+        order.razorpay_order_id = f"mock_rzp_order_{order.id}"
+
     else:
         order.razorpay_order_id = None
 
@@ -99,55 +89,24 @@ def verify_payment(
     if not order:
         raise HTTPException(status_code=404, detail="Order not found")
     
-    try:
-        # Ensure test/mock secret key overrides signature verification locally
-        if settings.RAZORPAY_KEY_SECRET == "razorpay_secret_key_here" or not settings.RAZORPAY_KEY_SECRET or data.razorpay_payment_id == "mock_payment_id":
-            order.payment_status = "paid"
-            order.razorpay_payment_id = data.razorpay_payment_id
-            order.razorpay_signature = data.razorpay_signature
-            
-            # Clear only the items that were in this order from the cart
-            cart = db.query(Cart).filter(Cart.user_id == current_user.id).first()
-            if cart:
-                for oi in order.items:
-                    db.query(CartItem).filter(
-                        CartItem.cart_id == cart.id,
-                        CartItem.product_id == oi.product_id,
-                        CartItem.quantity == oi.quantity
-                        # We could also check customization_details but it's complex for JSON comparison in SQL
-                    ).delete(synchronize_session=False)
-                
-            db.commit()
-            return {"status": "success", "message": "Payment verified (Mock)"}
+    # Signature verification skipped (Razorpay removed)
+    order.payment_status = "paid"
+    order.razorpay_payment_id = data.razorpay_payment_id
+    order.razorpay_signature = data.razorpay_signature
+    
+    # Clear only the items that were in this order from the cart
+    cart = db.query(Cart).filter(Cart.user_id == current_user.id).first()
+    if cart:
+        for oi in order.items:
+            db.query(CartItem).filter(
+                CartItem.cart_id == cart.id,
+                CartItem.product_id == oi.product_id,
+                CartItem.quantity == oi.quantity
+            ).delete(synchronize_session=False)
+        
+    db.commit()
+    return {"status": "success", "message": "Payment verified (Razorpay Removed)"}
 
-        # Verify signature
-        client.utility.verify_payment_signature({
-            'razorpay_order_id': data.razorpay_order_id,
-            'razorpay_payment_id': data.razorpay_payment_id,
-            'razorpay_signature': data.razorpay_signature
-        })
-        
-        order.payment_status = "paid"
-        order.razorpay_payment_id = data.razorpay_payment_id
-        order.razorpay_signature = data.razorpay_signature
-        
-        # Clear only the items that were in this order from the cart
-        cart = db.query(Cart).filter(Cart.user_id == current_user.id).first()
-        if cart:
-            for oi in order.items:
-                db.query(CartItem).filter(
-                    CartItem.cart_id == cart.id,
-                    CartItem.product_id == oi.product_id,
-                    CartItem.quantity == oi.quantity
-                ).delete(synchronize_session=False)
-            
-        db.commit()
-        return {"status": "success", "message": "Payment verified"}
-    except Exception as e:
-        order.payment_status = "failed"
-        db.commit()
-        print(f"Payment Verification Error: {str(e)}")
-        raise HTTPException(status_code=400, detail=f"Payment verification failed: {str(e)}")
 
 
 @router.get("/my-orders", response_model=List[OrderOut])

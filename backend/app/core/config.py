@@ -14,9 +14,8 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 600 # Longer for dev convenience
     UPLOAD_DIR: str = "uploads"
 
-    # Razorpay Settings (Mock keys for setup)
-    RAZORPAY_KEY_ID: str = os.getenv("RAZORPAY_KEY_ID", "rzp_test_5yBThevW2uEub2")
-    RAZORPAY_KEY_SECRET: str = os.getenv("RAZORPAY_KEY_SECRET", "razorpay_secret_key_here")
+    # Razorpay Settings Removed
+
 
     # Email Settings
     SMTP_HOST: str = os.getenv("SMTP_HOST", "smtp.gmail.com")

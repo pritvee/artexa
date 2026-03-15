@@ -17,7 +17,7 @@ _cors_origins = [
     "http://127.0.0.1:5173",
     "http://127.0.0.1:3000",
 ]
-# Add production frontend URL from env (set in Render dashboard)
+# Add production frontend    # Razorpay Settings Removed
 _frontend_url = os.getenv("FRONTEND_URL", "")
 if _frontend_url:
     _cors_origins.append(_frontend_url)
@@ -45,11 +45,13 @@ app.include_router(api_router, prefix="/api/v1")
 # Create tables in development
 @app.on_event("startup")
 def on_startup():
-    try:
-        print("DEBUG: Attempting to connect to database and create tables...")
-        Base.metadata.create_all(bind=engine)
-        print("DEBUG: Database connection successful and tables verified.")
-    except Exception as e:
-        print(f"ERROR: Database connection failed: {str(e)}")
-        print("CRITICAL: The application may not function correctly without a database connection.")
+    print("DEBUG: Startup event triggered. Skipping auto-table creation to prevent crash.")
+    # try:
+    #     print("DEBUG: Attempting to connect to database and create tables...")
+    #     Base.metadata.create_all(bind=engine)
+    #     print("DEBUG: Database connection successful and tables verified.")
+    # except Exception as e:
+    #     print(f"ERROR: Database connection failed: {str(e)}")
+    #     print("CRITICAL: The application may not function correctly without a database connection.")
+
 
