@@ -10,3 +10,4 @@ python-multipart
 python-dotenv
 alembic
 email-validator
+bcrypt==4.0.1

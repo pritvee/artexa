@@ -10,33 +10,14 @@ from app.core.config import settings
 
 app = FastAPI(title="Artexa E-Commerce API", version="1.0.0")
 
-# Build CORS origins list — always includes localhost, plus any Vercel/production URL
-_cors_origins = [
-    "http://localhost:3000",
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
-    "http://127.0.0.1:3000",
-    "https://artexa.vercel.app",  # Fallback for Vercel
-    "https://artexa.vin",         # Fallback for custom domain
-]
-
-# Add production frontend URL from env (set in Render dashboard)
-_frontend_url = os.getenv("FRONTEND_URL", "").strip().rstrip("/")
-if _frontend_url:
-    _cors_origins.append(_frontend_url)
-    # Also add the version with slash just in case, though browsers send without
-    _cors_origins.append(f"{_frontend_url}/")
-
-# Remove duplicates
-_cors_origins = list(set(_cors_origins))
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=_cors_origins,
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 
 @app.get("/")
