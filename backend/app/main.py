@@ -10,9 +10,23 @@ from app.core.config import settings
 
 app = FastAPI(title="Artexa E-Commerce API", version="1.0.0")
 
+# Define specific origins for production and development
+allowed_origins = [
+    "https://artexa.vercel.app",
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+]
+
+# Support custom frontend URL from environment variable
+env_frontend_url = os.getenv("FRONTEND_URL")
+if env_frontend_url:
+    allowed_origins.append(env_frontend_url.rstrip("/"))
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
