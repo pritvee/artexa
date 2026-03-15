@@ -7,7 +7,8 @@ load_dotenv()
 
 class Settings(BaseSettings):
     PROJECT_NAME: str = "Artexa – Custom Photo & Gift Studio"
-    DATABASE_URL: str = os.getenv("DATABASE_URL", "mysql+pymysql://root:Root%40123@localhost:3306/artexa_db")
+    DATABASE_URL: str = os.getenv("DATABASE_URL", "postgresql://user:pass@localhost:5432/artexa_db")
+
     SECRET_KEY: str = os.getenv("SECRET_KEY", "your-secret-key-goes-here-make-it-long-and-secure")
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 600 # Longer for dev convenience
