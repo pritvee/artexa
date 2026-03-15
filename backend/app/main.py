@@ -8,7 +8,7 @@ from app.db.base_class import Base
 from app.db.session import engine
 from app.core.config import settings
 
-app = FastAPI(title="Artexa E-Commerce API", version="1.0.0")
+app = FastAPI(title="Artexa E-Commerce API", version="1.0.0", redirect_slashes=False)
 
 app.add_middleware(
     CORSMiddleware,
