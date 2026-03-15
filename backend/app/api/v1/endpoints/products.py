@@ -13,7 +13,7 @@ from app.core.config import settings
 
 router = APIRouter()
 
-@router.get("/", response_model=ProductListOut)
+@router.get("", response_model=ProductListOut)
 def get_products(
     category_id: Optional[int] = None,
     on_home: Optional[bool] = None,
