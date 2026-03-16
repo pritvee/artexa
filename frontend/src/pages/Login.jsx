@@ -15,7 +15,16 @@ const Login = () => {
     const { login, user, token } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
-    const from = location.state?.from || (user?.role === 'admin' ? '/admin' : '/');
+    
+    // Get redirect path from state OR search params
+    const getFromPath = () => {
+        if (location.state?.from) return location.state.from;
+        const params = new URLSearchParams(location.search);
+        const fromParam = params.get('from');
+        if (fromParam) return fromParam;
+        return user?.role === 'admin' ? '/admin' : '/';
+    };
+    const from = getFromPath();
 
     useEffect(() => {
         if (token && user) {

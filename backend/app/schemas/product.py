@@ -15,11 +15,11 @@ class CategoryOut(CategoryBase):
 
 class ProductBase(BaseModel):
     name: str
-    description: str
+    description: Optional[str] = None
     price: float
     stock: int
     category_id: int
-    customization_type: str
+    customization_type: Optional[str] = None
     has_customization: bool = False
     customization_schema: Optional[dict] = None
     image_url: Optional[str] = None

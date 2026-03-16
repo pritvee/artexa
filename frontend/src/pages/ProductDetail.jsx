@@ -19,6 +19,7 @@ const ProductDetail = () => {
 
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null); // 'not_found', 'server_error', or null
     const [quantity, setQuantity] = useState(1);
     const [selectedImage, setSelectedImage] = useState(0);
 
@@ -27,11 +28,25 @@ const ProductDetail = () => {
 
     useEffect(() => {
         const fetchProduct = async () => {
+            const cleanId = id ? id.replace(/\/+$/, '') : null;
+            if (!cleanId) {
+                setError('not_found');
+                setLoading(false);
+                return;
+            }
+
             try {
-                const response = await api.get(`/products/${id}`);
+                setLoading(true);
+                setError(null);
+                const response = await api.get(`/products/${cleanId}`);
                 setProduct(response.data);
-            } catch (error) {
-                console.error("Error fetching product:", error);
+            } catch (err) {
+                console.error("Error fetching product:", err);
+                if (err.response?.status === 404) {
+                    setError('not_found');
+                } else {
+                    setError('server_error');
+                }
             } finally {
                 setLoading(false);
             }
@@ -93,10 +108,24 @@ const ProductDetail = () => {
         </Container>
     );
 
-    if (!product) return (
+    if (error === 'not_found' || (!loading && !product && !error)) return (
         <Container sx={{ py: 10, textAlign: 'center' }}>
-            <Typography variant="h4" color="text.secondary">Product not found</Typography>
-            <Button onClick={() => navigate('/shop')} sx={{ mt: 2 }}>Back to Shop</Button>
+            <Typography variant="h4" color="text.secondary" gutterBottom>Product not found</Typography>
+            <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+                The item you're looking for might have been moved or deleted.
+            </Typography>
+            <Button variant="contained" onClick={() => navigate('/shop')}>Back to Shop</Button>
+        </Container>
+    );
+
+    if (error === 'server_error') return (
+        <Container sx={{ py: 10, textAlign: 'center' }}>
+            <Typography variant="h4" color="error" gutterBottom>Oops! Something went wrong</Typography>
+            <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+                We had trouble loading this product. Please try refreshing the page.
+            </Typography>
+            <Button variant="outlined" onClick={() => window.location.reload()} sx={{ mr: 2 }}>Refresh Page</Button>
+            <Button onClick={() => navigate('/shop')}>Back to Shop</Button>
         </Container>
     );
 

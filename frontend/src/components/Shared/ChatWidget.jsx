@@ -13,7 +13,7 @@ import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import ViewInArIcon from '@mui/icons-material/ViewInAr';
 import { useAuth } from '../../store/AuthContext';
 import { useThemeMode } from '../../store/ThemeContext';
-import api from '../../api/axios';
+import api, { BASE_URL, API_BASE_URL } from '../../api/axios';
 
 const ChatWidget = () => {
     const { user, token } = useAuth();
@@ -27,6 +27,8 @@ const ChatWidget = () => {
     const ws = useRef(null);
     const messagesEndRef = useRef(null);
     const chatWindowRef = useRef(null);
+    const shouldReconnect = useRef(true);
+    const reconnectDelay = useRef(5000);
     const location = useLocation();
     const isCustomizing = location.pathname.includes('/customize');
     const [detectedDesign, setDetectedDesign] = useState(false);
@@ -56,11 +58,18 @@ const ChatWidget = () => {
 
     useEffect(() => {
         if (user && token) {
+            shouldReconnect.current = true;
+            reconnectDelay.current = 5000;
             fetchHistory();
             connectWebSocket();
         }
         return () => {
-            if (ws.current) ws.current.close();
+            // Signal that this is an intentional close — do not reconnect
+            shouldReconnect.current = false;
+            if (ws.current) {
+                ws.current.close();
+                ws.current = null;
+            }
         };
     }, [user, token]);
 
@@ -77,29 +86,52 @@ const ChatWidget = () => {
         if (!user || ws.current) return;
 
         setIsConnecting(true);
-        const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-        const wsUrl = `${protocol}//${window.location.host}/api/v1/chat/ws/${user.id}:user`;
+
+        // Always connect to the backend domain, not the frontend (Vercel)
+        const backendBase = API_BASE_URL.replace(/\/api\/v1\/?$/, '');
+        const wsProtocol = backendBase.startsWith('https') ? 'wss' : 'ws';
+        const wsBase = backendBase.replace(/^https?/, wsProtocol);
+        const wsUrl = `${wsBase}/api/v1/chat/ws/${user.id}:user`;
         
+        console.log("[WS] Connecting to:", wsUrl);
         ws.current = new WebSocket(wsUrl);
 
         ws.current.onopen = () => {
-            console.log("WebSocket Connected");
+            console.log("[WS] Connected");
             setIsConnecting(false);
+            reconnectDelay.current = 5000; // reset backoff on success
         };
 
         ws.current.onmessage = (event) => {
-            const msg = JSON.parse(event.data);
-            setMessages(prev => [...prev, msg]);
-            if (!open) {
-                setUnreadCount(prev => prev + 1);
+            try {
+                const msg = JSON.parse(event.data);
+                setMessages(prev => [...prev, msg]);
+                if (!open) {
+                    setUnreadCount(prev => prev + 1);
+                }
+            } catch (e) {
+                console.warn("[WS] Failed to parse message", e);
             }
         };
 
-        ws.current.onclose = () => {
-            console.log("WebSocket Disconnected");
+        ws.current.onerror = (err) => {
+            console.warn("[WS] Error:", err);
+        };
+
+        ws.current.onclose = (event) => {
+            console.log(`[WS] Disconnected (code=${event.code})`)
             ws.current = null;
-            // Try to reconnect after 5 seconds
-            setTimeout(connectWebSocket, 5000);
+            setIsConnecting(false);
+            // Only reconnect if this was not intentional
+            if (shouldReconnect.current) {
+                const delay = Math.min(reconnectDelay.current, 30000);
+                console.log(`[WS] Reconnecting in ${delay}ms...`);
+                setTimeout(() => {
+                    if (shouldReconnect.current) connectWebSocket();
+                }, delay);
+                // Exponential backoff — double the delay each time, cap at 30s
+                reconnectDelay.current = Math.min(reconnectDelay.current * 2, 30000);
+            }
         };
     };
 

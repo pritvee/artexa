@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import {
     Container, Grid, Box, Typography, Button, CircularProgress,
     TextField, MenuItem, Select, FormControl, InputLabel,
@@ -14,6 +14,7 @@ import CanvasPreview from '../components/Customization/LiveVisualizer/CanvasPrev
 const ProductCustomizerPage = () => {
     const { id, cartItemId } = useParams();
     const navigate = useNavigate();
+    const location = useLocation();
     const { user } = useAuth();
     const { updateCartItem } = useCart();
     const [textureCanvas, setTextureCanvas] = useState(null);
@@ -36,7 +37,7 @@ const ProductCustomizerPage = () => {
         const fetchProductAndCartItem = async () => {
             try {
                 // Fetch Product
-                const response = await api.get(`/products/${id}/`);
+                const response = await api.get(`/products/${id}`);
                 const data = response.data;
                 setProduct(data);
 
@@ -124,6 +125,11 @@ const ProductCustomizerPage = () => {
     };
 
     const handleImageUpload = async (e) => {
+        if (!user) {
+            alert('Please login to upload photos.');
+            navigate('/login', { state: { from: location.pathname } });
+            return;
+        }
         const file = e.target.files[0];
         if (!file) return;
         const reader = new FileReader();
@@ -141,8 +147,8 @@ const ProductCustomizerPage = () => {
 
     const handleAddToCart = async () => {
         if (!user) {
-            alert('Please log in.');
-            navigate('/login');
+            alert('Please login to add items to cart.');
+            navigate('/login', { state: { from: location.pathname } });
             return;
         }
 

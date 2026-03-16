@@ -12,7 +12,7 @@ import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useAuth } from '../../store/AuthContext';
 import { useThemeMode } from '../../store/ThemeContext';
-import api from '../../api/axios';
+import api, { BASE_URL, API_BASE_URL } from '../../api/axios';
 
 const AdminChat = () => {
     const { user, token } = useAuth();
@@ -25,6 +25,8 @@ const AdminChat = () => {
     const [loadingMessages, setLoadingMessages] = useState(false);
     const ws = useRef(null);
     const messagesEndRef = useRef(null);
+    const shouldReconnect = useRef(true);
+    const reconnectDelay = useRef(5000);
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -36,9 +38,15 @@ const AdminChat = () => {
 
     useEffect(() => {
         fetchConversations();
+        shouldReconnect.current = true;
+        reconnectDelay.current = 5000;
         connectWebSocket();
         return () => {
-            if (ws.current) ws.current.close();
+            shouldReconnect.current = false;
+            if (ws.current) {
+                ws.current.close();
+                ws.current = null;
+            }
         };
     }, []);
 
@@ -73,35 +81,58 @@ const AdminChat = () => {
     const connectWebSocket = () => {
         if (!user || ws.current) return;
 
-        const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-        const wsUrl = `${protocol}//${window.location.host}/api/v1/chat/ws/${user.id}:admin`;
+        // Always connect to the backend domain, not the frontend (Vercel)
+        const backendBase = API_BASE_URL.replace(/\/api\/v1\/?$/, '');
+        const wsProtocol = backendBase.startsWith('https') ? 'wss' : 'ws';
+        const wsBase = backendBase.replace(/^https?/, wsProtocol);
+        const wsUrl = `${wsBase}/api/v1/chat/ws/${user.id}:admin`;
         
+        console.log("[AdminWS] Connecting to:", wsUrl);
         ws.current = new WebSocket(wsUrl);
 
-        ws.current.onopen = () => console.log("Admin WS Connected");
-
-        ws.current.onmessage = (event) => {
-            const msg = JSON.parse(event.data);
-            
-            // If the message belongs to the current open chat
-            if (selectedUser && (msg.user_id === selectedUser.user_id)) {
-                setMessages(prev => [...prev, msg]);
-                api.post(`/chat/read/${selectedUser.user_id}`);
-            }
-            
-            // Refresh conversation list
-            fetchConversations();
-            
-            // Play notification sound
-            try {
-                const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2354/2354-preview.mp3');
-                audio.play();
-            } catch (e) {}
+        ws.current.onopen = () => {
+            console.log("[AdminWS] Connected");
+            reconnectDelay.current = 5000; // reset backoff
         };
 
-        ws.current.onclose = () => {
+        ws.current.onmessage = (event) => {
+            try {
+                const msg = JSON.parse(event.data);
+                
+                // If the message belongs to the current open chat
+                if (selectedUser && (msg.user_id === selectedUser.user_id)) {
+                    setMessages(prev => [...prev, msg]);
+                    api.post(`/chat/read/${selectedUser.user_id}`);
+                }
+                
+                // Refresh conversation list
+                fetchConversations();
+                
+                // Play notification sound
+                try {
+                    const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2354/2354-preview.mp3');
+                    audio.play();
+                } catch (e) {}
+            } catch (e) {
+                console.warn("[AdminWS] Failed to parse message", e);
+            }
+        };
+
+        ws.current.onerror = (err) => {
+            console.warn("[AdminWS] Error:", err);
+        };
+
+        ws.current.onclose = (event) => {
+            console.log(`[AdminWS] Disconnected (code=${event.code})`);
             ws.current = null;
-            setTimeout(connectWebSocket, 5000);
+            if (shouldReconnect.current) {
+                const delay = Math.min(reconnectDelay.current, 30000);
+                console.log(`[AdminWS] Reconnecting in ${delay}ms...`);
+                setTimeout(() => {
+                    if (shouldReconnect.current) connectWebSocket();
+                }, delay);
+                reconnectDelay.current = Math.min(reconnectDelay.current * 2, 30000);
+            }
         };
     };
 

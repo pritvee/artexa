@@ -51,8 +51,9 @@ api.interceptors.response.use(
             localStorage.removeItem('user_email');
             localStorage.removeItem('user_name');
             // Redirect depending on if they are in admin panel or regular flow. 
-            // Simple generic redirect for now.
-            window.location.href = '/login';
+            // Simple generic redirect for now, keeping the current path for redirect back
+            const currentPath = window.location.pathname;
+            window.location.href = `/login?from=${encodeURIComponent(currentPath)}`;
         }
         return Promise.reject(error);
     }

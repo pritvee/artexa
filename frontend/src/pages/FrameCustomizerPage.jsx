@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo, Suspense, lazy, useRef, useReducer } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import {
     Container, Grid, Box, Typography, Button, CircularProgress,
     TextField, MenuItem, Select, FormControl, InputLabel,
@@ -159,6 +159,7 @@ const INITIAL_DESIGN = {
 const FrameCustomizerPage = () => {
     const { id, cartItemId } = useParams();
     const navigate = useNavigate();
+    const location = useLocation();
     const { user } = useAuth();
     const { updateCartItem } = useCart();
 
@@ -288,7 +289,7 @@ const FrameCustomizerPage = () => {
     useEffect(() => {
         const fetchProductAndCartItem = async () => {
             try {
-                const response = await api.get(`/products/${id}/`);
+                const response = await api.get(`/products/${id}`);
                 setProduct(response.data);
                 setBasePrice(response.data.price);
 
@@ -386,6 +387,11 @@ const FrameCustomizerPage = () => {
     };
 
     const handleImageUpload = async (e) => {
+        if (!user) {
+            setSnackbar({ open: true, message: 'Please login to upload photos.', severity: 'warning' });
+            setTimeout(() => navigate('/login', { state: { from: location.pathname } }), 1000);
+            return;
+        }
         const files = Array.from(e.target.files);
         if (!files.length) return;
 

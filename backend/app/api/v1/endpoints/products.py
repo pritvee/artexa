@@ -66,11 +66,33 @@ def get_categories(db: Session = Depends(get_db)):
         return []
 
 @router.get("/{product_id}", response_model=ProductOut)
-def get_product(product_id: int, db: Session = Depends(get_db)):
-    product = db.query(Product).filter(Product.id == product_id).first()
-    if not product:
-        raise HTTPException(status_code=404, detail="Product not found")
-    return product
+@router.get("/{product_id}/", response_model=ProductOut)
+def get_product(product_id: str, db: Session = Depends(get_db)):
+    try:
+        # validate product ID to avoid database exception
+        if not product_id.isdigit():
+            raise HTTPException(status_code=400, detail="Invalid product ID format")
+            
+        pid = int(product_id)
+        product = db.query(Product).filter(Product.id == pid).first()
+        
+        if not product:
+            raise HTTPException(status_code=404, detail=f"Product with ID {pid} not found")
+            
+        # Avoid returning raw SQLAlchemy objects directly
+        if hasattr(ProductOut, 'model_validate'):
+            return ProductOut.model_validate(product)
+        return ProductOut.from_orm(product)
+            
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"DATABASE ERROR fetching product {product_id}: {str(e)}")
+        raise HTTPException(
+            status_code=500, 
+            detail="An internal error occurred while fetching the product. Please try again later."
+        )
+
 
 @router.post("/upload-image")
 def upload_image(

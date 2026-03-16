@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useRef, useEffect, lazy, Suspense } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import {
     Container, Grid, Box, Typography, Button, Paper, Tabs, Tab,
     Chip, Stack, Divider, TextField, Select, MenuItem, FormControl,
@@ -81,6 +81,7 @@ import { useCart } from '../store/CartContext';
 const GiftBoxCustomizerPage = () => {
     const { id, cartItemId } = useParams();
     const navigate = useNavigate();
+    const location = useLocation();
     const { user } = useAuth();
     const { updateCartItem } = useCart();
 
@@ -127,7 +128,7 @@ const GiftBoxCustomizerPage = () => {
     useEffect(() => {
         const fetchProductAndCartItem = async () => {
             try {
-                const res = await api.get(`/products/${id}/`);
+                const res = await api.get(`/products/${id}`);
                 const prod = res.data;
                 setProduct(prod);
 
@@ -273,6 +274,11 @@ const GiftBoxCustomizerPage = () => {
     };
 
     const handleUploadAndAdd = async (e, decType) => {
+        if (!user) {
+            setSnackbar({ open: true, message: 'Please login to upload photos.', severity: 'warning' });
+            setTimeout(() => navigate('/login', { state: { from: location.pathname } }), 1000);
+            return;
+        }
         const file = e.target.files[0];
         if (!file) return;
         setSnackbar({ open: true, message: 'Uploading photo...', severity: 'info' });
@@ -367,7 +373,8 @@ const GiftBoxCustomizerPage = () => {
 
     const handleAddToCart = async () => {
         if (!user) {
-            setSnackbar({ open: true, message: 'Please login first', severity: 'warning' });
+            setSnackbar({ open: true, message: 'Please login to add items to cart.', severity: 'warning' });
+            setTimeout(() => navigate('/login', { state: { from: location.pathname } }), 1000);
             return;
         }
 

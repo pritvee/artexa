@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useRef, lazy, Suspense, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     Container, Grid, Box, Typography, Button, Paper, Tabs, Tab,
@@ -83,6 +83,7 @@ import { useCart } from '../store/CartContext';
 const ChocolateHamperPage = () => {
     const { id, cartItemId } = useParams();
     const navigate = useNavigate();
+    const location = useLocation();
     const { user } = useAuth();
     const { updateCartItem } = useCart();
 
@@ -103,7 +104,7 @@ const ChocolateHamperPage = () => {
     useEffect(() => {
         const loadProductAndCartItem = async () => {
             try {
-                const res = await api.get(`/products/${id}/`);
+                const res = await api.get(`/products/${id}`);
                 setProduct(res.data);
                 if (res.data.customization_schema) {
                     const schema = res.data.customization_schema;
@@ -326,6 +327,11 @@ const ChocolateHamperPage = () => {
 
     // ─── Photo upload ───
     const handlePhotoUpload = (e) => {
+        if (!user) {
+            setSnackbar({ open: true, message: 'Please login to upload photos.', severity: 'warning' });
+            setTimeout(() => navigate('/login', { state: { from: location.pathname } }), 1000);
+            return;
+        }
         const file = e.target.files[0];
         if (!file) return;
         const reader = new FileReader();
@@ -372,7 +378,11 @@ const ChocolateHamperPage = () => {
 
     // ─── Add to Cart ───
     const handleAddToCart = async () => {
-        if (!user) { setSnackbar({ open: true, message: 'Please login first', severity: 'warning' }); return; }
+        if (!user) {
+            setSnackbar({ open: true, message: 'Please login to add items to cart.', severity: 'warning' });
+            setTimeout(() => navigate('/login', { state: { from: location.pathname } }), 1000);
+            return;
+        }
         if (totalChocs === 0) { setSnackbar({ open: true, message: 'Add at least one chocolate!', severity: 'warning' }); return; }
 
         let designImg = null;

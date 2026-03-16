@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, Suspense, lazy, useRef } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import {
     Container, Grid, Box, Typography, Button, CircularProgress,
     TextField, MenuItem, Select, FormControl, InputLabel,
@@ -57,6 +57,7 @@ import { useCart } from '../store/CartContext';
 const MugCustomizerPage = () => {
     const { id, cartItemId } = useParams();
     const navigate = useNavigate();
+    const location = useLocation();
     const { user } = useAuth();
     const { updateCartItem } = useCart();
 
@@ -113,7 +114,7 @@ const MugCustomizerPage = () => {
     useEffect(() => {
         const fetchProductAndCartItem = async () => {
             try {
-                const response = await api.get(`/products/${id}/`);
+                const response = await api.get(`/products/${id}`);
                 setProduct(response.data);
                 setBasePrice(response.data.price);
                 setTotalPrice(response.data.price);
@@ -168,6 +169,11 @@ const MugCustomizerPage = () => {
 
     // Photo upload handler
     const handleImageUpload = async (e) => {
+        if (!user) {
+            setSnackbar({ open: true, message: 'Please login to upload photos.', severity: 'warning' });
+            setTimeout(() => navigate('/login', { state: { from: location.pathname } }), 1000);
+            return;
+        }
         const file = e.target.files[0];
         if (!file) return;
 
@@ -254,8 +260,8 @@ const MugCustomizerPage = () => {
         setSelectedId(null);
 
         if (!user) {
-            setSnackbar({ open: true, message: 'Please log in to add items to cart.', severity: 'warning' });
-            setTimeout(() => navigate('/login'), 1500);
+            setSnackbar({ open: true, message: 'Please login to add items to cart.', severity: 'warning' });
+            setTimeout(() => navigate('/login', { state: { from: location.pathname } }), 1000);
             return;
         }
 
