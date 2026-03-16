@@ -7,7 +7,7 @@ from app.api.v1.endpoints.auth import get_current_user
 
 router = APIRouter()
 
-@router.get("/", response_model=CartOut)
+@router.get("", response_model=CartOut)
 def get_cart(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     try:
         cart = db.query(Cart).filter(Cart.user_id == current_user.id).first()
@@ -24,7 +24,7 @@ def get_cart(current_user: User = Depends(get_current_user), db: Session = Depen
         # Raise 404 or returning a dummy cart could be an option, but 500 with a message is safer for debugging here
         raise HTTPException(status_code=500, detail="Could not retrieve cart information.")
 
-@router.post("/items/")
+@router.post("/items", response_model=dict)
 def add_to_cart(
     item_in: CartItemCreate,
     current_user: User = Depends(get_current_user),
@@ -47,7 +47,7 @@ def add_to_cart(
     db.add(new_item)
     db.commit()
     return {"message": "Item added to cart"}
-@router.patch("/items/{item_id}/")
+@router.patch("/items/{item_id}", response_model=dict)
 def update_cart_item(
     item_id: int,
     item_update: dict,
@@ -73,7 +73,7 @@ def update_cart_item(
     db.commit()
     return {"message": "Cart updated"}
 
-@router.delete("/items/{item_id}/")
+@router.delete("/items/{item_id}", response_model=dict)
 def remove_from_cart(
     item_id: int,
     current_user: User = Depends(get_current_user),
