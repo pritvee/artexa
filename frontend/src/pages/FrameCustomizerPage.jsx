@@ -88,40 +88,39 @@ const STICKER_PACKS = [
         name: 'Butterflies',
         category: 'butterfly',
         pack: [
-            { url: 'https://cdn-icons-png.flaticon.com/512/3067/3067160.png', label: 'Blue Morpho' },
-            { url: 'https://cdn-icons-png.flaticon.com/512/1043/1043445.png', label: 'Monarch' },
-            { url: 'https://cdn-icons-png.flaticon.com/512/3067/3067171.png', label: 'Golden' },
-            { url: 'https://cdn-icons-png.flaticon.com/512/616/616430.png', label: 'Minimalist' }
+            { url: 'https://img.icons8.com/color/512/butterfly.png', label: 'Monarch' },
+            { url: 'https://img.icons8.com/color/512/insect.png', label: 'Blue Morpho' },
+            { url: 'https://img.icons8.com/color/512/moth.png', label: 'Golden' }
         ]
     },
     {
         name: 'Flowers',
         category: 'floral',
         pack: [
-            { url: 'https://cdn-icons-png.flaticon.com/512/2921/2921822.png', label: 'Sakura' },
-            { url: 'https://cdn-icons-png.flaticon.com/512/2921/2921782.png', label: 'Rose' },
-            { url: 'https://cdn-icons-png.flaticon.com/512/2921/2921815.png', label: 'Sunflower' },
-            { url: 'https://cdn-icons-png.flaticon.com/512/2921/2921798.png', label: 'Tulip' }
+            { url: 'https://img.icons8.com/color/512/sakura.png', label: 'Sakura' },
+            { url: 'https://img.icons8.com/color/512/rose.png', label: 'Rose' },
+            { url: 'https://img.icons8.com/color/512/sunflower.png', label: 'Sunflower' },
+            { url: 'https://img.icons8.com/color/512/tulip.png', label: 'Tulip' }
         ]
     },
     {
         name: 'Sparkles',
         category: 'glow',
         pack: [
-            { url: 'https://cdn-icons-png.flaticon.com/128/1828/1828884.png', label: 'Star' },
-            { url: 'https://cdn-icons-png.flaticon.com/128/3433/3433367.png', label: 'Sparkle' },
-            { url: 'https://cdn-icons-png.flaticon.com/128/6532/6532050.png', label: 'Magic' },
-            { url: 'https://cdn-icons-png.flaticon.com/128/1257/1257603.png', label: 'Confetti' }
+            { url: 'https://img.icons8.com/color/512/star.png', label: 'Star' },
+            { url: 'https://img.icons8.com/color/512/sparkles.png', label: 'Sparkle' },
+            { url: 'https://img.icons8.com/color/512/magic-wand.png', label: 'Magic' },
+            { url: 'https://img.icons8.com/color/512/confetti.png', label: 'Confetti' }
         ]
     },
     {
         name: 'Birthday',
         category: 'party',
         pack: [
-            { url: 'https://cdn-icons-png.flaticon.com/128/2488/2488614.png', label: 'Balloons' },
-            { url: 'https://cdn-icons-png.flaticon.com/128/2614/2614603.png', label: 'Cake' },
-            { url: 'https://cdn-icons-png.flaticon.com/128/3820/3820121.png', label: 'Gift' },
-            { url: 'https://cdn-icons-png.flaticon.com/128/3956/3956327.png', label: 'Hat' }
+            { url: 'https://img.icons8.com/color/512/balloons.png', label: 'Balloons' },
+            { url: 'https://img.icons8.com/color/512/birthday-cake.png', label: 'Cake' },
+            { url: 'https://img.icons8.com/color/512/gift.png', label: 'Gift' },
+            { url: 'https://img.icons8.com/color/512/party-hat.png', label: 'Hat' }
         ]
     }
 ];
@@ -348,19 +347,44 @@ const FrameCustomizerPage = () => {
     }, [frameSize, basePrice, quantity, product]);
 
     const uploadContextCanvas = async (source, filename, isStage = false) => {
-        if (!source) return null;
+        if (!source) {
+            console.warn(`Snapshot skip: Source for ${filename} is null`);
+            return null;
+        }
+        
         try {
-            let transformers = [];
+            let dataUrl;
+            
             if (isStage) {
-                transformers = source.find('Transformer');
+                // Handle Konva Stage
+                if (typeof source.find !== 'function' || typeof source.toDataURL !== 'function') {
+                    console.error("Source is not a valid Konva Stage instance");
+                    return null;
+                }
+                
+                const transformers = source.find('Transformer');
                 transformers.forEach(t => t.hide());
+                
+                dataUrl = source.toDataURL({ pixelRatio: 3, mimeType: 'image/png' });
+                
+                transformers.forEach(t => t.show());
+            } else {
+                // Handle HTML Canvas Element (e.g. from Three.js or simple canvas)
+                const canvas = source instanceof HTMLCanvasElement ? source : 
+                              (source.domElement instanceof HTMLCanvasElement ? source.domElement : null);
+                
+                if (!canvas || typeof canvas.toDataURL !== 'function') {
+                    console.error("Source is not a valid HTMLCanvasElement", source);
+                    return null;
+                }
+                
+                dataUrl = canvas.toDataURL('image/png');
             }
 
-            const dataUrl = isStage
-                ? source.toDataURL({ pixelRatio: 3, mimeType: 'image/png' })
-                : source.toDataURL('image/png');
-
-            if (isStage) transformers.forEach(t => t.show());
+            if (!dataUrl || !dataUrl.startsWith('data:image')) {
+                console.error("Failed to generate valid data URL from snapshot source");
+                return null;
+            }
 
             const arr = dataUrl.split(',');
             const mime = arr[0].match(/:(.*?);/)[1];
@@ -381,7 +405,7 @@ const FrameCustomizerPage = () => {
 
             return uploadRes.data.image_url || uploadRes.data.url;
         } catch (e) {
-            console.error("Snapshot capture/upload failed", e);
+            console.error(`Snapshot capture/upload failed for ${filename}:`, e);
             return null;
         }
     };

@@ -30,23 +30,45 @@ def add_to_cart(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    cart = db.query(Cart).filter(Cart.user_id == current_user.id).first()
-    if not cart:
-        cart = Cart(user_id=current_user.id)
-        db.add(cart)
+    try:
+        # Ensure cart exists
+        cart = db.query(Cart).filter(Cart.user_id == current_user.id).first()
+        if not cart:
+            cart = Cart(user_id=current_user.id)
+            db.add(cart)
+            db.commit()
+            db.refresh(cart)
+        
+        # Check if item with same product and customization already exists
+        existing_item = db.query(CartItem).filter(
+            CartItem.cart_id == cart.id,
+            CartItem.product_id == item_in.product_id,
+            CartItem.customization_details == item_in.customization_details
+        ).first()
+
+        if existing_item:
+            existing_item.quantity += item_in.quantity
+            if item_in.preview_image_url:
+                existing_item.preview_image_url = item_in.preview_image_url
+            if item_in.uploaded_photo_id:
+                existing_item.uploaded_photo_id = item_in.uploaded_photo_id
+        else:
+            new_item = CartItem(
+                cart_id=cart.id,
+                product_id=item_in.product_id,
+                quantity=item_in.quantity,
+                customization_details=item_in.customization_details,
+                preview_image_url=item_in.preview_image_url,
+                uploaded_photo_id=item_in.uploaded_photo_id
+            )
+            db.add(new_item)
+        
         db.commit()
-    
-    new_item = CartItem(
-        cart_id=cart.id,
-        product_id=item_in.product_id,
-        quantity=item_in.quantity,
-        customization_details=item_in.customization_details,
-        preview_image_url=item_in.preview_image_url,
-        uploaded_photo_id=item_in.uploaded_photo_id
-    )
-    db.add(new_item)
-    db.commit()
-    return {"message": "Item added to cart"}
+        return {"message": "Item added to cart", "status": "success"}
+    except Exception as e:
+        db.rollback()
+        print(f"ERROR adding item to cart for user {current_user.id}: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to add item to cart: {str(e)}")
 @router.patch("/items/{item_id}", response_model=dict)
 def update_cart_item(
     item_id: int,

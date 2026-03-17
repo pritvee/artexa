@@ -16,7 +16,7 @@ from sqlalchemy import text
 app = FastAPI(
     title="Artexa E-Commerce API", 
     version="1.0.0",
-    redirect_slashes=False
+    redirect_slashes=True
 )
 
 # Define specific origins for production and development
