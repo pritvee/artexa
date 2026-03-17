@@ -65,7 +65,7 @@ const PremiumBackground = () => {
                 sx={{ 
                     position: 'absolute', 
                     inset: 0, 
-                    opacity: 0.05, 
+                    opacity: 0.1, // Increased from 0.05
                     zIndex: 2,
                     backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3Detected%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
                 }} 
@@ -73,22 +73,22 @@ const PremiumBackground = () => {
 
             {/* SMOOTH COLOR CHANGE EFFECT */}
             
-            {/* Orb 1 - Increased opacity for visibility */}
+            {/* Orb 1 - Bold Visibility */}
             <motion.div
                 animate={{ 
                     backgroundColor: colors.primary,
                     filter: [`blur(${baseBlur})`, `blur(${highBlur})`, `blur(${baseBlur})`],
                 }}
                 transition={{ 
-                    backgroundColor: { duration: 2 }, // Longer, smoother color shifts
-                    filter: { duration: 6, repeat: Infinity, ease: "easeInOut" }
+                    backgroundColor: { duration: 1.5 },
+                    filter: { duration: 4, repeat: Infinity, ease: "easeInOut" }
                 }}
                 style={{
                     position: 'absolute',
-                    top: '-15%', left: '-10%',
-                    width: '90vw', height: '90vw', // Slightly larger for better "presence"
+                    top: '-10%', left: '-5%',
+                    width: '100vw', height: '100vw',
                     borderRadius: '50%',
-                    opacity: isCustomizer ? 0.08 : 0.18, 
+                    opacity: isCustomizer ? 0.15 : 0.35, // Significantly increased from 0.18
                     x: flow1X,
                     y: flow1Y,
                 }}
@@ -98,28 +98,28 @@ const PremiumBackground = () => {
             <motion.div
                 animate={{ 
                     backgroundColor: colors.secondary,
-                    scale: isCustomizer ? 1 : [1, 1.15, 1],
+                    scale: isCustomizer ? 1 : [1, 1.2, 1],
                 }}
                 transition={{ 
-                    backgroundColor: { duration: 2 },
-                    scale: { duration: 10, repeat: Infinity, ease: "easeInOut" }
+                    backgroundColor: { duration: 1.5 },
+                    scale: { duration: 8, repeat: Infinity, ease: "easeInOut" }
                 }}
                 style={{
                     position: 'absolute',
-                    bottom: '-10%', right: '-15%',
-                    width: '80vw', height: '80vw',
+                    bottom: '-10%', right: '-10%',
+                    width: '90vw', height: '90vw',
                     borderRadius: '50%',
-                    opacity: isCustomizer ? 0.06 : 0.15,
+                    opacity: isCustomizer ? 0.12 : 0.3, // Significantly increased from 0.15
                     filter: `blur(${baseBlur})`,
                     x: flow2X,
                     y: flow2Y,
                 }}
             />
 
-            {/* Central Glow Wash - Persistent smooth color shift */}
+            {/* Central Glow Wash - Stronger persistent shift */}
             <motion.div 
                 animate={{ 
-                    background: `radial-gradient(circle at 50% 50%, ${colors.primary}15 0%, transparent 80%)` 
+                    background: `radial-gradient(circle at 50% 50%, ${colors.primary}33 0%, transparent 70%)` // Increased alpha to 33 (approx 20%)
                 }}
                 transition={{ duration: 1.5 }}
                 style={{ 
@@ -129,16 +129,16 @@ const PremiumBackground = () => {
                 }} 
             />
 
-            {/* Subtle Grid */}
+            {/* Subtle Grid - More visible depth */}
             <Box 
                 sx={{ 
                     position: 'absolute', 
                     inset: 0, 
-                    opacity: 0.06,
+                    opacity: 0.15, // Increased from 0.06
                     zIndex: 2,
-                    backgroundImage: 'radial-gradient(rgba(255, 255, 255, 0.08) 1.5px, transparent 0)',
-                    backgroundSize: '80px 80px',
-                    maskImage: 'linear-gradient(to bottom, black, transparent)',
+                    backgroundImage: 'radial-gradient(rgba(255, 255, 255, 0.12) 1.5px, transparent 0)',
+                    backgroundSize: '100px 100px',
+                    maskImage: 'radial-gradient(ellipse at center, black, transparent 90%)',
                 }} 
             />
         </Box>

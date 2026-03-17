@@ -66,8 +66,8 @@ const Navbar = () => {
                     zIndex: 2000,
                     transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
                     background: isScrolled
-                        ? 'rgba(8, 12, 24, 0.85)'
-                        : 'rgba(15, 22, 40, 0.65)',
+                        ? 'rgba(5, 7, 10, 0.85)'
+                        : 'rgba(12, 14, 20, 0.65)',
                     backdropFilter: 'blur(16px) saturate(180%)',
                     border: '1px solid rgba(255,255,255,0.08)',
                     boxShadow: isScrolled
@@ -87,7 +87,7 @@ const Navbar = () => {
                             fontWeight: 900,
                             fontSize: { xs: '1.2rem', md: '1.6rem' },
                             letterSpacing: '-0.04em',
-                            background: 'linear-gradient(135deg, #fff 30%, #a78bfa 100%)',
+                            background: 'linear-gradient(135deg, #FFFFFF 30%, #CEC7FF 100%)',
                             WebkitBackgroundClip: 'text',
                             WebkitTextFillColor: 'transparent',
                             display: 'flex',
@@ -120,7 +120,7 @@ const Navbar = () => {
                                         px: 2.5,
                                         borderRadius: '100px',
                                         opacity: isActive ? 1 : 0.7,
-                                        bgcolor: isActive ? 'rgba(108, 99, 255, 0.2)' : 'transparent',
+                                        bgcolor: isActive ? 'rgba(124, 77, 255, 0.2)' : 'transparent',
                                         textTransform: 'none',
                                         transition: 'all 0.3s',
                                         '&:hover': { opacity: 1, bgcolor: 'rgba(255,255,255,0.08)' }
@@ -151,13 +151,13 @@ const Navbar = () => {
                                 badgeContent={cartCount}
                                 sx={{ 
                                     '& .MuiBadge-badge': { 
-                                        background: 'linear-gradient(135deg,#6C63FF,#9C4DFF)', 
+                                        background: 'linear-gradient(135deg,#7C4DFF,#F50057)', 
                                         color: '#fff', 
                                         fontWeight: 800, 
                                         fontSize: '10px', 
                                         minWidth: 18, height: 18, 
-                                        border: '2px solid #0a0f1e',
-                                        boxShadow: '0 0 10px rgba(108, 99, 255, 0.5)'
+                                        border: '2px solid #05070A',
+                                        boxShadow: '0 0 10px rgba(124, 77, 255, 0.5)'
                                     } 
                                 }}
                             >
@@ -208,7 +208,7 @@ const Navbar = () => {
                 PaperProps={{
                     sx: {
                         width: 280,
-                        background: 'linear-gradient(160deg, #0f172a 0%, #1a0f3c 100%)',
+                        background: 'linear-gradient(160deg, #05070A 0%, #1A0A26 100%)',
                         color: 'white',
                         p: 0,
                         border: 'none',
@@ -229,8 +229,8 @@ const Navbar = () => {
                 {/* Profile block */}
                 <Box sx={{ p: 2 }}>
                     {user ? (
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, p: 1.5, bgcolor: 'rgba(108,99,255,0.12)', borderRadius: '12px', border: '1px solid rgba(108,99,255,0.2)' }}>
-                            <Avatar sx={{ bgcolor: '#6C63FF', width: 40, height: 40, fontWeight: 700, fontSize: '1rem' }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, p: 1.5, bgcolor: 'rgba(124,77,255,0.12)', borderRadius: '12px', border: '1px solid rgba(124,77,255,0.2)' }}>
+                            <Avatar sx={{ bgcolor: '#7C4DFF', width: 40, height: 40, fontWeight: 700, fontSize: '1rem' }}>
                                 {(user.name || 'U')[0].toUpperCase()}
                             </Avatar>
                             <Box sx={{ overflow: 'hidden' }}>
@@ -241,7 +241,7 @@ const Navbar = () => {
                                     component={RouterLink}
                                     to="/profile"
                                     onClick={() => setDrawerOpen(false)}
-                                    sx={{ p: 0, fontSize: '11px', color: 'rgba(255,255,255,0.5)', minHeight: 0, '&:hover': { color: 'primary.main' } }}
+                                    sx={{ p: 0, fontSize: '11px', color: 'rgba(255,255,255,0.5)', minHeight: 0, '&:hover': { color: '#F50057' } }}
                                 >
                                     View Profile →
                                 </Button>
@@ -254,7 +254,7 @@ const Navbar = () => {
                             to="/login"
                             variant="contained"
                             onClick={() => setDrawerOpen(false)}
-                            sx={{ borderRadius: '12px', height: '44px', background: 'linear-gradient(135deg, #6C63FF 0%, #9C4DFF 100%)', fontWeight: 700 }}
+                            sx={{ borderRadius: '12px', height: '44px', background: 'linear-gradient(135deg, #7C4DFF 0%, #F50057 100%)', fontWeight: 700 }}
                         >
                             Login / Join Artexa
                         </Button>
@@ -275,7 +275,7 @@ const Navbar = () => {
                                     borderRadius: '12px',
                                     mb: 0.25,
                                     color: 'white',
-                                    bgcolor: isActive ? 'rgba(108,99,255,0.15)' : 'transparent',
+                                    bgcolor: isActive ? 'rgba(124,77,255,0.15)' : 'transparent',
                                     '&:hover': { bgcolor: 'rgba(255,255,255,0.05)' },
                                     minHeight: '48px',
                                 }}

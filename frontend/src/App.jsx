@@ -73,9 +73,7 @@ function App() {
             minHeight: '100vh', 
             overflowX: 'hidden',
             position: 'relative',
-            background: mode === 'dark' 
-                ? '#020617'
-                : '#f8fafc',
+            background: 'transparent', // Let PremiumBackground handle the colors
         }}>
 
 
