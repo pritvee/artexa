@@ -141,10 +141,33 @@ def delete_product(
     admin: User = Depends(get_current_active_admin),
     db: Session = Depends(get_db)
 ):
-    db_product = db.query(Product).filter(Product.id == product_id).first()
-    if not db_product:
-        raise HTTPException(status_code=404, detail="Product not found")
-    
-    db.delete(db_product)
-    db.commit()
-    return {"message": "Product deleted"}
+    try:
+        # 1. Fetch product and validate existence
+        db_product = db.query(Product).filter(Product.id == product_id).first()
+        if not db_product:
+            raise HTTPException(status_code=404, detail=f"Product with ID {product_id} not found")
+        
+        # 2. Attempt deletion
+        # Note: If product is referenced by OrderItems or CartItems, this will raise IntegrityError
+        db.delete(db_product)
+        db.commit()
+        return {"message": "Product successfully deleted"}
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        db.rollback()
+        error_msg = str(e)
+        
+        # Catch foreign key violations (very common in e-commerce when deleting products used in orders)
+        if "foreign key" in error_msg.lower() or "violates" in error_msg.lower():
+            raise HTTPException(
+                status_code=400, 
+                detail="Cannot hard-delete product because it is referenced by existing orders. Please deactivate it (is_on_shop=False) instead to preserve order history."
+            )
+            
+        print(f"CRITICAL ERROR: Failed to delete product {product_id}: {error_msg}")
+        raise HTTPException(
+            status_code=500, 
+            detail=f"An error occurred while deleting the product: {error_msg}"
+        )

@@ -1,7 +1,11 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import api from '../api/axios';
 
 const ProductContext = createContext();
+
+const categoryMap = {
+    'frames': 1, 'mugs': 2, 'hampers': 3, 'gifts': 4, 'giftbox': 4, 'gift box': 4, 'gift-box': 4, 'gift_box': 4
+};
 
 export const ProductProvider = ({ children }) => {
     const [products, setProducts] = useState([]);
@@ -13,20 +17,23 @@ export const ProductProvider = ({ children }) => {
     });
     const [categories, setCategories] = useState([]);
 
-    const categoryMap = {
-        'frames': 1, 'mugs': 2, 'hampers': 3, 'gifts': 4, 'giftbox': 4, 'gift box': 4
-    };
+    // Track latest pagination in a ref to keep context functions stable
+    // without using pagination.page in their dependency arrays.
+    const paginationRef = useRef(pagination);
+    useEffect(() => {
+        paginationRef.current = pagination;
+    }, [pagination]);
 
-    const fetchCategories = async () => {
+    const fetchCategories = useCallback(async () => {
         try {
             const response = await api.get('/products/categories');
             setCategories(response.data);
         } catch (error) {
             console.error("Error fetching categories:", error);
         }
-    };
+    }, [api]);
 
-    const fetchProducts = async (page = 1, limit = 10, categoryId = null, search = '', onHome = null, onShop = null) => {
+    const fetchProducts = useCallback(async (page = 1, limit = 10, categoryId = null, search = '', onHome = null, onShop = null) => {
         setLoading(true);
         try {
             const params = { page, limit };
@@ -59,7 +66,7 @@ export const ProductProvider = ({ children }) => {
         } finally {
             setLoading(false);
         }
-    };
+    }, [api]);
 
     useEffect(() => {
         // Initial load from local storage for instant UI
@@ -79,51 +86,64 @@ export const ProductProvider = ({ children }) => {
     }, []);
 
 
-    const addProduct = async (newProduct) => {
+    const addProduct = useCallback(async (newProduct) => {
         try {
-            // Usually we'd upload images first or use form-data
             const response = await api.post('/admin/products', newProduct);
-            fetchProducts(pagination.page);
+            // Always refresh the list using the latest stable page from ref
+            fetchProducts(paginationRef.current.page);
             return response.data;
         } catch (error) {
             console.error("Error adding product:", error);
             throw error;
         }
-    };
+    }, [api, fetchProducts]);
 
-    const updateProduct = async (id, updatedProduct) => {
+    const updateProduct = useCallback(async (id, updatedProduct) => {
         try {
             await api.patch(`/admin/products/${id}`, updatedProduct);
-            fetchProducts(pagination.page);
+            fetchProducts(paginationRef.current.page);
         } catch (error) {
             console.error("Error updating product:", error);
             throw error;
         }
-    };
+    }, [api, fetchProducts]);
 
-    const deleteProduct = async (id) => {
+    const deleteProduct = useCallback(async (id) => {
         try {
             await api.delete(`/admin/products/${id}`);
-            fetchProducts(pagination.page);
+            fetchProducts(paginationRef.current.page);
         } catch (error) {
             console.error("Error deleting product:", error);
             throw error;
         }
-    };
+    }, [api, fetchProducts]);
+
+    const contextValue = useMemo(() => ({
+        products,
+        loading,
+        pagination,
+        fetchProducts,
+        addProduct,
+        updateProduct,
+        deleteProduct,
+        categories,
+        categoryMap,
+        fetchCategories
+    }), [
+        products, 
+        loading, 
+        pagination, 
+        categories, 
+        categoryMap,
+        fetchProducts, 
+        addProduct, 
+        updateProduct, 
+        deleteProduct, 
+        fetchCategories
+    ]);
 
     return (
-        <ProductContext.Provider value={{
-            products,
-            loading,
-            pagination,
-            fetchProducts,
-            addProduct,
-            updateProduct,
-            deleteProduct,
-            categories,
-            categoryMap,
-            fetchCategories
-        }}>
+        <ProductContext.Provider value={contextValue}>
             {children}
         </ProductContext.Provider>
     );

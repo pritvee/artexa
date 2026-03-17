@@ -124,6 +124,10 @@ function App() {
 
                                 <Route path="/hampers" element={<Navigate to="/shop?category=hampers" replace />} />
                                 <Route path="/chocolate-hamper" element={<Navigate to="/shop?category=hampers" replace />} />
+                                <Route path="/categories/frames" element={<Navigate to="/shop?category=frames" replace />} />
+                                <Route path="/categories/mugs" element={<Navigate to="/shop?category=mugs" replace />} />
+                                <Route path="/categories/hampers" element={<Navigate to="/shop?category=hampers" replace />} />
+                                <Route path="/categories/giftbox" element={<Navigate to="/shop?category=gifts" replace />} />
                                 <Route path="/categories/:id" element={<Navigate to="/shop" replace />} />
                                 <Route path="/checkout" element={
                                     <ProtectedRoute><PageTransition><Checkout /></PageTransition></ProtectedRoute>

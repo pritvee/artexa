@@ -93,5 +93,29 @@
     "createdAt": "2026-03-14T07:05:15.511Z",
     "updatedAt": "2026-03-14T07:06:44.460Z",
     "type": "code-review"
+  },
+  {
+    "id": "e46af571-68cb-4354-8eb3-7f3ec9e384c7",
+    "title": "Code Review - 3/17/2026, 1:05:31 PM",
+    "status": "active",
+    "messageCount": 4,
+    "totalTokens": 0,
+    "totalCost": 0,
+    "lastMessageAt": "2026-03-17T07:39:27.170Z",
+    "tags": [],
+    "metadata": {
+      "projectId": "default-project",
+      "model": "free-trial-model-with-daily-limit",
+      "mode": "debugging",
+      "connectedCodebasePath": "d:\\project\\photoframe website"
+    },
+    "codeContextIds": [],
+    "previous_session_intent": "pure_discussion",
+    "pinnedFilePaths": [
+      "d:\\project\\photoframe website\\frontend\\src\\store\\ProductContext.jsx"
+    ],
+    "createdAt": "2026-03-17T07:35:31.506Z",
+    "updatedAt": "2026-03-17T07:39:27.172Z",
+    "type": "code-review"
   }
 ]
