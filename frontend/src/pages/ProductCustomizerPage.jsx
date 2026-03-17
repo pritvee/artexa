@@ -190,8 +190,9 @@ const ProductCustomizerPage = () => {
                 flatDesignUrl = await uploadContextCanvas(textureCanvas, 'design.png');
             }
 
+            const productSchema = product.customization_schema || {};
             const finalCustomization = {
-                product: schema.type || product.customization_type || 'Custom-Product',
+                product: productSchema.type || product.customization_type || 'Custom-Product',
                 ...customizationData,
                 text: textProps.text,
                 font: textProps.fontFamily,
@@ -236,57 +237,93 @@ const ProductCustomizerPage = () => {
         setCustomizationData({ ...customizationData, extras: newExtras });
     };
 
-    if (loading) return <Container sx={{ py: 8, textAlign: 'center' }}><CircularProgress /></Container>;
-    if (!product) return <Container sx={{ py: 8 }}><Typography variant="h5">Product not found.</Typography></Container>;
+    if (loading) return (
+        <Container sx={{ py: 6, textAlign: 'center', px: 3 }}>
+            <CircularProgress sx={{ color: 'primary.main' }} />
+            <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>Loading your customizer…</Typography>
+        </Container>
+    );
+
+    if (!product) return (
+        <Container sx={{ py: 10, textAlign: 'center', px: 3 }}>
+            <Typography fontSize={56} mb={1}>😕</Typography>
+            <Typography variant="h2" sx={{ mb: 1 }}>Oops! Product not available</Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 4 }}>We couldn't find this product.</Typography>
+            <Stack direction="row" spacing={2} justifyContent="center">
+                <Button variant="contained" onClick={() => navigate('/shop')} sx={{ borderRadius: '12px', height: '48px' }}>Back to Shop</Button>
+                <Button variant="outlined" onClick={() => window.location.reload()} sx={{ borderRadius: '12px', height: '48px', borderColor: 'rgba(255,255,255,0.2)' }}>Retry</Button>
+            </Stack>
+        </Container>
+    );
 
     const schema = product.customization_schema || {};
 
+    const [previewTab, setPreviewTab] = React.useState(0);
+
     return (
-        <Container maxWidth="xl" sx={{ mt: 4 }}>
-            <Grid container spacing={4}>
-                {/* LEFT SIDE: Live Preview */}
-                <Grid item xs={12} md={7}>
-                    <Paper elevation={3} sx={{ p: 2, height: '100%', minHeight: '600px', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#fafafa' }}>
+        <Box sx={{ bgcolor: 'background.default', minHeight: '100vh' }}>
+            {/* Mobile Title Bar */}
+            <Box sx={{ px: 2, pt: 2, pb: 1 }}>
+                <Typography variant="h2" sx={{ fontSize: '18px', fontWeight: 800, mb: 0.5 }}>{product.name}</Typography>
+                <Typography variant="h3" sx={{ fontSize: '20px', fontWeight: 800, color: 'primary.main' }}>₹{totalPrice.toFixed(0)}</Typography>
+            </Box>
+
+            {/* Tabs: Preview / Editor */}
+            <Box sx={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+                <Stack direction="row" sx={{ px: 2 }}>
+                    {['Preview', 'Customize'].map((tab, i) => (
+                        <Button
+                            key={tab}
+                            onClick={() => setPreviewTab(i)}
+                            sx={{
+                                flex: 1, height: '44px', borderRadius: 0,
+                                fontWeight: 700, fontSize: '13px',
+                                color: previewTab === i ? 'primary.main' : 'text.secondary',
+                                borderBottom: previewTab === i ? '2px solid' : '2px solid transparent',
+                                borderColor: previewTab === i ? 'primary.main' : 'transparent',
+                            }}
+                        >{tab}</Button>
+                    ))}
+                </Stack>
+            </Box>
+
+        <Container maxWidth="xl" sx={{ px: { xs: 2, md: 3 } }}>
+            <Grid container spacing={3}>
+                {/* LEFT SIDE: Product Preview */}
+                <Grid item xs={12} md={7} sx={{ display: { xs: previewTab === 0 ? 'block' : 'none', md: 'block' } }}>
+                    <Paper elevation={0} sx={{
+                        borderRadius: '16px',
+                        overflow: 'hidden',
+                        bgcolor: 'rgba(18, 26, 47, 0.6)',
+                        border: '1px solid rgba(255,255,255,0.06)',
+                        minHeight: { xs: 300, md: 500 },
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        mt: 2
+                    }}>
                         {['Mug', 'Frame', 'Crystal'].includes(schema.type || product.customization_type) ? (
-                            <Box sx={{ border: '2px dashed #ccc', p: 2 }}>
-                                <CanvasPreview
-                                    bgImageSrc={product.image_url || 'https://via.placeholder.com/400x400?text=Blank+Product'}
-                                    userImageSrc={userImageSrc}
-                                    textProps={textProps}
-                                    customizationData={customizationData}
-                                    schemaType={schema.type}
-                                    onReady={setTextureCanvas}
-                                />
-                            </Box>
+                            <CanvasPreview
+                                bgImageSrc={getPublicUrl(product.image_url)}
+                                userImageSrc={userImageSrc}
+                                textProps={textProps}
+                                customizationData={customizationData}
+                                schemaType={schema.type}
+                                onReady={setTextureCanvas}
+                            />
                         ) : (
-                            <Box sx={{ textAlign: 'center' }}>
-                                <img src={product.image_url || 'https://via.placeholder.com/400x400'} alt={product.name} style={{ maxWidth: '100%', maxHeight: '500px' }} />
-                                <Typography variant="h6" sx={{ mt: 2 }}>Visual layout preview for {schema.type}</Typography>
-                                <Typography color="textSecondary">{schema.type === 'Hamper' ? 'Hamper Builder' : 'Box Builder'} Theme</Typography>
+                            <Box sx={{ textAlign: 'center', p: 3 }}>
+                                <img
+                                    src={getPublicUrl(product.image_url) || 'https://picsum.photos/seed/gift/400/400'}
+                                    alt={product.name}
+                                    style={{ maxWidth: '100%', maxHeight: '400px', borderRadius: '12px' }}
+                                />
                             </Box>
                         )}
                     </Paper>
                 </Grid>
 
                 {/* RIGHT SIDE: Customization Panel */}
-                <Grid item xs={12} md={5}>
-                    <Box sx={{ mb: 3 }}>
-                        <Typography variant="h4" fontWeight="bold">{product.name}</Typography>
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mt: 1 }}>
-                            <Typography variant="h5" color="secondary" sx={{ fontWeight: 'bold' }}>
-                                ₹{totalPrice.toFixed(2)}
-                            </Typography>
-                            {totalPrice > product.price && (
-                                <Typography variant="body2" color="textSecondary" sx={{ textDecoration: 'line-through' }}>
-                                    ₹{product.price.toFixed(2)}
-                                </Typography>
-                            )}
-                        </Box>
-                    </Box>
-
-                    <Divider sx={{ my: 3 }} />
-
-                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                <Grid item xs={12} md={5} sx={{ display: { xs: previewTab === 1 ? 'block' : 'none', md: 'block' } }}>
+                    <Box sx={{ mt: 2, display: 'flex', flexDirection: 'column', gap: 2.5 }}>
 
                         {/* Options Selectors based on schema */}
                         {schema.colors && (
@@ -477,33 +514,50 @@ const ProductCustomizerPage = () => {
                             </Paper>
                         )}
 
+                    {/* Quantity Selector */}
+                    <Box sx={{ mt: 3, mb: 2 }}>
+                        <Typography variant="caption" sx={{ fontWeight: 700, display: 'block', mb: 1.5, color: 'text.secondary', textTransform: 'uppercase' }}>Quantity</Typography>
+                        <Box sx={{ display: 'inline-flex', alignItems: 'center', border: '1px solid rgba(255,255,255,0.12)', borderRadius: '12px', overflow: 'hidden' }}>
+                            <Button onClick={() => setItemQuantity(Math.max(1, itemQuantity - 1))} sx={{ minWidth: 44, height: 44, borderRadius: 0, fontSize: '18px', color: 'text.primary' }}>−</Button>
+                            <Typography sx={{ px: 3, fontWeight: 700 }}>{itemQuantity}</Typography>
+                            <Button onClick={() => setItemQuantity(itemQuantity + 1)} sx={{ minWidth: 44, height: 44, borderRadius: 0, fontSize: '18px', color: 'text.primary' }}>+</Button>
+                        </Box>
                     </Box>
 
-                    <Divider sx={{ my: 3 }} />
-
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        size="large"
-                        fullWidth
-                        sx={{ py: 1.5, fontSize: '1.1rem', fontWeight: 'bold' }}
-                        onClick={handleAddToCart}
-                    >
-                        Add to Cart
-                    </Button>
+                    {/* Action Buttons */}
+                    <Stack spacing={1.5} sx={{ mt: 3, pb: 4 }}>
+                        <Button
+                            variant="contained"
+                            fullWidth
+                            sx={{ height: '48px', borderRadius: '12px', fontSize: '14px', fontWeight: 700, background: 'linear-gradient(135deg, #6C63FF 0%, #9C4DFF 100%)', boxShadow: '0 4px 16px rgba(108,99,255,0.35)' }}
+                            onClick={handleAddToCart}
+                        >
+                            Add to Cart — ₹{totalPrice.toFixed(0)}
+                        </Button>
+                        <Button
+                            variant="outlined"
+                            fullWidth
+                            sx={{ height: '44px', borderRadius: '12px', fontSize: '13px', fontWeight: 600, borderColor: 'rgba(255,255,255,0.15)', color: 'white' }}
+                            onClick={() => navigate(-1)}
+                        >
+                            Save for Later
+                        </Button>
+                    </Stack>
+                    </Box>
                 </Grid>
             </Grid>
-            <Snackbar 
-                open={snackbar.open} 
-                autoHideDuration={6000} 
+        </Container>
+            <Snackbar
+                open={snackbar.open}
+                autoHideDuration={4000}
                 onClose={() => setSnackbar({ ...snackbar, open: false })}
                 anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
             >
-                <Alert onClose={() => setSnackbar({ ...snackbar, open: false })} severity={snackbar.severity} sx={{ width: '100%' }}>
+                <Alert severity={snackbar.severity} variant="filled" sx={{ borderRadius: '12px', fontWeight: 600 }}>
                     {snackbar.message}
                 </Alert>
             </Snackbar>
-        </Container>
+        </Box>
     );
 };
 

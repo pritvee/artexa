@@ -13,6 +13,8 @@ import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../store/CartContext';
 import { getPublicUrl } from '../api/axios';
+import LoadingState from '../components/Shared/LoadingState';
+import ErrorState from '../components/Shared/ErrorState';
 
 const Cart = () => {
     const { cart, removeFromCart, updateQuantity, clearCart, loading } = useCart();
@@ -69,29 +71,19 @@ const Cart = () => {
         navigate(path);
     };
 
-    if (loading) return (
-        <Container sx={{ py: 15, textAlign: 'center' }}>
-            <Typography variant="h5" sx={{ fontWeight: 700 }}>Polishing your treasures...</Typography>
-        </Container>
-    );
+    if (loading) return <LoadingState type="product" />;
 
-    if (cart.length === 0) return (
-        <Box sx={{ minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Container maxWidth="sm" sx={{ textAlign: 'center' }}>
-                <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}>
-                    <ShoppingCartIcon sx={{ fontSize: 100, color: 'text.secondary', mb: 3, opacity: 0.1 }} />
-                    <Typography variant="h2" sx={{ fontWeight: 900, mb: 2 }}>Cart Empty</Typography>
-                    <Typography color="text.secondary" sx={{ mb: 4, fontWeight: 600 }}>Your bag is waiting for some custom magic.</Typography>
-                    <Button variant="contained" size="large" onClick={() => navigate('/shop')} sx={{ borderRadius: 4, px: 6, py: 2 }}>
-                        Explore Shop
-                    </Button>
-                </motion.div>
-            </Container>
-        </Box>
+    if (!cart || cart.length === 0) return (
+        <ErrorState 
+            title="Your cart is empty"
+            message="Looks like you haven't added any magic to your bag yet."
+            onRetry={() => navigate('/shop')}
+            retryText="Start Shopping"
+        />
     );
 
     return (
-        <Box sx={{ py: { xs: 4, md: 8 }, bgcolor: 'background.default', minHeight: '100vh' }}>
+        <Box sx={{ py: { xs: 4, md: 8 }, bgcolor: 'transparent', minHeight: '100vh' }}>
             <Container maxWidth="lg">
                 <Box sx={{ mb: 6, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
                     <Box>

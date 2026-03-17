@@ -36,7 +36,6 @@ const Mug3DPreview = ({
 
         // Scene, Camera, Renderer setup
         const scene = new THREE.Scene();
-        scene.background = new THREE.Color('#0a0a1a');
         sceneRef.current = scene;
 
         const camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 1000);
@@ -70,21 +69,60 @@ const Mug3DPreview = ({
         scene.add(mugGroupRef.current);
 
         // Lights
-        scene.add(new THREE.AmbientLight(0xffffff, 0.7));
-        const dirLight = new THREE.DirectionalLight(0xffffff, 1.2);
-        dirLight.position.set(10, 10, 10);
-        dirLight.castShadow = true;
-        scene.add(dirLight);
+        scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+        const spotLight = new THREE.SpotLight(0xffffff, 1.5, 20, 0.3, 1);
+        spotLight.position.set(5, 10, 5);
+        spotLight.castShadow = true;
+        scene.add(spotLight);
+
+        const purpleLight = new THREE.PointLight('#6C63FF', 0.8, 10);
+        purpleLight.position.set(-5, 5, -5);
+        scene.add(purpleLight);
+
+        // Floor Glow / Shadow (Mock)
+        const floorGeo = new THREE.PlaneGeometry(10, 10);
+        const floorMat = new THREE.MeshStandardMaterial({ 
+            color: '#020617', 
+            transparent: true, 
+            opacity: 0.8,
+            roughness: 1
+        });
+        const floor = new THREE.Mesh(floorGeo, floorMat);
+        floor.rotation.x = -Math.PI / 2;
+        floor.position.y = -1.2;
+        floor.receiveShadow = true;
+        scene.add(floor);
+
+        // Soft Purple Glow under mug
+        const glowGeo = new THREE.CircleGeometry(1.2, 32);
+        const glowMat = new THREE.MeshBasicMaterial({ 
+            color: '#6C63FF', 
+            transparent: true, 
+            opacity: 0.15 
+        });
+        const glow = new THREE.Mesh(glowGeo, glowMat);
+        glow.rotation.x = -Math.PI / 2;
+        glow.position.y = -1.19;
+        scene.add(glow);
 
         // Animation Loop
-        const animate = () => {
+        const animate = (time) => {
             requestRef.current = requestAnimationFrame(animate);
+            
+            const t = time * 0.001; // Seconds
+            
+            // Suble floating animation
+            if (mugGroupRef.current) {
+                mugGroupRef.current.position.y = Math.sin(t * 1.5) * 0.05;
+                mugGroupRef.current.rotation.z = Math.sin(t * 0.5) * 0.02;
+            }
+
             if (controlsRef.current) controlsRef.current.update();
             if (rendererRef.current && sceneRef.current && cameraRef.current) {
                 rendererRef.current.render(sceneRef.current, cameraRef.current);
             }
         };
-        animate();
+        animate(0);
 
         // Event Handlers
         const handleResize = () => {
@@ -262,11 +300,11 @@ const Mug3DPreview = ({
             className="mug-3d-preview-container"
             style={{ 
                 width: '100%', 
-                height: '500px', 
+                height: '100%', 
                 position: 'relative',
-                borderRadius: '12px',
+                borderRadius: '24px',
                 overflow: 'hidden',
-                background: '#0a0a1a'
+                background: 'transparent'
             }}
         />
     );

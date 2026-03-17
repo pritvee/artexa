@@ -585,16 +585,25 @@ const ProceduralRectBox = ({ dim, boxColor, mat, isOpen, faceDesigns, foamColor,
 };
 
 const GiftBoxScene = ({ boxColor, mat, isOpen, dim, faceDesigns, foamColor, ribbonSettings }) => {
+    const groupRef = useRef();
+
+    useFrame((state) => {
+        const t = state.clock.getElapsedTime();
+        if (groupRef.current) {
+            groupRef.current.position.y = Math.sin(t * 1.5) * 0.05;
+            groupRef.current.rotation.y = Math.sin(t * 0.2) * 0.05;
+        }
+    });
+
     return (
-        <>
-            <ambientLight intensity={0.9} />
-            <spotLight position={[10, 20, 10]} angle={0.25} penumbra={1} intensity={2} castShadow />
-            <pointLight position={[-10, 10, -10]} intensity={1} color="#ffffff" />
-            <directionalLight position={[0, 10, 5]} intensity={1} />
+        <group ref={groupRef}>
+            <ambientLight intensity={0.5} />
+            <spotLight position={[5, 10, 5]} angle={0.25} penumbra={1} intensity={1.5} castShadow />
+            <pointLight position={[-5, 5, -5]} intensity={0.8} color="#6C63FF" />
             
-            <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -(dim.h * 0.8), 0]} receiveShadow>
-                <planeGeometry args={[30, 30]} />
-                <meshStandardMaterial color="#0a0a0f" roughness={1} />
+            <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -(dim.h * 1.2), 0]} receiveShadow>
+                <planeGeometry args={[20, 20]} />
+                <meshStandardMaterial color="#020617" transparent opacity={0.6} roughness={1} />
             </mesh>
 
             <Suspense fallback={null}>
@@ -618,8 +627,10 @@ const GiftBoxScene = ({ boxColor, mat, isOpen, dim, faceDesigns, foamColor, ribb
                 makeDefault
                 dampingFactor={0.1}
                 enableDamping
+                autoRotate
+                autoRotateSpeed={0.5}
             />
-        </>
+        </group>
     );
 };
 
@@ -642,11 +653,12 @@ const GiftBox3DPreview = ({
         antialias: true,
         stencil: false,
         depth: true,
+        alpha: true,
         failIfMajorPerformanceCaveat: false
     }), []);
 
     return (
-        <div style={{ position: 'relative', width: '100%', height: '100%', background: '#050510' }}>
+        <div style={{ position: 'relative', width: '100%', height: '100%', background: 'transparent' }}>
             <Canvas 
                 key={canvasKey}
                 shadows={{ type: THREE.PCFShadowMap }} 

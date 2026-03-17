@@ -30,6 +30,7 @@ import { ArrowBack as ArrowBackIcon } from '@mui/icons-material';
 import { AnimatePresence } from 'framer-motion';
 import PageTransition from './components/Shared/PageTransition';
 import ErrorBoundary from './components/Shared/ErrorBoundary';
+import PremiumBackground from './components/Shared/PremiumBackground';
 
 const LoadingFallback = () => (
     <Box sx={{ 
@@ -78,34 +79,11 @@ function App() {
         }}>
 
 
-            {/* 3. Static Decorative Glows (Stable Depth) */}
-            <Box sx={{
-                position: 'fixed',
-                top: '-15%',
-                right: '-10%',
-                width: '60vw',
-                height: '60vw',
-                background: 'radial-gradient(circle, rgba(124, 58, 237, 0.1) 0%, transparent 70%)',
-                filter: 'blur(140px)',
-                borderRadius: '50%',
-                zIndex: 0,
-                pointerEvents: 'none',
-            }} />
-            <Box sx={{
-                position: 'fixed',
-                bottom: '-10%',
-                left: '-10%',
-                width: '50vw',
-                height: '50vw',
-                background: 'radial-gradient(circle, rgba(236, 72, 153, 0.08) 0%, transparent 70%)',
-                filter: 'blur(120px)',
-                borderRadius: '50%',
-                zIndex: 0,
-                pointerEvents: 'none',
-            }} />
+
+            <PremiumBackground />
 
             <Navbar />
-            <Box sx={{ flexGrow: 1, pt: 12, pb: isFullscreen ? 0 : 4, position: 'relative', zIndex: 1 }}>
+            <Box sx={{ flexGrow: 1, pt: { xs: 8, md: 12 }, pb: isFullscreen ? 0 : 4, position: 'relative', zIndex: 1 }}>
                 <ErrorBoundary>
                     <AnimatePresence mode="wait">
                         <React.Suspense fallback={<LoadingFallback />}>

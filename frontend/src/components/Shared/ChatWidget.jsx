@@ -215,43 +215,36 @@ const ChatWidget = () => {
     return (
         <Box sx={{ position: 'fixed', bottom: 24, right: 24, zIndex: 9999 }}>
             {/* Floating Button */}
-            <Zoom in={true}>
+            <Zoom in={true} style={{ transitionDelay: '500ms' }}>
                 <Fab 
                     color="primary" 
                     aria-label="chat" 
                     onClick={() => setOpen(!open)}
                     sx={{ 
-                        background: 'linear-gradient(135deg, #7C3AED 0%, #EC4899 100%)',
-                        boxShadow: '0 8px 32px rgba(124, 58, 237, 0.4)',
+                        width: 48,
+                        height: 48,
+                        minHeight: 48,
+                        background: 'linear-gradient(135deg, #6C63FF 0%, #9C4DFF 100%)',
+                        boxShadow: '0 8px 24px rgba(108, 99, 255, 0.4)',
                         transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
-                        '&:hover': { transform: 'scale(1.15) rotate(5deg)' },
-                        animation: detectedDesign ? 'pulse 2s infinite' : 'none',
-                        '@keyframes pulse': {
-                            '0%': { boxShadow: '0 0 0 0 rgba(124, 58, 237, 0.7)' },
-                            '70%': { boxShadow: '0 0 0 15px rgba(124, 58, 237, 0)' },
-                            '100%': { boxShadow: '0 0 0 0 rgba(124, 58, 237, 0)' }
-                        }
+                        '&:hover': { transform: 'scale(1.1) rotate(5deg)', boxShadow: '0 12px 32px rgba(108, 99, 255, 0.5)' },
+                        '&:active': { transform: 'scale(0.95)' }
                     }}
                 >
                     <Badge 
                         badgeContent={unreadCount} 
                         color="error"
-                        sx={{ '& .MuiBadge-badge': { top: 4, right: 4 } }}
+                        sx={{ 
+                            '& .MuiBadge-badge': { 
+                                top: 2, 
+                                right: 2,
+                                background: '#FF4D4D',
+                                border: '2px solid #0B0F1A'
+                            } 
+                        }}
                     >
-                        {open ? <CloseIcon /> : <ChatIcon />}
+                        {open ? <CloseIcon sx={{ fontSize: 20 }} /> : <ChatIcon sx={{ fontSize: 20 }} />}
                     </Badge>
-                    {detectedDesign && !open && !unreadCount && (
-                        <Box sx={{ 
-                            position: 'absolute', top: -35, right: 0, 
-                            bgcolor: 'white', color: 'primary.main',
-                            px: 1.5, py: 0.5, borderRadius: '10px',
-                            boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-                            whiteSpace: 'nowrap', fontSize: '0.75rem', fontWeight: 900,
-                            border: '1px solid rgba(124, 58, 237, 0.2)'
-                        }}>
-                             ✨ SHARE DESIGN?
-                        </Box>
-                    )}
                 </Fab>
             </Zoom>
 

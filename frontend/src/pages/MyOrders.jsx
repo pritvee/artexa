@@ -15,6 +15,8 @@ import InfoIcon from '@mui/icons-material/Info';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PaymentIcon from '@mui/icons-material/Payment';
+import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
+import LoadingState from '../components/Shared/LoadingState';
 import { getPublicUrl } from '../api/axios';
 
 const MyOrders = () => {
@@ -27,12 +29,7 @@ const MyOrders = () => {
     }, []);
 
     if (loading && orders.length === 0) {
-        return (
-            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '60vh' }}>
-                <CircularProgress size={60} thickness={4} sx={{ mb: 4, color: 'primary.main' }} />
-                <Typography variant="h6" sx={{ fontWeight: 700, opacity: 0.7 }}>Loading your memories...</Typography>
-            </Box>
-        );
+        return <LoadingState type="product" />;
     }
 
     return (
@@ -239,7 +236,7 @@ const MyOrders = () => {
                                                                         border: '1px solid',
                                                                         borderColor: isDark ? 'rgba(236, 72, 153, 0.2)' : 'rgba(236, 72, 153, 0.1)'
                                                                     }}>
-                                                                        <GiftIcon sx={{ color: '#EC4899', fontSize: '1.4rem' }} />
+                                                                        <CardGiftcardIcon sx={{ color: '#EC4899', fontSize: '1.4rem' }} />
                                                                         <Box>
                                                                             <Typography variant="caption" sx={{ fontWeight: 800, color: '#EC4899', display: 'block', letterSpacing: 1 }}>GIFT NOTE</Typography>
                                                                             <Typography variant="body2" sx={{ fontWeight: 600, fontStyle: 'italic' }}>"{order.gift_note}"</Typography>

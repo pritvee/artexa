@@ -103,106 +103,94 @@ const AdminDashboard = () => {
                 }}
             >
                 <Paper sx={{ 
-                    p: { xs: 3, md: 5 }, 
-                    mb: 5, 
-                    borderRadius: 2, 
+                    p: 2, 
+                    mb: 3, 
+                    borderRadius: '16px', 
                     display: 'flex', 
-                    flexDirection: { xs: 'column', md: 'row' },
-                    alignItems: 'center', 
-                    justifyContent: 'space-between',
+                    flexDirection: 'column',
                     background: 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)',
                     color: 'white',
-                    position: 'relative',
-                    overflow: 'visible'
+                    border: '1px solid rgba(255,255,255,0.05)'
                 }}>
-                    <Box sx={{ position: 'relative', zIndex: 1 }}>
-                        <Typography variant="h3" sx={{ fontWeight: 800, mb: 1 }}>
-                            Welcome back, {user?.name || 'Admin'}!
-                        </Typography>
-                        <Typography variant="h6" sx={{ opacity: 0.8, fontWeight: 400 }}>
-                            Here's what's happening with your store today.
-                        </Typography>
-                    </Box>
-                    <Box sx={{ 
-                        display: 'flex', 
-                        gap: 2, 
-                        mt: { xs: 3, md: 0 },
-                        position: 'relative', 
-                        zIndex: 1 
-                    }}>
-                        <Button 
-                            variant="contained" 
-                            startIcon={<AddCircleOutlineIcon />}
-                            onClick={() => navigate('/admin/products')}
-                            sx={{ 
-                                bgcolor: 'rgba(255,255,255,0.1)', 
-                                backdropFilter: 'blur(10px)',
-                                '&:hover': { bgcolor: 'rgba(255,255,255,0.2)' },
-                                borderRadius: 3,
-                                px: 3
-                            }}
-                        >
-                            New Product
-                        </Button>
-                        <Button 
-                            variant="contained" 
-                            sx={{ 
-                                bgcolor: '#6366f1', 
-                                '&:hover': { bgcolor: '#4f46e5' },
-                                borderRadius: 3,
-                                px: 3
-                            }}
-                            onClick={() => navigate('/admin/orders')}
-                        >
-                            Manage Orders
-                        </Button>
-                    </Box>
-                    {/* Decorative elements - Removed radial circle */}
+                    <Typography variant="h3" sx={{ fontWeight: 800, mb: 0.5, fontSize: '1.2rem' }}>
+                        Welcome back, {user?.name || 'Admin'}!
+                    </Typography>
+                    <Typography variant="body2" sx={{ opacity: 0.8, mb: 2 }}>
+                        Here's your store overview.
+                    </Typography>
+                    
+                    <Grid container spacing={1}>
+                        <Grid item xs={6}>
+                            <Button 
+                                fullWidth
+                                variant="contained" 
+                                startIcon={<AddCircleOutlineIcon fontSize="small" />}
+                                onClick={() => navigate('/admin/products')}
+                                sx={{ 
+                                    bgcolor: 'rgba(255,255,255,0.1)', 
+                                    height: '40px',
+                                    borderRadius: '12px',
+                                    fontSize: '12px'
+                                }}
+                            >
+                                Add Product
+                            </Button>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <Button 
+                                fullWidth
+                                variant="contained" 
+                                startIcon={<ShoppingBasketIcon fontSize="small" />}
+                                sx={{ 
+                                    bgcolor: '#6C63FF', 
+                                    height: '40px',
+                                    borderRadius: '12px',
+                                    fontSize: '12px'
+                                }}
+                                onClick={() => navigate('/admin/orders')}
+                            >
+                                Orders
+                            </Button>
+                        </Grid>
+                    </Grid>
                 </Paper>
             </motion.div>
 
             {/* Stats Grid */}
-            <Grid container spacing={3} sx={{ mb: 6 }}>
+            <Grid container spacing={1.5} sx={{ mb: 4 }}>
                 {stats.map((stat, i) => (
-                    <Grid item xs={12} sm={6} md={3} key={stat.label}>
+                    <Grid item xs={6} md={3} key={stat.label}>
                         <motion.div
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{ delay: i * 0.1 }}
                         >
                             <Card sx={{ 
-                                borderRadius: 2, 
-                                border: '1px solid rgba(0,0,0,0.05)',
-                                boxShadow: '0 4px 20px rgba(0,0,0,0.05)',
-                                overflow: 'hidden',
-                                transition: 'all 0.3s',
-                                '&:hover': { 
-                                    transform: 'translateY(-8px)',
-                                    boxShadow: '0 12px 30px rgba(0,0,0,0.1)'
-                                }
+                                borderRadius: '12px', 
+                                bgcolor: 'rgba(18, 26, 47, 0.6)',
+                                border: '1px solid rgba(255,255,255,0.05)',
+                                overflow: 'hidden'
                             }}>
-                                <CardContent sx={{ p: 0 }}>
-                                    <Box sx={{ p: 3, display: 'flex', alignItems: 'center', gap: 2.5 }}>
+                                <CardContent sx={{ p: '12px !important' }}>
+                                    <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', mb: 1 }}>
                                         <Box sx={{ 
-                                            p: 1.5, 
-                                            borderRadius: 4, 
+                                            p: 1, 
+                                            borderRadius: '8px', 
                                             bgcolor: `${stat.color}15`, 
                                             color: stat.color,
                                             display: 'flex'
                                         }}>
-                                            {stat.icon}
+                                            {React.cloneElement(stat.icon, { sx: { fontSize: 20 } })}
                                         </Box>
-                                        <Box>
-                                            <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 600, textTransform: 'uppercase', letterSpacing: 0.5 }}>
-                                                {stat.label}
-                                            </Typography>
-                                            <Typography variant="h4" sx={{ fontWeight: 800 }}>
-                                                {stat.value}
-                                            </Typography>
-                                        </Box>
+                                        <Typography variant="h3" sx={{ fontWeight: 800, fontSize: '1.2rem' }}>
+                                            {stat.value}
+                                        </Typography>
                                     </Box>
-                                    <Box sx={{ height: 4, bgcolor: stat.color, opacity: 0.6 }} />
+                                    <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 600, display: 'block' }}>
+                                        {stat.label}
+                                    </Typography>
                                 </CardContent>
+                                <Box sx={{ height: 3, bgcolor: stat.color, opacity: 0.8 }} />
                             </Card>
                         </motion.div>
                     </Grid>
@@ -320,29 +308,28 @@ const AdminDashboard = () => {
                 {/* Quick Actions & Tips */}
                 <Grid item xs={12} lg={4}>
                     <Box sx={{ mb: 4 }}>
-                        <Typography variant="h5" sx={{ fontWeight: 800, mb: 3, display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                            <AddCircleOutlineIcon color="primary" /> Quick Actions
-                        </Typography>
-                        <Grid container spacing={2}>
+                        <Typography variant="h3" sx={{ mb: 2 }}>Quick Actions</Typography>
+                        <Grid container spacing={1.5}>
                             {quickActions.map((action, i) => (
-                                <Grid item xs={12} sm={6} key={i}>
+                                <Grid item xs={6} key={i}>
                                     <Button
                                         fullWidth
                                         variant="outlined"
                                         color={action.color}
-                                        startIcon={action.icon}
                                         onClick={action.onClick}
                                         sx={{
-                                            height: 100,
-                                            borderRadius: 2,
+                                            py: 1.5,
+                                            borderRadius: '12px',
                                             flexDirection: 'column',
-                                            gap: 1,
-                                            borderWidth: 2,
-                                            '&:hover': { borderWidth: 2, bgcolor: `${action.color}.main`, color: 'white' },
-                                            '.MuiButton-startIcon': { margin: 0 }
+                                            gap: 0.5,
+                                            borderWidth: 1,
+                                            bgcolor: 'rgba(18, 26, 47, 0.4)',
+                                            '&:hover': { borderWidth: 1, bgcolor: `${action.color}.main`, color: 'white' },
+                                            '.MuiButton-startIcon': { display: 'none' } // Hide default startIcon
                                         }}
                                     >
-                                        <Typography variant="body2" sx={{ fontWeight: 700 }}>{action.label}</Typography>
+                                        {React.cloneElement(action.icon, { sx: { fontSize: 24, mb: 0.5 } })}
+                                        <Typography variant="caption" sx={{ fontWeight: 600, lineHeight: 1.2 }}>{action.label}</Typography>
                                     </Button>
                                 </Grid>
                             ))}

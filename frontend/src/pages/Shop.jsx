@@ -2,13 +2,26 @@ import React, { useState, useEffect } from 'react';
 import { 
     Container, Grid, Box, Typography, TextField, 
     InputAdornment, Pagination, Stack, Skeleton,
-    Breadcrumbs, Link, Chip, FormControl, InputLabel, Select, MenuItem, Card
+    Chip, Select, MenuItem, IconButton, Fab
 } from '@mui/material';
-import { Search as SearchIcon } from '@mui/icons-material';
+import SearchIcon from '@mui/icons-material/Search';
+import FilterListIcon from '@mui/icons-material/FilterList';
+import TuneIcon from '@mui/icons-material/Tune';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSearchParams } from 'react-router-dom';
 import { useProducts } from '../store/ProductContext';
 import ProductCard from '../components/ProductCard';
+import LoadingState from '../components/Shared/LoadingState';
+import ErrorState from '../components/Shared/ErrorState';
+
+const CATEGORY_CHIPS = [
+    { label: 'All', value: '' },
+    { label: 'Frames', value: 'frames' },
+    { label: 'Mugs', value: 'mugs' },
+    { label: 'Hampers', value: 'hampers' },
+    { label: 'Photo Gifts', value: 'gifts' },
+    { label: 'Crystals', value: 'crystals' },
+];
 
 const Shop = () => {
     const [searchParams] = useSearchParams();
@@ -17,160 +30,167 @@ const Shop = () => {
     const { products, pagination, fetchProducts, loading, categoryMap } = useProducts();
     const [searchQuery, setSearchQuery] = useState("");
     const [sortBy, setSortBy] = useState("newest");
+    const [activeCategory, setActiveCategory] = useState(categoryQuery || '');
 
-    // Debounce search so we don't call API on every keystroke
     useEffect(() => {
         const timer = setTimeout(() => {
-            const catId = categoryQuery ? categoryMap[categoryQuery.toLowerCase()] : null;
+            const catId = activeCategory ? categoryMap[activeCategory.toLowerCase()] : null;
             fetchProducts(1, 12, catId, searchQuery, null, true);
-        }, searchQuery ? 300 : 0); // No delay when category changes
+        }, searchQuery ? 300 : 0);
         return () => clearTimeout(timer);
-    }, [categoryQuery, searchQuery]);
+    }, [activeCategory, searchQuery]);
 
     const handlePageChange = (event, value) => {
-        const catId = categoryQuery ? categoryMap[categoryQuery.toLowerCase()] : null;
+        const catId = activeCategory ? categoryMap[activeCategory.toLowerCase()] : null;
         fetchProducts(value, 12, catId, searchQuery, null, true);
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-    const handleSearch = (e) => {
-        setSearchQuery(e.target.value);
-    };
-
-    // Apply client-side sorting to fetched results
     const sortedProducts = [...products].sort((a, b) => {
         if (sortBy === 'price-low') return (a.price || 0) - (b.price || 0);
         if (sortBy === 'price-high') return (b.price || 0) - (a.price || 0);
-        if (sortBy === 'popular') return (b.id || 0) - (a.id || 0);
-        return 0; // newest (default order from server)
+        return 0;
     });
 
-    const filteredProducts = sortedProducts;
-
     return (
-        <Box sx={{ bgcolor: 'background.default', minHeight: '100vh', py: { xs: 6, md: 10 } }}>
-            <Container maxWidth="xl">
-                {/* Header Section */}
-                <Box sx={{ mb: 8 }}>
-                    <Breadcrumbs aria-label="breadcrumb" sx={{ mb: 3 }}>
-                        <Link underline="hover" color="inherit" href="/" sx={{ fontWeight: 700, opacity: 0.6 }}>Home</Link>
-                        <Typography color="primary" sx={{ fontWeight: 900 }}>Collection</Typography>
-                    </Breadcrumbs>
-                    <Typography variant="h1" sx={{ fontWeight: 900, mb: 1, fontSize: { xs: '3rem', md: '4.5rem' }, letterSpacing: '-0.04em' }}>
-                        Curated Gifts
+        <Box sx={{ bgcolor: 'transparent', minHeight: '100vh', py: { xs: 2, md: 4 } }}>
+            <Container maxWidth="xl" sx={{ px: { xs: 2, sm: 3 } }}>
+
+                {/* ── Page header ── */}
+                <Box sx={{ mb: 3 }}>
+                    <Typography variant="h1" sx={{ fontSize: { xs: '22px', md: '32px' }, fontWeight: 800, mb: 0.5 }}>
+                        Our Collection
                     </Typography>
-                    <Typography variant="h5" color="text.secondary" sx={{ fontWeight: 600, opacity: 0.8 }}>
-                        Find the perfect vessel for your most precious moments.
+                    <Typography variant="body2" color="text.secondary">
+                        {pagination.total || 0} products available
                     </Typography>
                 </Box>
 
-                {/* Filters & Search Toolbar */}
-                <Card className="glass" sx={{ 
-                    p: 2, mb: 6, borderRadius: '24px', 
-                    display: 'flex', flexWrap: 'wrap', gap: 3, 
-                    alignItems: 'center', justifyContent: 'space-between',
-                    border: '1px solid rgba(255,255,255,0.08)',
-                    background: 'rgba(17, 24, 39, 0.4)'
-                }}>
-                    <TextField 
-                        placeholder="Search our collection..." 
-                        value={searchQuery}
-                        onChange={handleSearch}
-                        fullWidth={false}
-                        sx={{ 
-                            width: { xs: '100%', md: 450 },
-                            '& .MuiOutlinedInput-root': {
-                                borderRadius: '18px',
-                                bgcolor: 'background.default',
-                                '& fieldset': { border: 'none' },
-                                boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.02)'
-                            }
-                        }}
-                        InputProps={{
-                            startAdornment: (
-                                <InputAdornment position="start" sx={{ ml: 1 }}>
-                                    <SearchIcon sx={{ color: 'primary.main', opacity: 0.5 }} />
-                                </InputAdornment>
-                            ),
-                        }}
-                    />
+                {/* ── Search Bar ── */}
+                <TextField
+                    fullWidth
+                    placeholder="Search gifts, frames, mugs…"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    sx={{
+                        mb: 2,
+                        '& .MuiOutlinedInput-root': {
+                            borderRadius: '12px',
+                            bgcolor: 'rgba(18, 26, 47, 0.6)',
+                            border: '1px solid rgba(255,255,255,0.08)',
+                            height: '48px',
+                            '& fieldset': { border: 'none' },
+                        }
+                    }}
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <SearchIcon sx={{ color: 'text.secondary', fontSize: 20 }} />
+                            </InputAdornment>
+                        ),
+                    }}
+                />
 
-                    <Stack direction="row" spacing={3} alignItems="center" sx={{ width: { xs: '100%', md: 'auto' } }}>
-                        <Typography variant="body2" sx={{ fontWeight: 800, textTransform: 'uppercase', opacity: 0.5, letterSpacing: '0.05em' }}>Sort</Typography>
-                        <FormControl size="small" sx={{ minWidth: 200 }}>
-                            <Select
-                                value={sortBy}
-                                onChange={(e) => setSortBy(e.target.value)}
-                                sx={{ 
-                                    borderRadius: '16px', fontWeight: 700, bgcolor: 'background.default',
-                                    '& .MuiOutlinedInput-notchedOutline': { border: 'none' }
-                                }}
-                            >
-                                <MenuItem value="newest">Featured First</MenuItem>
-                                <MenuItem value="price-low">Price: Low to High</MenuItem>
-                                <MenuItem value="price-high">Price: High to Low</MenuItem>
-                                <MenuItem value="popular">Most Popular</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Stack>
-                </Card>
+                {/* ── Category Filter Chips (horizontal scroll) ── */}
+                <Box sx={{ display: 'flex', gap: 1, overflowX: 'auto', pb: 1.5, mb: 1, '&::-webkit-scrollbar': { display: 'none' } }}>
+                    {CATEGORY_CHIPS.map((cat) => (
+                        <Chip
+                            key={cat.value}
+                            label={cat.label}
+                            onClick={() => setActiveCategory(cat.value)}
+                            sx={{
+                                flexShrink: 0,
+                                height: '36px',
+                                px: 0.5,
+                                fontWeight: 600,
+                                fontSize: '13px',
+                                borderRadius: '10px',
+                                cursor: 'pointer',
+                                bgcolor: activeCategory === cat.value
+                                    ? 'primary.main'
+                                    : 'rgba(255,255,255,0.07)',
+                                color: activeCategory === cat.value ? 'white' : 'text.secondary',
+                                border: activeCategory === cat.value
+                                    ? '1px solid transparent'
+                                    : '1px solid rgba(255,255,255,0.08)',
+                                '&:hover': { bgcolor: activeCategory === cat.value ? 'primary.main' : 'rgba(255,255,255,0.12)' }
+                            }}
+                        />
+                    ))}
+                </Box>
 
-                {/* Product Grid */}
-                <Grid container spacing={{ xs: 2, md: 4 }}>
-                    {loading ? (
-                        Array.from({ length: 12 }).map((_, i) => (
-                            <Grid item xs={6} sm={6} md={3} key={i}>
-                                <Box sx={{ borderRadius: 2, p: 1.5, bgcolor: 'background.paper', height: { xs: 300, md: 400 }, opacity: 0.5 }}>
-                                    <Skeleton variant="rectangular" height={180} sx={{ borderRadius: 1.5 }} />
-                                    <Skeleton width="80%" sx={{ mt: 2 }} />
-                                    <Skeleton width="40%" />
-                                </Box>
-                            </Grid>
-                        ))
-                    ) : filteredProducts.length > 0 ? (
-                        <AnimatePresence>
-                            {filteredProducts.map((product, index) => (
-                                <Grid item xs={6} sm={6} md={3} key={product.id}>
+                {/* ── Sort + Count Row ── */}
+                <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
+                    <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 600 }}>
+                        {sortedProducts.length} results
+                    </Typography>
+                    <Select
+                        value={sortBy}
+                        onChange={(e) => setSortBy(e.target.value)}
+                        size="small"
+                        sx={{
+                            borderRadius: '10px',
+                            fontSize: '13px',
+                            fontWeight: 600,
+                            bgcolor: 'rgba(18, 26, 47, 0.6)',
+                            border: '1px solid rgba(255,255,255,0.08)',
+                            color: 'text.primary',
+                            height: '36px',
+                            '& .MuiOutlinedInput-notchedOutline': { border: 'none' }
+                        }}
+                    >
+                        <MenuItem value="newest">Featured</MenuItem>
+                        <MenuItem value="price-low">Price: Low → High</MenuItem>
+                        <MenuItem value="price-high">Price: High → Low</MenuItem>
+                    </Select>
+                </Stack>
+
+                {/* ── Product Grid ── */}
+                {loading ? (
+                    <LoadingState type="product" />
+                ) : sortedProducts.length > 0 ? (
+                    <Grid container spacing={1.5}>
+                        <AnimatePresence mode="popLayout">
+                            {sortedProducts.map((product, index) => (
+                                <Grid item xs={6} sm={4} md={3} key={product.id} sx={{ display: 'flex' }}>
                                     <motion.div
-                                        initial={{ opacity: 0, y: 20 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        transition={{ duration: 0.4, delay: (index % 4) * 0.1 }}
+                                        initial={{ opacity: 0, scale: 0.9 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        exit={{ opacity: 0, scale: 0.9 }}
+                                        transition={{ duration: 0.3, delay: (index % 8) * 0.05 }}
+                                        style={{ width: '100%' }}
                                     >
                                         <ProductCard product={product} />
                                     </motion.div>
                                 </Grid>
                             ))}
                         </AnimatePresence>
-                    ) : (
-                        <Grid item xs={12}>
-                            <Box sx={{ textAlign: 'center', py: 15 }}>
-                                <SearchIcon sx={{ fontSize: 100, color: 'text.secondary', opacity: 0.1, mb: 3 }} />
-                                <Typography variant="h4" sx={{ fontWeight: 900, mb: 1 }}>No products found</Typography>
-                                <Typography color="text.secondary" sx={{ fontWeight: 600 }}>Try adjusting your search or filters.</Typography>
-                            </Box>
-                        </Grid>
-                    )}
-                </Grid>
+                    </Grid>
+                ) : (
+                    <ErrorState 
+                        message="No gifts found here!" 
+                        onRetry={() => {
+                            setActiveCategory('');
+                            setSearchQuery('');
+                        }}
+                    />
+                )}
 
-                {/* Styled Pagination */}
+                {/* ── Pagination ── */}
                 {pagination.total > pagination.limit && (
-                    <Box sx={{ mt: 10, display: 'flex', justifyContent: 'center' }}>
-                        <Pagination 
-                            count={Math.ceil(pagination.total / pagination.limit)} 
-                            page={pagination.page} 
-                            onChange={handlePageChange} 
-                            size="large"
+                    <Box sx={{ mt: 5, display: 'flex', justifyContent: 'center' }}>
+                        <Pagination
+                            count={Math.ceil(pagination.total / pagination.limit)}
+                            page={pagination.page}
+                            onChange={handlePageChange}
+                            size="medium"
                             sx={{
                                 '& .MuiPaginationItem-root': {
-                                    fontWeight: 900,
-                                    borderRadius: '12px',
-                                    height: 48,
-                                    width: 48,
-                                    margin: '0 6px',
+                                    fontWeight: 700,
+                                    borderRadius: '10px',
                                     '&.Mui-selected': {
-                                        background: 'linear-gradient(135deg, #7C3AED, #EC4899)',
+                                        background: 'linear-gradient(135deg, #6C63FF, #9C4DFF)',
                                         color: '#fff',
-                                        '&:hover': { opacity: 0.9 }
                                     }
                                 }
                             }}

@@ -7,22 +7,29 @@ import { Link as RouterLink } from 'react-router-dom';
 
 const Footer = () => {
     return (
-        <Box component="footer" sx={{ bgcolor: '#fff', pt: 10, pb: 4, borderTop: '1px solid rgba(0,0,0,0.05)' }}>
+        <Box component="footer" sx={{ 
+            bgcolor: '#020617', 
+            pt: { xs: 6, md: 10 }, 
+            pb: 4, 
+            borderTop: '1px solid rgba(255,255,255,0.05)',
+            position: 'relative',
+            zIndex: 1
+        }}>
             <Container maxWidth="xl">
-                <Grid container spacing={8} sx={{ mb: 8 }}>
+                <Grid container spacing={{ xs: 4, md: 8 }} sx={{ mb: 8 }}>
                     <Grid item xs={12} md={4}>
                         <Typography
                             variant="h4"
                             sx={{
-                                color: '#1F2937',
+                                color: '#fff',
                                 fontWeight: 900,
                                 letterSpacing: '-0.03em',
                                 mb: 3
                             }}
                         >
-                            Art<Box component="span" sx={{ color: '#6C63FF' }}>exa</Box>
+                            Art<Box component="span" sx={{ color: '#7B61FF' }}>exa</Box>
                         </Typography>
-                        <Typography variant="body1" color="text.secondary" sx={{ mb: 4, maxWidth: 350, lineHeight: 1.8 }}>
+                        <Typography variant="body1" sx={{ color: 'rgba(255,255,255,0.5)', mb: 4, maxWidth: 350, lineHeight: 1.8 }}>
                             Handcrafted high-quality photo gifts for every occasion. We help you preserve your most precious memories through art and personalization.
                         </Typography>
                         <Stack direction="row" spacing={2}>
@@ -38,8 +45,8 @@ const Footer = () => {
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     sx={{ 
-                                        bgcolor: '#F6F7FF', color: '#1F2937',
-                                        '&:hover': { bgcolor: '#6C63FF', color: '#fff' }
+                                        bgcolor: 'rgba(255,255,255,0.05)', color: '#fff',
+                                        '&:hover': { bgcolor: '#7B61FF', color: '#fff' }
                                     }}
                                 >
                                     <social.Icon fontSize="small" />
@@ -49,7 +56,7 @@ const Footer = () => {
                     </Grid>
 
                     <Grid item xs={6} sm={6} md={2}>
-                        <Typography variant="h6" sx={{ fontWeight: 800, mb: 4 }}>Shop Gifts</Typography>
+                        <Typography variant="h6" sx={{ color: '#fff', fontWeight: 800, mb: 4 }}>Shop Gifts</Typography>
                         <Stack spacing={2}>
                             {[
                                 { name: 'Photo Frames', path: '/shop?category=frames' },
@@ -63,8 +70,8 @@ const Footer = () => {
                                     component={RouterLink} 
                                     to={link.path} 
                                     underline="none" 
-                                    color="text.secondary" 
                                     sx={{ 
+                                        color: 'rgba(255,255,255,0.5)',
                                         fontWeight: 500, 
                                         transition: 'color 0.2s', 
                                         '&:hover': { color: 'primary.main' } 
@@ -77,10 +84,11 @@ const Footer = () => {
                     </Grid>
 
                     <Grid item xs={6} sm={6} md={2}>
-                        <Typography variant="h6" sx={{ fontWeight: 800, mb: 4 }}>Company</Typography>
+                        <Typography variant="h6" sx={{ color: '#fff', fontWeight: 800, mb: 4 }}>Company</Typography>
                         <Stack spacing={2}>
                             {['Our Story', 'Designers', 'Contact Us', 'Careers', 'Gift Cards'].map(link => (
-                                <Link key={link} href="#" underline="none" color="text.secondary" sx={{ 
+                                <Link key={link} href="#" underline="none" sx={{ 
+                                    color: 'rgba(255,255,255,0.5)',
                                     fontWeight: 500, transition: 'color 0.2s', '&:hover': { color: 'primary.main' } 
                                 }}>
                                     {link}
@@ -90,29 +98,29 @@ const Footer = () => {
                     </Grid>
 
                     <Grid item xs={12} md={4}>
-                        <Typography variant="h6" sx={{ fontWeight: 800, mb: 4 }}>Visit Our Atelier</Typography>
-                        <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 2, mb: 3 }}>
+                        <Typography variant="h6" sx={{ color: '#fff', fontWeight: 800, mb: 4 }}>Visit Our Atelier</Typography>
+                        <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.5)', lineHeight: 2, mb: 3 }}>
                             123 Design Street, Creative Valley<br />
                             New Delhi, India 110001<br />
                             Email: hello@artexa.in<br />
                             Phone: +91 98765 43210
                         </Typography>
-                        <Box sx={{ p: 2, borderRadius: 3, bgcolor: '#F6F7FF', display: 'flex', alignItems: 'center', gap: 2 }}>
+                        <Box sx={{ p: 2, borderRadius: 3, bgcolor: 'rgba(255,255,255,0.03)', display: 'flex', alignItems: 'center', gap: 2 }}>
                             <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: '#10b981' }} />
-                            <Typography variant="caption" fontWeight={700}>System Status: Online & Accepting Orders</Typography>
+                            <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.7)', fontWeight: 700 }}>System Status: Online & Accepting Orders</Typography>
                         </Box>
                     </Grid>
                 </Grid>
 
-                <Divider sx={{ opacity: 0.1 }} />
+                <Divider sx={{ borderColor: 'rgba(255,255,255,0.05)' }} />
                 <Stack direction={{ xs: 'column', md: 'row' }} justifyContent="space-between" alignItems="center" sx={{ mt: 4, gap: 2 }}>
-                    <Typography variant="body2" color="text.secondary">
+                    <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.4)' }}>
                         © {new Date().getFullYear()} Artexa Personalization Lab. All rights reserved.
                     </Typography>
                     <Stack direction="row" spacing={3}>
-                        <Link href="#" underline="none" color="text.secondary" variant="caption">Privacy Policy</Link>
-                        <Link href="#" underline="none" color="text.secondary" variant="caption">Terms of Service</Link>
-                        <Link href="#" underline="none" color="text.secondary" variant="caption">Refund Policy</Link>
+                        <Link href="#" underline="none" sx={{ color: 'rgba(255,255,255,0.4)' }} variant="caption">Privacy Policy</Link>
+                        <Link href="#" underline="none" sx={{ color: 'rgba(255,255,255,0.4)' }} variant="caption">Terms of Service</Link>
+                        <Link href="#" underline="none" sx={{ color: 'rgba(255,255,255,0.4)' }} variant="caption">Refund Policy</Link>
                     </Stack>
                 </Stack>
             </Container>

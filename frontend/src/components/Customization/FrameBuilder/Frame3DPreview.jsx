@@ -35,6 +35,8 @@ ErrorBoundary.propTypes = {
 
 /* ─── Procedural Photo Frame ─── */
 const PhotoFrame = React.memo(({ frameColor, frameStyle, textureCanvas, frameSize, glassReflection, orientation, frameThicknessMultiplier = 1 }) => {
+    const groupRef = useRef();
+
     // Map size labels to 3D dimensions (roughly in meters/units)
     const dims = useMemo(() => {
         const SCALE_TO_METERS = 0.5; // Increased scale for better visibility
@@ -84,8 +86,16 @@ const PhotoFrame = React.memo(({ frameColor, frameStyle, textureCanvas, frameSiz
         return tex;
     }, [textureCanvas]);
 
-    // Removed expensive useFrame running at 60fps unnecessarily. 
-    // Replaced with unmount cleanup to avoid GPU WebGL memory leaks.
+    // Floating Animation
+    useFrame((state) => {
+        const t = state.clock.getElapsedTime();
+        if (groupRef.current) {
+            groupRef.current.position.y = Math.sin(t * 1.2) * 0.08;
+            groupRef.current.rotation.x = Math.sin(t * 0.4) * 0.03;
+            groupRef.current.rotation.z = Math.cos(t * 0.5) * 0.02;
+        }
+    });
+
     React.useEffect(() => {
         return () => {
              if (texture) texture.dispose();
@@ -97,7 +107,7 @@ const PhotoFrame = React.memo(({ frameColor, frameStyle, textureCanvas, frameSiz
     const frameDepth = 0.2;
 
     return (
-        <group rotation={[0, -Math.PI / 10, 0]}>
+        <group ref={groupRef} rotation={[0, -Math.PI / 10, 0]}>
             {/* 1. The Real Frame (with hole) */}
             {!isCanvas ? (
                 <group>
@@ -204,7 +214,7 @@ const Frame3DPreview = React.memo(({
         if (wallPreview === 'living room') return '#dcdcdc';
         if (wallPreview === 'bedroom') return '#ead8c0';
         if (wallPreview === 'office') return '#b0c4de';
-        return '#050510';
+        return '#020617';
     }, [wallPreview]);
 
     const glConfig = useMemo(() => ({
@@ -236,7 +246,7 @@ const Frame3DPreview = React.memo(({
 
     // Handle gl initialization and cleanup outside of JSX to prevent inline anonymous fn allocations
     const handleCanvasCreated = useCallback(({ gl, scene }) => {
-        gl.setClearColor(wallColor, 1);
+        gl.setClearColor(wallColor, 0); // Transparent background for cleaner blend
 
         const onContextLost = (e) => {
             e.preventDefault();
@@ -275,9 +285,9 @@ const Frame3DPreview = React.memo(({
                 <PerspectiveCamera makeDefault position={[0, tiltAngle * 0.1, 4.5]} fov={50} />
 
                 {/* Lighting */}
-                <ambientLight intensity={wallPreview !== 'none' ? 0.6 : 0.4} />
-                <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1} castShadow />
-                <pointLight position={[-10, -10, -10]} intensity={0.5} />
+                <ambientLight intensity={0.5} />
+                <spotLight position={[5, 10, 5]} angle={0.2} penumbra={1} intensity={1.5} castShadow />
+                <pointLight position={[-10, 10, -5]} intensity={0.5} color="#6C63FF" />
                 <Environment preset="city" />
 
                 {/* Photo Frame */}
@@ -292,32 +302,41 @@ const Frame3DPreview = React.memo(({
                         frameThicknessMultiplier={frameThickness}
                     />
 
-                    {/* Background Wall if enabled */}
-                    {wallPreview !== 'none' && (
-                        <mesh position={[0, 0, -1]} receiveShadow>
-                            <planeGeometry args={[20, 15]} />
-                            <meshStandardMaterial color={wallColor} roughness={0.9} />
-                        </mesh>
-                    )}
+                    {/* Floor Glow / Soft shadow Area */}
+                    <mesh position={[0, -2.5, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+                        <planeGeometry args={[10, 10]} />
+                        <meshStandardMaterial 
+                            transparent 
+                            opacity={0.15} 
+                            color="#6C63FF" 
+                            roughness={1} 
+                        />
+                    </mesh>
 
                     <ContactShadows
-                        position={[0, -3.5, 0]}
-                        opacity={0.4}
-                        scale={10}
-                        blur={2.5}
+                        position={[0, -2.8, 0]}
+                        opacity={0.6}
+                        scale={8}
+                        blur={2.4}
                         far={4}
                     />
+
+                    {/* Background Wall if enabled */}
+                    <mesh position={[0, 0, -2]}>
+                        <planeGeometry args={[20, 20]} />
+                        <meshStandardMaterial color={wallColor} roughness={1} metalness={0} />
+                    </mesh>
                 </Suspense>
 
                 {/* Controls */}
                 <OrbitControls
                     enablePan={false}
                     minDistance={3}
-                    maxDistance={12}
+                    maxDistance={10}
                     minPolarAngle={Math.PI / 4}
                     maxPolarAngle={Math.PI / 1.5}
                     autoRotate={autoRotate}
-                    autoRotateSpeed={0.5}
+                    autoRotateSpeed={0.8}
                 />
             </Canvas>
         </ErrorBoundary>

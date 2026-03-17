@@ -13,106 +13,56 @@ const getDesignTokens = (mode) => ({
     palette: {
         mode,
         primary: {
-            main: '#7C3AED',
-            light: '#9333EA',
-            dark: '#5B21B6',
+            main: '#6C63FF',
+            light: '#8B85FF',
+            dark: '#483fd3',
             contrastText: '#ffffff',
         },
         secondary: {
-            main: '#EC4899',
+            main: '#9C4DFF',
         },
         accent: {
-            main: '#F59E0B',
+            main: '#FF7A59',
         },
-        ...(mode === 'light'
-            ? {
-                background: {
-                    default: '#F8FAFC',
-                    paper: '#ffffff',
-                },
-                text: {
-                    primary: '#0F172A',
-                    secondary: '#475569',
-                },
-            }
-            : {
-                background: {
-                    default: '#0B1120',
-                    paper: '#111827',
-                },
-                text: {
-                    primary: '#E5E7EB',
-                    secondary: '#94A3B8',
-                },
-            }),
+        background: {
+            default: '#0B0F1A',
+            paper: '#121A2F',
+        },
+        text: {
+            primary: '#E5E7EB',
+            secondary: '#9CA3AF',
+        },
     },
     typography: {
-        fontFamily: '"Outfit", "Inter", "Plus Jakarta Sans", sans-serif',
-        h1: { fontWeight: 900, letterSpacing: '-0.04em' },
-        h2: { fontWeight: 900, letterSpacing: '-0.03em' },
-        h3: { fontWeight: 800, letterSpacing: '-0.02em' },
-        h4: { fontWeight: 800, letterSpacing: '-0.01em' },
-        h5: { fontWeight: 700 },
-        h6: { fontWeight: 700 },
-        button: { textTransform: 'none', fontWeight: 700, letterSpacing: '0.01em' },
+        fontFamily: '"Inter", "Poppins", sans-serif',
+        h1: { fontSize: '28px', fontWeight: 800, lineHeight: 1.2 },
+        h2: { fontSize: '22px', fontWeight: 700, lineHeight: 1.3 },
+        h3: { fontSize: '18px', fontWeight: 600, lineHeight: 1.4 },
+        body1: { fontSize: '14px', lineHeight: 1.5 },
+        body2: { fontSize: '14px', lineHeight: 1.5 },
+        caption: { fontSize: '12px', lineHeight: 1.5 },
+        button: { textTransform: 'none', fontWeight: 600, fontSize: '14px' },
     },
     shape: {
-        borderRadius: 24,
+        borderRadius: 12,
     },
     components: {
         MuiButton: {
             styleOverrides: {
                 root: ({ theme }) => ({
-                    padding: '12px 28px',
-                    borderRadius: '500px', // True pill shape
-                    fontWeight: 800,
-                    fontSize: '0.95rem',
-                    letterSpacing: '0.02em',
-                    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)', // Snappier high-performance easing
+                    minHeight: '44px',
+                    padding: '8px 16px',
+                    borderRadius: '12px',
+                    fontWeight: 600,
                     textTransform: 'none',
-                    position: 'relative',
-                    overflow: 'hidden',
-                    willChange: 'transform, opacity',
-                    touchAction: 'manipulation', // Prevent zoom delays on mobile
-                    '&:hover': {
-                        transform: 'translateY(-2px)',
-                        boxShadow: '0 12px 24px -8px rgba(0,0,0,0.2)',
-                        '&::after': {
-                            transform: 'translateX(100%)',
-                        }
-                    },
-                    '&:active': {
-                        transform: 'scale(1.01)', // Very subtle to guarantee zero lag
-                        filter: 'brightness(1.1)',
-                        transition: 'all 0.1s ease-out', 
-                    },
-                    '@media (hover: none)': {
-                        '&:active': {
-                            transform: 'scale(1.01)',
-                            background: 'rgba(255, 255, 255, 0.1)',
-                        }
-                    },
-                    // Liquid Shine Effect
-                    '&::after': {
-                        content: '""',
-                        position: 'absolute',
-                        top: 0,
-                        left: '-100%',
-                        width: '100%',
-                        height: '100%',
-                        background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent)',
-                        transition: 'transform 0.6s ease',
-                    }
+                    transition: 'all 0.3s ease',
                 }),
                 containedPrimary: ({ theme }) => ({
-                    background: theme.palette.mode === 'dark' 
-                        ? 'linear-gradient(135deg, rgba(124, 58, 237, 0.8) 0%, rgba(236, 72, 153, 0.8) 100%)'
-                        : 'linear-gradient(135deg, rgba(124, 58, 237, 0.9) 0%, rgba(236, 72, 153, 0.9) 100%)',
-                    border: '1px solid rgba(255,255,255,0.2)',
-                    boxShadow: '0 10px 30px -10px rgba(124, 58, 237, 0.4)',
+                    background: 'linear-gradient(135deg, #6C63FF 0%, #9C4DFF 100%)',
+                    boxShadow: '0 4px 14px 0 rgba(108, 99, 255, 0.39)',
                     '&:hover': {
-                        background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.9) 0%, rgba(244, 114, 182, 0.9) 100%)',
-                        boxShadow: '0 20px 40px -12px rgba(124, 58, 237, 0.6)',
+                        background: 'linear-gradient(135deg, #7a72ff 0%, #a862ff 100%)',
+                        boxShadow: '0 6px 20px rgba(108, 99, 255, 0.4)',
                     },
                 }),
                 outlined: ({ theme }) => ({
@@ -136,23 +86,16 @@ const getDesignTokens = (mode) => ({
         MuiCard: {
             styleOverrides: {
                 root: ({ theme }) => ({
-                    borderRadius: '24px',
-                    border: '1px solid rgba(255, 255, 255, 0.12)',
-                    background: theme.palette.mode === 'dark' 
-                        ? 'rgba(30, 41, 59, 0.5)' 
-                        : 'rgba(255, 255, 255, 0.6)',
-                    backdropFilter: 'blur(20px) saturate(180%)',
-                    WebkitBackdropFilter: 'blur(20px) saturate(180%)',
-                    boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.15)',
-                    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                    willChange: 'transform, opacity',
+                    borderRadius: '16px',
+                    border: '1px solid rgba(255, 255, 255, 0.08)',
+                    background: 'rgba(18, 26, 47, 0.6)',
+                    backdropFilter: 'blur(12px)',
+                    boxShadow: '0 4px 16px rgba(0, 0, 0, 0.2)',
+                    transition: 'all 0.3s ease',
                     '&:hover': {
-                        transform: 'translateY(-4px)',
-                        background: theme.palette.mode === 'dark' 
-                            ? 'rgba(30, 41, 59, 0.7)' 
-                            : 'rgba(255, 255, 255, 0.8)',
-                        boxShadow: '0 25px 60px -12px rgba(0, 0, 0, 0.3)',
-                        borderColor: 'rgba(255, 255, 255, 0.3)',
+                        transform: 'translateY(-2px)',
+                        boxShadow: '0 8px 24px rgba(0, 0, 0, 0.3)',
+                        borderColor: 'rgba(255, 255, 255, 0.15)',
                     },
                 }),
             },
@@ -161,124 +104,114 @@ const getDesignTokens = (mode) => ({
             styleOverrides: {
                 root: ({ theme }) => ({
                     backgroundImage: 'none',
-                    borderRadius: '24px',
-                    backgroundColor: theme.palette.mode === 'dark' ? 'rgba(15, 23, 42, 0.5)' : 'rgba(255, 255, 255, 0.7)',
-                    backdropFilter: 'blur(20px) saturate(180%)',
-                    WebkitBackdropFilter: 'blur(20px) saturate(180%)',
-                    border: '1px solid rgba(255, 255, 255, 0.12)',
-                    transition: 'all 0.5s cubic-bezier(0.22, 1, 0.36, 1)',
+                    borderRadius: '16px',
+                    backgroundColor: 'rgba(18, 26, 47, 0.8)',
+                    backdropFilter: 'blur(12px)',
+                    border: '1px solid rgba(255, 255, 255, 0.08)',
                 }),
             },
         },
         MuiAppBar: {
             styleOverrides: {
                 root: ({ theme }) => ({
-                    backgroundColor: theme.palette.mode === 'dark' ? 'rgba(15, 23, 42, 0.4)' : 'rgba(255, 255, 255, 0.4)',
-                    backdropFilter: 'blur(25px) saturate(200%)',
-                    WebkitBackdropFilter: 'blur(25px) saturate(200%)',
-                    borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-                    color: theme.palette.text.primary,
+                    backgroundColor: 'rgba(11, 15, 26, 0.8)',
+                    backdropFilter: 'blur(12px)',
+                    borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
                     boxShadow: 'none',
-                    transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
                 }),
             },
         },
-        MuiCssBaseline: {
+                MuiCssBaseline: {
             styleOverrides: (theme) => `
                 html {
                     scroll-behavior: smooth;
+                    -webkit-font-smoothing: antialiased;
+                    -moz-osx-font-smoothing: grayscale;
                 }
                 body {
                     overflow-x: hidden;
                     margin: 0;
                     padding: 0;
                     background-color: ${theme.palette.background.default};
+                    color: ${theme.palette.text.primary};
                 }
+                /* Premium Glassmorphism */
                 .glass {
-                    background: ${theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.03)' : 'rgba(255,255,255,0.5)'};
-                    backdrop-filter: blur(25px) saturate(200%);
-                    -webkit-backdrop-filter: blur(25px) saturate(200%);
-                    border: 1px solid rgba(255,255,255,0.1);
-                    border-radius: 24px;
-                    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
-                    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                    will-change: transform, opacity;
+                    background: rgba(255, 255, 255, 0.03);
+                    backdrop-filter: blur(20px) saturate(180%);
+                    -webkit-backdrop-filter: blur(20px) saturate(180%);
+                    border: 1px solid rgba(255, 255, 255, 0.08);
+                    border-radius: 20px;
+                    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
                 }
-                .glass:hover {
-                    background: ${theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.08)' : 'rgba(255,255,255,0.7)'};
-                    border-color: rgba(255,255,255,0.2);
-                    box-shadow: 0 15px 45px 0 rgba(0, 0, 0, 0.2);
-                    transform: translateY(-2px);
+                .glass-card {
+                    background: rgba(18, 26, 47, 0.4);
+                    backdrop-filter: blur(20px);
+                    border-radius: 20px;
+                    border: 1px solid rgba(255, 255, 255, 0.08);
+                    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+                    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
                 }
-                /* Mobile Touch Ripple/Feedback */
-                @media (hover: none) {
-                    .glass:active {
-                        transform: scale(0.98);
-                        background: rgba(255, 255, 255, 0.1);
-                        transition: transform 0.1s ease;
+                .glass-card:hover {
+                    background: rgba(18, 26, 47, 0.6);
+                    border-color: rgba(108, 99, 255, 0.3);
+                    transform: translateY(-8px);
+                    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+                }
+                /* 3D Interactive Tilt */
+                .tilt-3d {
+                    transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+                    transform-style: preserve-3d;
+                    perspective: 1000px;
+                }
+                .tilt-3d:hover {
+                    transform: rotateX(5deg) rotateY(-5deg);
+                }
+                /* Animations */
+                .float {
+                    animation: floating 4s ease-in-out infinite;
+                }
+                @keyframes floating {
+                    0% { transform: translateY(0px); }
+                    50% { transform: translateY(-15px); }
+                    100% { transform: translateY(0px); }
+                }
+                .pulse-glow {
+                    animation: glow 3s ease-in-out infinite;
+                }
+                @keyframes glow {
+                    0%, 100% { box-shadow: 0 0 20px rgba(108, 99, 255, 0.2); }
+                    50% { box-shadow: 0 0 40px rgba(108, 99, 255, 0.5); }
+                }
+                .gradient-text {
+                    background: linear-gradient(135deg, #6C63FF 0%, #9C4DFF 100%);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                }
+                /* Mobile Touch System */
+                @media (max-width: 768px) {
+                    .btn-mobile {
+                        height: 48px;
+                        min-width: 44px;
+                    }
+                    .touch-target {
+                        min-height: 44px;
+                        min-width: 44px;
                     }
                 }
-                .liquid-glass {
-                    position: relative;
-                    background: rgba(255, 255, 255, 0.05);
-                    backdrop-filter: blur(20px) saturate(180%);
-                    border: 1px solid rgba(255, 255, 255, 0.1);
-                    border-radius: 24px;
-                    overflow: hidden;
-                    transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-                }
-                .liquid-glass::before {
-                    content: "";
-                    position: absolute;
-                    top: -50%;
-                    left: -50%;
-                    width: 200%;
-                    height: 200%;
-                    background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
-                    pointer-events: none;
-                }
-                .card3d {
-                    transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-                    transform-style: preserve-3d;
-                    will-change: transform;
-                }
-                .card3d:hover {
-                    transform: perspective(1000px) rotateX(6deg) rotateY(-8deg) scale(1.03);
-                }
-                .heroFloat {
-                    animation: float 6s ease-in-out infinite;
-                    will-change: transform;
-                }
-                @keyframes float {
-                    0% { transform: translateY(0); }
-                    50% { transform: translateY(-12px); }
-                    100% { transform: translateY(0); }
-                }
-                .preview3d {
-                    transition: all .6s cubic-bezier(0.23, 1, 0.32, 1);
-                    will-change: transform;
-                    overflow: hidden;
-                    border-radius: inherit;
-                }
-                /* Removed tilt effect for better usability */
-                img {
-                    max-width: 100%;
-                    height: auto;
-                    border-radius: inherit;
-                }
-                /* Hide scrollbar for Chrome, Safari and Opera */
+                /* Custom Scrollbar */
                 ::-webkit-scrollbar {
-                    width: 8px;
+                    width: 6px;
                 }
                 ::-webkit-scrollbar-track {
-                    background: ${theme.palette.background.default};
+                    background: #0B0F1A;
                 }
                 ::-webkit-scrollbar-thumb {
-                    background: ${theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,1,0,0.1)'};
+                    background: rgba(108, 99, 255, 0.3);
                     border-radius: 10px;
                 }
                 ::-webkit-scrollbar-thumb:hover {
-                    background: ${theme.palette.primary.main};
+                    background: #6C63FF;
                 }
             `,
         },
@@ -286,13 +219,11 @@ const getDesignTokens = (mode) => ({
 });
 
 export const AppThemeProvider = ({ children }) => {
-    const stored = localStorage.getItem('theme_mode') || 'dark'; // Default to dark as requested
-    const [mode, setMode] = useState(stored);
+    const stored = localStorage.getItem('theme_mode') || 'dark'; // the new design is strictly dark mood based on colors
+    const [mode, setMode] = useState('dark'); // force dark mode as per requirements
 
     const toggleTheme = () => {
-        const next = mode === 'light' ? 'dark' : 'light';
-        setMode(next);
-        localStorage.setItem('theme_mode', next);
+        // Keeping toggle structure in case it's used elsewhere, but we force dark based on "Background: #0B0F1A (dark)"
     };
 
     const theme = useMemo(() => createTheme(getDesignTokens(mode)), [mode]);

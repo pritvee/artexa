@@ -1,35 +1,37 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Container, Typography, Grid, Box, Button,
     Card, CardMedia, Chip, Paper, Stack,
-    Rating, Avatar, Divider, TextField
+    Rating, Avatar, Divider, TextField, IconButton,
+    Fab, Zoom, Tooltip
 } from '@mui/material';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate, Link as RouterLink } from 'react-router-dom';
 import { useProducts } from '../store/ProductContext';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import LocalShippingIcon from '@mui/icons-material/LocalShipping';
-import VerifiedIcon from '@mui/icons-material/Verified';
-import TimerIcon from '@mui/icons-material/Timer';
+import ProductCard from '../components/ProductCard';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 import { getPublicUrl } from '../api/axios';
 
 const fadeUp = {
-    hidden: { opacity: 0, y: 30 },
+    hidden: { opacity: 0, y: 20 },
     show: {
         opacity: 1,
         y: 0,
         transition: { 
-            duration: 0.5, 
+            duration: 0.4, 
             ease: [0.22, 1, 0.36, 1] 
         }
     }
 };
 
 const CATEGORIES_DATA = [
-    { name: 'Frames',   img: getPublicUrl('/assets/cat_frames.png'), count: 24, path: '/shop?category=frames' },
-    { name: 'Mugs',     img: getPublicUrl('/assets/cat_mugs.png'),   count: 18, path: '/shop?category=mugs' },
-    { name: 'Hampers',  img: getPublicUrl('/assets/perfect_chocolate_hamper.png'), count: 12, path: '/shop?category=hampers' },
-    { name: 'Gifts',    img: getPublicUrl('/assets/luxury_giftbox.png'), count: 32, path: '/shop?category=gifts' },
+    { name: 'Frames', img: getPublicUrl('/assets/cat_frames.png'), path: '/shop?category=frames' },
+    { name: 'Mugs', img: getPublicUrl('/assets/cat_mugs.png'), path: '/shop?category=mugs' },
+    { name: 'Hampers', img: getPublicUrl('/assets/perfect_chocolate_hamper.png'), path: '/shop?category=hampers' },
+    { name: 'Photo Gifts', img: getPublicUrl('/assets/luxury_giftbox.png'), path: '/shop?category=gifts' },
 ];
 
 const REVIEWS = [
@@ -43,155 +45,197 @@ const Home = () => {
     const { products, fetchProducts, loading } = useProducts();
 
     useEffect(() => {
-        fetchProducts(1, 8, null, '', true); 
+        fetchProducts(1, 10, null, '', true); 
     }, []);
 
     return (
         <Box sx={{ bgcolor: 'background.default', pb: 10 }}>
-            {/* 1. Promotional Banner */}
+            {/* Promo */}
             <Box sx={{ 
-                background: 'linear-gradient(90deg, #7C3AED 0%, #EC4899 100%)', 
-                color: '#fff', py: 1.5, textAlign: 'center', fontSize: '0.8rem', fontWeight: 800,
-                letterSpacing: '0.1em', textTransform: 'uppercase'
+                background: 'linear-gradient(90deg, #6C63FF 0%, #9C4DFF 100%)', 
+                color: '#fff', py: 1, textAlign: 'center', fontSize: '12px', fontWeight: 600
             }}>
-                <motion.div animate={{ opacity: [0.8, 1, 0.8] }} transition={{ repeat: Infinity, duration: 2.5 }}>
-                    ✨ 20% OFF on All Custom Frames | Use: <Box component="span" sx={{ bgcolor: 'rgba(0,0,0,0.2)', px: 1.5, py: 0.2, borderRadius: 1.5, ml: 1 }}>MEMORIES20</Box>
-                </motion.div>
+                Use mobile-first design · Free shipping on orders over ₹1000
             </Box>
 
-            <Container maxWidth="xl">
-                {/* 2. Hero Section */}
-                <Grid container spacing={8} sx={{ py: { xs: 8, md: 15 }, alignItems: 'center', minHeight: '90vh' }}>
-                    <Grid item xs={12} md={6}>
-                        <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: 'easeOut' }}>
-                            <Box sx={{ mb: 3 }}>
-                                <Chip label="Handcrafted with Love" color="primary" sx={{ borderRadius: 2, fontWeight: 900, px: 1 }} />
-                            </Box>
+            <Container maxWidth="xl" sx={{ px: { xs: 2, sm: 3, md: 4 } }}>
+                {/* HERO SECTION */}
+                <Box sx={{ 
+                    py: { xs: 6, md: 10 }, 
+                    display: 'flex', 
+                    flexDirection: { xs: 'column', md: 'row' }, 
+                    alignItems: 'center',
+                    gap: { xs: 6, md: 4 },
+                    position: 'relative'
+                }}>
+                    {/* Background Blobs */}
+                    <Box sx={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        width: '100%',
+                        height: '100%',
+                        zIndex: -1,
+                        overflow: 'hidden'
+                    }}>
+                        <motion.div 
+                            animate={{ 
+                                scale: [1, 1.2, 1],
+                                rotate: [0, 90, 0],
+                                opacity: [0.3, 0.5, 0.3]
+                            }}
+                            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                            style={{
+                                position: 'absolute',
+                                top: '-20%',
+                                right: '-10%',
+                                width: '400px',
+                                height: '400px',
+                                background: 'radial-gradient(circle, rgba(108, 99, 255, 0.2) 0%, transparent 70%)',
+                                borderRadius: '50%',
+                                filter: 'blur(60px)'
+                            }}
+                        />
+                    </Box>
+
+                    <Box sx={{ flex: 1 }}>
+                        <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }}>
                             <Typography variant="h1" sx={{ 
-                                fontSize: { xs: '3.5rem', md: '5.5rem' }, 
-                                fontWeight: 900, mb: 3, lineHeight: 1,
+                                fontSize: { xs: '40px', md: '64px' }, 
+                                fontWeight: 900, mb: 2, lineHeight: 1.05,
                                 letterSpacing: '-0.04em'
                             }}>
-                                Gift the <Box component="span" sx={{ color: 'primary.main', position: 'relative' }}>
-                                    Extraordinary
-                                    <Box sx={{ position: 'absolute', bottom: 10, left: 0, width: '100%', height: 8, bgcolor: 'secondary.main', opacity: 0.2, borderRadius: 4, zIndex: -1 }} />
-                                </Box>
+                                Gift the <Box component="span" className="gradient-text">Extraordinary</Box>
                             </Typography>
-                            <Typography variant="h5" color="text.secondary" sx={{ mb: 6, maxWidth: 550, lineHeight: 1.8, fontSize: '1.25rem', fontWeight: 600 }}>
-                                Transform your digital moments into physical masterpieces. Artisanal gifts designed to last a lifetime.
+                            <Typography variant="h3" color="text.secondary" sx={{ mb: 4, fontWeight: 500, maxWidth: 600, fontSize: { xs: '16px', md: '20px' } }}>
+                                Elevate your memories with Artexa's premium custom photo gifts. Designed for those who appreciate the finer things.
                             </Typography>
 
-                            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={3}>
+                            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ width: { xs: '100%', sm: 'auto' } }}>
                                 <Button 
-                                    component={RouterLink} to="/shop" variant="contained" size="large" 
+                                    component={RouterLink} to="/shop" variant="contained" 
+                                    className="pulse-glow"
                                     sx={{ 
-                                        px: { xs: 4, md: 8 }, py: 2.5, borderRadius: '20px', fontSize: { xs: '1rem', md: '1.2rem' }, fontWeight: 900,
-                                        boxShadow: '0 25px 50px -12px rgba(124, 58, 237, 0.4)'
+                                        height: '56px', px: 4, borderRadius: '16px', fontSize: '16px', fontWeight: 700,
+                                        background: 'linear-gradient(135deg, #6C63FF 0%, #9C4DFF 100%)',
                                     }}
                                 >
                                     Start Creating
                                 </Button>
                                 <Button 
-                                    component={RouterLink} to="/shop?category=frames" variant="outlined" size="large" 
-                                    sx={{ px: { xs: 4, md: 6 }, py: 2.5, borderRadius: '20px', fontSize: { xs: '1rem', md: '1.1rem' }, fontWeight: 800 }}
+                                    component={RouterLink} to="/shop?category=frames" variant="outlined" 
+                                    sx={{ 
+                                        height: '56px', px: 4, borderRadius: '16px', fontSize: '16px', fontWeight: 700,
+                                        border: '1px solid rgba(255,255,255,0.1)',
+                                        background: 'rgba(255,255,255,0.02)',
+                                        backdropFilter: 'blur(10px)',
+                                        '&:hover': { background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.2)' }
+                                    }}
                                 >
-                                    View Gallery
+                                    Explore Gallery
                                 </Button>
                             </Stack>
 
-                            <Stack direction="row" spacing={4} sx={{ mt: 8, opacity: 0.7 }}>
+                            <Stack direction="row" spacing={3} sx={{ mt: 6 }}>
                                 {[
-                                    { icon: <LocalShippingIcon />, label: 'Express Delivery' },
-                                    { icon: <VerifiedIcon />, label: 'Premium Quality' },
-                                    { icon: <TimerIcon />, label: '24h Dispatch' }
-                                ].map((item, idx) => (
-                                    <Box key={item.label} sx={{ textAlign: 'center' }}>
-                                        <Box sx={{ mb: 1, color: 'primary.main' }}>{item.icon}</Box>
-                                        <Typography variant="caption" sx={{ fontWeight: 800 }}>{item.label}</Typography>
+                                    { label: 'Happy Users', val: '10k+' },
+                                    { label: 'Total Gifts', val: '50k+' },
+                                    { label: 'Fast delivery', val: '24h' }
+                                ].map((stat) => (
+                                    <Box key={stat.label}>
+                                        <Typography sx={{ fontWeight: 800, fontSize: '20px', color: 'primary.main' }}>{stat.val}</Typography>
+                                        <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 600 }}>{stat.label}</Typography>
                                     </Box>
                                 ))}
                             </Stack>
                         </motion.div>
-                    </Grid>
-                    
-                    <Grid item xs={12} md={6}>
+                    </Box>
+
+                    <Box sx={{ flex: 1, position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                         <motion.div 
-                            initial="hidden"
-                            whileInView="show"
-                            variants={fadeUp}
-                            viewport={{ once: true }}
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 1, delay: 0.2 }}
+                            style={{ position: 'relative', width: '100%', maxWidth: '500px' }}
                         >
-                            <Box sx={{ position: 'relative' }}>
-                                {/* Floating decorative elements */}
-                                <motion.div animate={{ y: [0, -20, 0] }} transition={{ repeat: Infinity, duration: 4 }} style={{ position: 'absolute', top: -40, right: 20, zIndex: 1 }}>
-                                    <Box className="glass" sx={{ p: 2, borderRadius: 4 }}>
-                                        <Typography sx={{ fontWeight: 900, color: 'primary.main', fontSize: '0.8rem' }}>⭐ 4.9 Rating</Typography>
-                                    </Box>
-                                </motion.div>
+                            <Box sx={{ 
+                                position: 'relative',
+                                borderRadius: '32px',
+                                overflow: 'visible',
+                                boxShadow: '0 30px 60px rgba(0,0,0,0.5)',
+                                '&::before': {
+                                    content: '""',
+                                    position: 'absolute',
+                                    inset: -2,
+                                    borderRadius: '34px',
+                                    padding: '2px',
+                                    background: 'linear-gradient(135deg, rgba(108,99,255,0.5), rgba(156,77,255,0.2))',
+                                    WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+                                    WebkitMaskComposite: 'xor',
+                                    maskComposite: 'exclude',
+                                }
+                            }}>
+                                <img 
+                                    src={getPublicUrl("/assets/hero.png")} 
+                                    alt="Artexa Premium Product" 
+                                    style={{ width: '100%', borderRadius: '32px', display: 'block' }}
+                                />
                                 
-                                <Box className="heroFloat" sx={{ 
-                                    borderRadius: 4, overflow: 'hidden',
-                                    boxShadow: '0 60px 120px -20px rgba(0,0,0,0.15)',
-                                    transform: 'perspective(1000px) rotateY(-5deg)',
-                                    background: 'linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01))',
-                                    p: 1.5, border: '1px solid rgba(255,255,255,0.1)',
-                                    backdropFilter: 'blur(10px)',
-                                    WebkitBackdropFilter: 'blur(10px)',
-                                }}>
-                                    <img 
-                                        src={getPublicUrl("/assets/hero.png")} 
-                                        alt="Premium Gifts" 
-                                        loading="lazy"
-                                        style={{ width: '100%', borderRadius: '14px', display: 'block' }} 
-                                    />
-                                </Box>
+                                {/* Floating mini images */}
+                                <motion.div 
+                                    className="float"
+                                    style={{ 
+                                        position: 'absolute', top: '-10%', right: '-5%', width: '120px',
+                                        background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(10px)',
+                                        padding: '10px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.2)'
+                                    }}
+                                >
+                                    <img src={getPublicUrl("/assets/cat_frames.png")} style={{ width: '100%', borderRadius: '10px' }} alt="" />
+                                </motion.div>
+                                <motion.div 
+                                    className="float"
+                                    style={{ 
+                                        position: 'absolute', bottom: '10%', left: '-10%', width: '100px',
+                                        background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(10px)',
+                                        padding: '10px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.2)',
+                                        animationDelay: '1s'
+                                    }}
+                                >
+                                    <img src={getPublicUrl("/assets/cat_mugs.png")} style={{ width: '100%', borderRadius: '10px' }} alt="" />
+                                </motion.div>
                             </Box>
                         </motion.div>
-                    </Grid>
-                </Grid>
-
-                {/* 3. Categories Grid */}
-                <Box sx={{ mb: { xs: 10, md: 20 } }}>
-                    <Box sx={{ mb: { xs: 4, md: 8 }, textAlign: 'center' }}>
-                        <Typography variant="h2" sx={{ fontWeight: 900, mb: 2, fontSize: { xs: '2rem', md: '3.75rem' } }}>The Gift Studio</Typography>
-                        <Divider sx={{ width: 60, height: 4, bgcolor: 'primary.main', mx: 'auto', borderRadius: 2 }} />
                     </Box>
-                    <Grid container spacing={{ xs: 2, md: 3 }}>
+                </Box>
+
+                {/* FEATURED CATEGORIES */}
+                <Box sx={{ py: { xs: 4, md: 6 } }}>
+                    <Typography variant="h2" sx={{ mb: 3 }}>Popular Categories</Typography>
+                    <Grid container spacing={1.5}>
                         {CATEGORIES_DATA.map((cat, i) => (
-                            <Grid item xs={6} md={3} key={cat.name}>
+                            <Grid item xs={6} sm={3} key={cat.name}>
                                 <motion.div 
                                     variants={fadeUp}
                                     initial="hidden"
                                     whileInView="show"
                                     viewport={{ once: true }}
                                     transition={{ delay: i * 0.1 }}
-                                    className="card3d"
                                 >
                                     <Card 
                                         onClick={() => navigate(cat.path)}
-                                        className="glass"
                                         sx={{ 
-                                            borderRadius: 2, cursor: 'pointer', overflow: 'hidden', 
-                                            height: { xs: 220, md: 350 },
+                                            borderRadius: '16px', cursor: 'pointer', overflow: 'hidden', 
                                             position: 'relative', border: 'none',
-                                            boxShadow: '0 10px 30px -5px rgba(0,0,0,0.1)'
+                                            bgcolor: 'rgba(18, 26, 47, 0.4)',
+                                            display: 'flex', flexDirection: 'column', alignItems: 'center',
+                                            p: 2, textAlign: 'center'
                                         }}
                                     >
-                                        <img 
-                                            src={cat.img} 
-                                            alt={cat.name} 
-                                            loading="lazy"
-                                            style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
-                                        />
-                                        <Box sx={{ 
-                                            position: 'absolute', inset: 0, 
-                                            background: 'linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 60%)',
-                                            display: 'flex', flexDirection: 'column', justifyContent: 'flex-end',
-                                            p: { xs: 2, md: 4 }
-                                        }}>
-                                            <Typography variant="h4" sx={{ color: '#fff', fontWeight: 900, fontSize: { xs: '1.2rem', md: '2rem' } }}>{cat.name}</Typography>
-                                            <Typography sx={{ color: 'rgba(255,255,255,0.7)', fontWeight: 600, fontSize: { xs: '0.7rem', md: '1rem' } }}>{cat.count}+ Products</Typography>
+                                        <Box sx={{ width: 64, height: 64, mb: 1.5, borderRadius: '50%', overflow: 'hidden', bgcolor: 'rgba(255,255,255,0.05)' }}>
+                                            <img src={cat.img} alt={cat.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                         </Box>
+                                        <Typography variant="body2" sx={{ fontWeight: 600 }}>{cat.name}</Typography>
                                     </Card>
                                 </motion.div>
                             </Grid>
@@ -199,96 +243,28 @@ const Home = () => {
                     </Grid>
                 </Box>
 
-                {/* 4. Trending Products */}
-                <Box sx={{ mb: 20 }}>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', mb: 8 }}>
-                        <Box>
-                            <Typography variant="h2" sx={{ fontWeight: 900, mb: 1, fontSize: { xs: '2.5rem', md: '3.75rem' } }}>Trending Now</Typography>
-                            <Typography color="text.secondary" sx={{ fontWeight: 700 }}>Most loved gifts this month</Typography>
-                        </Box>
-                        <Button 
-                            color="primary" 
-                            sx={{ fontWeight: 900, fontSize: '1.1rem' }} 
-                            endIcon={<ArrowForwardIcon />}
-                            onClick={() => navigate('/shop')}
-                        >
-                            See All
-                        </Button>
-                    </Box>
+                {/* FEATURED COLLECTIONS (Best Sellers) */}
+                <Box sx={{ py: { xs: 4, md: 6 } }}>
+                    <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 3 }}>
+                        <Typography variant="h2">Best Sellers</Typography>
+                        <Button color="primary" size="small" onClick={() => navigate('/shop')} sx={{ fontWeight: 600 }}>See All</Button>
+                    </Stack>
                     
-                    <Grid container spacing={{ xs: 2, md: 4 }}>
+                    <Grid container spacing={1.5}>
                         {loading ? (
-                             [1,2,3,4].map(i => <Grid item xs={6} sm={6} md={3} key={i}><Box sx={{ height: { xs: 250, md: 400 }, bgcolor: 'background.paper', borderRadius: 2, opacity: 0.5 }} /></Grid>)
+                             [1,2,3,4].map(i => <Grid item xs={6} sm={4} md={3} key={i}><Box sx={{ height: 280, bgcolor: 'rgba(255,255,255,0.05)', borderRadius: '16px' }} /></Grid>)
                         ) : (
-                            products.slice(0, 8).map((product, index) => (
-                                <Grid item xs={6} sm={6} md={3} key={product.id}>
+                            products.slice(0, 4).map((product, index) => (
+                                <Grid item xs={6} sm={4} md={3} key={product.id}>
                                     <motion.div 
                                         variants={fadeUp}
                                         initial="hidden"
                                         whileInView="show"
-                                        viewport={{ once: true, margin: "50px" }}
-                                        transition={{ delay: (index % 4) * 0.1 }}
-                                        className="card3d"
+                                        viewport={{ once: true }}
+                                        transition={{ delay: index * 0.1 }}
+                                        style={{ height: '100%' }}
                                     >
-                                        <Card className="glass" sx={{ 
-                                            height: '100%', 
-                                            borderRadius: 2, 
-                                            p: { xs: 1.5, md: 2 }, 
-                                            transition: 'all 0.3s', 
-                                            display: 'flex',
-                                            flexDirection: 'column'
-                                        }}>
-                                            <Box sx={{ 
-                                                position: 'relative', 
-                                                height: { xs: 180, md: 280 }, 
-                                                borderRadius: 2, 
-                                                overflow: 'hidden', 
-                                                bgcolor: 'background.default', 
-                                                mb: { xs: 1.5, md: 3 } 
-                                            }}>
-                                                <CardMedia component="img" image={getPublicUrl(product.image_url)} loading="lazy" sx={{ height: '100%', objectFit: 'cover' }} />
-                                                <Box sx={{ position: 'absolute', top: 10, left: 10 }}>
-                                                    <Chip 
-                                                        label="Bestseller" 
-                                                        className="glass"
-                                                        sx={{ 
-                                                            fontWeight: 900, 
-                                                            fontSize: '0.6rem',
-                                                            height: 20
-                                                        }} 
-                                                        size="small" 
-                                                    />
-                                                </Box>
-                                            </Box>
-                                            <Box sx={{ px: 0.5, flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
-                                                <Typography variant="body1" sx={{ fontWeight: 900, mb: 0.5, fontSize: { xs: '0.9rem', md: '1.1rem' }, lineHeight: 1.2, minHeight: { xs: '2.4em', md: 'auto' } }}>
-                                                    {product.name}
-                                                </Typography>
-                                                <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'space-between', alignItems: { xs: 'flex-start', sm: 'center' }, mt: 'auto', mb: 2, gap: 0.5 }}>
-                                                    <Typography variant="h6" color="primary" sx={{ fontWeight: 900, fontSize: { xs: '1.1rem', md: '1.25rem' } }}>₹{(product.price || 0).toFixed(0)}</Typography>
-                                                    <Stack direction="row" spacing={0.5} alignItems="center">
-                                                        <Rating value={5} readOnly size="small" sx={{ fontSize: '0.8rem' }} />
-                                                    </Stack>
-                                                </Box>
-                                                <Button 
-                                                    className="btn"
-                                                    variant="contained" 
-                                                    component={RouterLink}
-                                                    to={`/product/${product.id}`}
-                                                    fullWidth
-                                                    sx={{ 
-                                                        borderRadius: 2, 
-                                                        px: 2,
-                                                        py: { xs: 0.8, md: 1.2 },
-                                                        fontWeight: 900,
-                                                        fontSize: { xs: '0.7rem', md: '0.85rem' },
-                                                        boxShadow: '0 10px 20px -5px rgba(124, 58, 237, 0.3)'
-                                                    }}
-                                                >
-                                                    Customize
-                                                </Button>
-                                            </Box>
-                                        </Card>
+                                        <ProductCard product={product} />
                                     </motion.div>
                                 </Grid>
                             ))
@@ -296,59 +272,159 @@ const Home = () => {
                     </Grid>
                 </Box>
 
-                {/* 5. Reviews */}
-                <Box sx={{ mb: 20 }}>
-                    <Grid container spacing={4}>
+                {/* LIVE CUSTOMIZATION BANNER */}
+                <Box sx={{ py: { xs: 4, md: 6 } }}>
+                    <Paper sx={{ 
+                        p: { xs: 3, md: 5 }, borderRadius: '16px', 
+                        background: 'linear-gradient(135deg, rgba(108, 99, 255, 0.1) 0%, rgba(156, 77, 255, 0.1) 100%)',
+                        border: '1px solid rgba(108, 99, 255, 0.2)',
+                        textAlign: 'center'
+                    }}>
+                        <Typography variant="h2" sx={{ mb: 1 }}>Design Your Own</Typography>
+                        <Typography variant="body2" color="text.secondary" sx={{ mb: 3, maxWidth: 300, mx: 'auto' }}>
+                            Upload a photo, add text, and see a live preview instantly.
+                        </Typography>
+                        <Button variant="contained" onClick={() => navigate('/shop?category=frames')} sx={{ height: '48px', borderRadius: '12px', px: 4, fontWeight: 700 }}>
+                            Start Designing
+                        </Button>
+                    </Paper>
+                </Box>
+
+                {/* AI GIFT RECOMMENDATION TOOL */}
+                <Box sx={{ py: { xs: 4, md: 6 } }}>
+                    <Typography variant="h2" sx={{ mb: 3 }}>AI Gift Matchmaker</Typography>
+                    <Paper sx={{ p: 2.5, borderRadius: '16px', bgcolor: 'rgba(18, 26, 47, 0.8)', border: '1px solid rgba(108, 99, 255, 0.3)' }}>
+                        <Stack spacing={2}>
+                            <Typography variant="body2" sx={{ color: 'text.secondary', fontWeight: 600 }}>Who are you shopping for?</Typography>
+                            <Box sx={{ display: 'flex', gap: 1, overflowX: 'auto', pb: 1, '&::-webkit-scrollbar': { display: 'none' } }}>
+                                {['For Girlfriend', 'For Mom', 'For Friend'].map(filter => (
+                                    <Chip key={filter} label={filter} sx={{ bgcolor: 'rgba(255,255,255,0.08)', fontWeight: 600, color: 'white', border: '1px solid rgba(255,255,255,0.1)', flexShrink: 0 }} />
+                                ))}
+                            </Box>
+                            <Typography variant="body2" sx={{ color: 'text.secondary', fontWeight: 600 }}>Occasion?</Typography>
+                            <Box sx={{ display: 'flex', gap: 1, overflowX: 'auto', pb: 1, '&::-webkit-scrollbar': { display: 'none' } }}>
+                                {['Birthday', 'Anniversary', 'Farewell'].map(filter => (
+                                    <Chip key={filter} label={filter} sx={{ bgcolor: 'rgba(255,255,255,0.08)', fontWeight: 600, color: 'white', border: '1px solid rgba(255,255,255,0.1)', flexShrink: 0 }} />
+                                ))}
+                            </Box>
+                            <Button 
+                                variant="contained" 
+                                fullWidth 
+                                sx={{ 
+                                    borderRadius: '12px', 
+                                    height: '48px',
+                                    background: 'linear-gradient(90deg, #6C63FF 0%, #9C4DFF 100%)',
+                                    fontWeight: 700,
+                                    mt: 2,
+                                    boxShadow: '0 4px 15px rgba(108, 99, 255, 0.3)'
+                                }}
+                            >
+                                Get AI Recommendations
+                            </Button>
+                        </Stack>
+                    </Paper>
+                </Box>
+
+                {/* TRENDING GIFTS */}
+                <Box sx={{ py: { xs: 4, md: 6 } }}>
+                    <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 3 }}>
+                        <Typography variant="h2">Trending Gifts</Typography>
+                    </Stack>
+                    
+                    <Grid container spacing={1.5}>
+                        {products.length > 4 ? products.slice(4, 8).map((product, index) => (
+                            <Grid item xs={6} sm={4} md={3} key={product.id}>
+                                <motion.div 
+                                    variants={fadeUp}
+                                    initial="hidden"
+                                    whileInView="show"
+                                    viewport={{ once: true }}
+                                    transition={{ delay: index * 0.1 }}
+                                    style={{ height: '100%' }}
+                                >
+                                    <ProductCard product={product} />
+                                </motion.div>
+                            </Grid>
+                        )) : (
+                            <Grid item xs={12}><Typography variant="body2" color="text.secondary">More products arriving soon.</Typography></Grid>
+                        )}
+                    </Grid>
+                </Box>
+
+                {/* CUSTOMER REVIEWS */}
+                <Box sx={{ py: { xs: 4, md: 6 } }}>
+                    <Typography variant="h2" sx={{ mb: 3 }}>Customer Reviews</Typography>
+                    <Box sx={{ display: 'flex', gap: 2, overflowX: 'auto', pb: 2, snapType: 'x mandatory', '&::-webkit-scrollbar': { display: 'none' } }}>
                         {REVIEWS.map((rev, i) => (
-                            <Grid item xs={12} md={4} key={rev.name}>
-                                <Card sx={{ p: 5, borderRadius: 2, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                            <Card key={rev.name} sx={{ 
+                                minWidth: 260, maxWidth: 300, p: 2.5, borderRadius: '16px', scrollSnapAlign: 'start', flexShrink: 0,
+                                bgcolor: 'rgba(18, 26, 47, 0.6)', border: '1px solid rgba(255,255,255,0.05)'
+                            }}>
+                                <Rating value={rev.rating} readOnly size="small" sx={{ mb: 1.5 }} />
+                                <Typography variant="body2" sx={{ fontWeight: 500, mb: 2, fontStyle: 'italic', color: 'rgba(255,255,255,0.8)', minHeight: '3em' }}>"{rev.text}"</Typography>
+                                <Stack direction="row" spacing={1.5} alignItems="center">
+                                    <Avatar sx={{ bgcolor: 'primary.main', width: 32, height: 32, fontSize: '14px', fontWeight: 600 }}>{rev.avatar}</Avatar>
                                     <Box>
-                                        <Rating value={rev.rating} readOnly sx={{ mb: 3 }} />
-                                        <Typography variant="h5" sx={{ fontWeight: 700, mb: 3, fontStyle: 'italic', lineHeight: 1.6 }}>"{rev.text}"</Typography>
+                                        <Typography variant="caption" sx={{ fontWeight: 700, display: 'block' }}>{rev.name}</Typography>
                                     </Box>
-                                    <Stack direction="row" spacing={2} alignItems="center">
-                                        <Avatar sx={{ bgcolor: 'primary.main', width: 48, height: 48, fontWeight: 800 }}>{rev.avatar}</Avatar>
-                                        <Box>
-                                            <Typography sx={{ fontWeight: 900 }}>{rev.name}</Typography>
-                                            <Typography variant="caption" sx={{ fontWeight: 700, opacity: 0.6 }}>Verified Customer</Typography>
-                                        </Box>
-                                    </Stack>
-                                </Card>
+                                </Stack>
+                            </Card>
+                        ))}
+                    </Box>
+                </Box>
+                
+                {/* INSTAGRAM GALLERY */}
+                <Box sx={{ py: { xs: 4, md: 6 } }}>
+                    <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 3 }}>
+                        <Typography variant="h2">@ArtexaGifts on Instagram</Typography>
+                        <Button color="primary" size="small" sx={{ fontWeight: 600 }}>Follow Us</Button>
+                    </Stack>
+                    <Grid container spacing={1}>
+                        {[1, 2, 3, 4].map((i) => (
+                            <Grid item xs={6} md={3} key={i}>
+                                <Box sx={{ 
+                                    aspectRatio: '1', 
+                                    borderRadius: '16px', 
+                                    overflow: 'hidden',
+                                    position: 'relative',
+                                    bgcolor: 'rgba(255,255,255,0.05)',
+                                    backgroundImage: `url(https://picsum.photos/seed/insta${i}/400/400)`,
+                                    backgroundSize: 'cover',
+                                    backgroundPosition: 'center',
+                                    '&:hover .insta-overlay': { opacity: 1 }
+                                }}>
+                                    <Box className="insta-overlay" sx={{ 
+                                        position: 'absolute', inset: 0, bgcolor: 'rgba(0,0,0,0.5)', 
+                                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                        opacity: 0, transition: 'opacity 0.2s', cursor: 'pointer'
+                                    }}>
+                                        <FavoriteIcon sx={{ color: 'white' }} />
+                                    </Box>
+                                </Box>
                             </Grid>
                         ))}
                     </Grid>
                 </Box>
-
-                {/* 6. Newsletter */}
-                <Paper sx={{ 
-                    p: { xs: 6, md: 12 }, borderRadius: 2, 
-                    background: 'linear-gradient(135deg, #7C3AED 0%, #EC4899 100%)',
-                    color: '#fff', textAlign: 'center', position: 'relative', overflow: 'hidden'
-                }}>
-                    {/* Decorative elements - Removed circles */}
-
-                    <Typography variant="h2" sx={{ mb: 2, fontWeight: 900, fontSize: { xs: '2.5rem', md: '3.75rem' } }}>Join the Circle</Typography>
-                    <Typography variant="h5" sx={{ mb: 8, opacity: 0.9, fontWeight: 600, fontSize: { xs: '1.1rem', md: '1.5rem' } }}>Get curated gift ideas & 15% off your first order.</Typography>
-                    
-                    <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ maxWidth: 650, mx: 'auto', position: 'relative', zIndex: 1 }}>
-                        <TextField 
-                            fullWidth 
-                            placeholder="Enter your email" 
-                            sx={{ 
-                                bgcolor: '#fff', borderRadius: '24px',
-                                '& .MuiOutlinedInput-notchedOutline': { border: 'none' },
-                                '& input': { py: 2.5, px: 3, fontWeight: 600 }
-                            }}
-                        />
-                        <Button variant="contained" size="large" sx={{ 
-                            px: 8, bgcolor: '#1F2937', color: '#fff', borderRadius: '24px',
-                            fontWeight: 900, '&:hover': { bgcolor: '#000' }
-                        }}>
-                            Subscribe
-                        </Button>
-                    </Stack>
-                </Paper>
             </Container>
+
+            {/* FLOATING ACTION BUTTON */}
+            <Tooltip title="Chat with Support">
+                <Fab 
+                    color="primary" 
+                    aria-label="chat" 
+                    sx={{ 
+                        position: 'fixed', 
+                        bottom: 16, 
+                        right: 16, 
+                        width: 48, 
+                        height: 48,
+                        boxShadow: '0 4px 20px rgba(108, 99, 255, 0.4)',
+                        background: 'linear-gradient(135deg, #6C63FF 0%, #9C4DFF 100%)'
+                    }}
+                >
+                    <ChatBubbleIcon />
+                </Fab>
+            </Tooltip>
         </Box>
     );
 };
