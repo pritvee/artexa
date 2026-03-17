@@ -760,7 +760,14 @@ const FrameCustomizerPage = () => {
                             borderRadius: '12px'
                         }}>
                             {/* 2D Editor */}
-                            <Box sx={{ display: previewTab === 0 ? 'flex' : 'none', position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, alignItems: 'center', justifyContent: 'center' }}>
+                            <Box 
+                                inert={previewTab !== 0 ? '' : undefined}
+                                sx={{ 
+                                    display: previewTab === 0 ? 'flex' : 'none', 
+                                    position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, 
+                                    alignItems: 'center', justifyContent: 'center' 
+                                }}
+                            >
                                 <Box sx={{ position: 'absolute', top: 20, left: 20, zIndex: 5 }}>
                                     <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.6)', fontWeight: 'bold' }}>
                                         SIZE: {selectedSizeObj.label}
@@ -797,7 +804,14 @@ const FrameCustomizerPage = () => {
                             </Box>
 
                             {/* 3D Preview */}
-                            <Box sx={{ display: previewTab === 1 ? 'flex' : 'none', position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, alignItems: 'center', justifyContent: 'center' }}>
+                            <Box 
+                                inert={previewTab !== 1 ? '' : undefined}
+                                sx={{ 
+                                    display: previewTab === 1 ? 'flex' : 'none', 
+                                    position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, 
+                                    alignItems: 'center', justifyContent: 'center' 
+                                }}
+                            >
                                 <Suspense fallback={<CircularProgress />}>
                                     <Frame3DPreview
                                         frameColor={frameColor}

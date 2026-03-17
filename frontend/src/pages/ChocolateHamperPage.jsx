@@ -553,7 +553,13 @@ const ChocolateHamperPage = () => {
 
                             <Box className="preview3d" sx={{ height: 540, position: 'relative' }}>
                                 {/* 2D Canvas */}
-                                <Box sx={{ display: previewTab === 0 ? 'flex' : 'none', position: 'absolute', inset: 0, p: 1 }}>
+                                <Box 
+                                    inert={previewTab !== 0 ? '' : undefined}
+                                    sx={{ 
+                                        display: previewTab === 0 ? 'flex' : 'none', 
+                                        position: 'absolute', inset: 0, p: 1 
+                                    }}
+                                >
                                     <ChocolateHamperCanvasEditor
                                         hamperColor={hamperColor}
                                         containerStyle={containerStyle}
@@ -693,7 +699,13 @@ const ChocolateHamperPage = () => {
                             </AnimatePresence>
 
                                 {/* 3D */}
-                                <Box sx={{ display: previewTab === 1 ? 'block' : 'none', position: 'absolute', inset: 0 }}>
+                                <Box 
+                                    inert={previewTab !== 1 ? '' : undefined}
+                                    sx={{ 
+                                        display: previewTab === 1 ? 'block' : 'none', 
+                                        position: 'absolute', inset: 0 
+                                    }}
+                                >
                                     <Suspense fallback={
                                         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
                                             <CircularProgress sx={{ color: '#d4af37' }} />

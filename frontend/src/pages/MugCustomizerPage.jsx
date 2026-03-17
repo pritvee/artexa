@@ -394,14 +394,16 @@ const MugCustomizerPage = () => {
                             borderRadius: '12px'
                         }}>
                             {/* Layer 1: 2D Editor */}
-                            <Box sx={{
-                                position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
-                                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                opacity: previewTab === 0 ? 1 : 0,
-                                pointerEvents: previewTab === 0 ? 'auto' : 'none',
-                                zIndex: previewTab === 0 ? 2 : 1,
-                                transition: 'opacity 0.3s'
-                            }}>
+                            <Box 
+                                inert={previewTab !== 0 ? '' : undefined}
+                                sx={{
+                                    position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
+                                    display: previewTab === 0 ? 'flex' : 'none', 
+                                    alignItems: 'center', justifyContent: 'center',
+                                    zIndex: previewTab === 0 ? 2 : 1,
+                                    transition: 'opacity 0.3s'
+                                }}
+                            >
                                 <MugCanvasEditor
                                     userImageSrc={enhancedImageSrc || userImageSrc}
                                     textProps={textProps}
@@ -422,13 +424,15 @@ const MugCustomizerPage = () => {
                             </Box>
 
                             {/* Layer 2: 3D Preview (Always Mounted for snapshot processing) */}
-                            <Box sx={{
-                                position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
-                                opacity: previewTab === 1 ? 1 : 0,
-                                pointerEvents: previewTab === 1 ? 'auto' : 'none',
-                                zIndex: previewTab === 1 ? 2 : 1,
-                                transition: 'opacity 0.3s'
-                            }}>
+                            <Box 
+                                inert={previewTab !== 1 ? '' : undefined}
+                                sx={{
+                                    position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
+                                    display: previewTab === 1 ? 'block' : 'none',
+                                    zIndex: previewTab === 1 ? 2 : 1,
+                                    transition: 'opacity 0.3s'
+                                }}
+                            >
                                 <Suspense fallback={
                                     <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                                         <CircularProgress sx={{ color: '#fff' }} />

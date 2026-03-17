@@ -471,7 +471,14 @@ const GiftBoxCustomizerPage = () => {
 
                             <Box className="preview3d" sx={{ height: 600, position: 'relative' }}>
                                 {/* 2D Mode */}
-                                <Box sx={{ display: previewTab === 0 ? 'flex' : 'none', flexDirection: 'column', height: '100%' }}>
+                                <Box 
+                                    inert={previewTab !== 0 ? '' : undefined}
+                                    sx={{ 
+                                        display: previewTab === 0 ? 'flex' : 'none', 
+                                        flexDirection: 'column', 
+                                        height: '100%' 
+                                    }}
+                                >
                                     {/* 2D Canvas — always shows Inside Box */}
                                     <Box sx={{ flexGrow: 1, position: 'relative', p: 2 }}>
                                             <GiftBoxCanvasEditor
@@ -497,7 +504,15 @@ const GiftBoxCustomizerPage = () => {
                                 </Box>
 
                                 {/* 3D Mode */}
-                                <Box sx={{ display: previewTab === 1 ? 'block' : 'none', height: '100%', width: '100%', position: 'relative' }}>
+                                <Box 
+                                    inert={previewTab !== 1 ? '' : undefined}
+                                    sx={{ 
+                                        display: previewTab === 1 ? 'block' : 'none', 
+                                        height: '100%', 
+                                        width: '100%', 
+                                        position: 'relative' 
+                                    }}
+                                >
                                     <Suspense fallback={<Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}><CircularProgress /></Box>}>
                                         <GiftBox3DPreview 
                                             boxType={boxType} 

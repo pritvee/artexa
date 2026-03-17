@@ -1,7 +1,8 @@
-import React, { useRef, useMemo, Suspense } from 'react';
+import React, { useMemo, Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Environment, ContactShadows, PerspectiveCamera, useTexture } from '@react-three/drei';
 import * as THREE from 'three';
+import PropTypes from 'prop-types';
 
 /* ─── Error Boundary ─── */
 class ErrorBoundary extends React.Component {
@@ -23,11 +24,15 @@ class ErrorBoundary extends React.Component {
     }
 }
 
+ErrorBoundary.propTypes = {
+    children: PropTypes.node
+};
+
 /* ─── Frame Mesh — loads texture from URL ─── */
 const FrameMeshFromUrl = ({ textureUrl, frameColor = '#111111', frameStyle = 'wooden', frameSize = { width: 12, height: 8 }, orientation = 'landscape', glassReflection = true }) => {
     // Standardize inputs to prevent NaN crashes
-    const safeW = parseFloat(frameSize?.width) || 12;
-    const safeH = parseFloat(frameSize?.height) || 8;
+    const safeW = Number.parseFloat(frameSize?.width) || 12;
+    const safeH = Number.parseFloat(frameSize?.height) || 8;
 
     const texture = useTexture(textureUrl || '/placeholder.png');
 
@@ -117,11 +122,20 @@ const FrameMeshFromUrl = ({ textureUrl, frameColor = '#111111', frameStyle = 'wo
     );
 };
 
+FrameMeshFromUrl.propTypes = {
+    textureUrl: PropTypes.string,
+    frameColor: PropTypes.string,
+    frameStyle: PropTypes.string,
+    frameSize: PropTypes.object,
+    orientation: PropTypes.string,
+    glassReflection: PropTypes.bool
+};
+
 /* ─── Fallback when no textureUrl ─── */
 const FrameMeshPlaceholder = ({ frameColor = '#111111', frameStyle = 'wooden', frameSize = { width: 12, height: 8 }, orientation = 'landscape' }) => {
     const dims = useMemo(() => {
         const SCALE = 0.25;
-        const base = { w: (frameSize?.width || 12) * SCALE, h: (frameSize?.height || 8) * SCALE };
+        const base = { w: (Number.parseFloat(frameSize?.width) || 12) * SCALE, h: (Number.parseFloat(frameSize?.height) || 8) * SCALE };
         const isSquare = Math.abs(base.w - base.h) < 0.01;
         if (isSquare) return base;
         const naturallyPortrait = base.h > base.w;
@@ -150,6 +164,13 @@ const FrameMeshPlaceholder = ({ frameColor = '#111111', frameStyle = 'wooden', f
     );
 };
 
+FrameMeshPlaceholder.propTypes = {
+    frameColor: PropTypes.string,
+    frameStyle: PropTypes.string,
+    frameSize: PropTypes.object,
+    orientation: PropTypes.string
+};
+
 /* ─── Main Export ─── */
 const Frame3DPreviewAdmin = ({
     textureUrl,
@@ -160,6 +181,7 @@ const Frame3DPreviewAdmin = ({
     glassReflection = true,
     wallPreview = 'none',
 }) => {
+    const [canvasKey, setCanvasKey] = React.useState(0);
     const wallColor = useMemo(() => {
         if (wallPreview === 'living room') return '#dcdcdc';
         if (wallPreview === 'bedroom') return '#ead8c0';
@@ -167,13 +189,44 @@ const Frame3DPreviewAdmin = ({
         return '#080818';
     }, [wallPreview]);
 
+    const glConfig = useMemo(() => ({
+        preserveDrawingBuffer: true,
+        antialias: true,
+        toneMapping: THREE.ACESFilmicToneMapping,
+        powerPreference: 'high-performance',
+        stencil: false,
+        depth: true,
+        failIfMajorPerformanceCaveat: false
+    }), []);
+
     return (
         <ErrorBoundary>
             <Canvas
+                key={canvasKey}
                 shadows
                 style={{ width: '100%', height: '100%' }}
-                gl={{ preserveDrawingBuffer: true, antialias: true, toneMapping: THREE.ACESFilmicToneMapping }}
-                onCreated={({ gl }) => gl.setClearColor(wallColor, 1)}
+                dpr={[1, 2]}
+                gl={glConfig}
+                onCreated={({ gl, scene }) => {
+                    gl.setClearColor(wallColor, 1);
+                    
+                    const handleContextLost = (event) => {
+                        event.preventDefault();
+                        console.warn('Frame3DAdmin: WebGL Context Lost — recovering...');
+                        setCanvasKey(prev => prev + 1);
+                    };
+
+                    const canvas = gl.domElement;
+                    canvas.addEventListener('webglcontextlost', handleContextLost, false);
+                    
+                    // Cleanup
+                    return () => {
+                        canvas.removeEventListener('webglcontextlost', handleContextLost);
+                        if (gl.forceContextLoss) gl.forceContextLoss();
+                        if (gl.dispose) gl.dispose();
+                        scene.clear();
+                    };
+                }}
             >
                 <PerspectiveCamera makeDefault position={[0, 0, 7]} fov={40} />
 
@@ -198,11 +251,11 @@ const Frame3DPreviewAdmin = ({
                         let width = 12, height = 8;
                         if (typeof frameSize === 'string') {
                             const parts = frameSize.split('x');
-                            width = parseFloat(parts[0]) || 12;
-                            if (parts[1]) height = parseFloat(parts[1].split(/[–-]/)[0]) || 8;
+                            width = Number.parseFloat(parts[0]) || 12;
+                            if (parts[1]) height = Number.parseFloat(parts[1].split(/[–-]/)[0]) || 8;
                         } else if (frameSize && typeof frameSize === 'object') {
-                            width = parseFloat(frameSize.width) || 12;
-                            height = parseFloat(frameSize.height) || 8;
+                            width = Number.parseFloat(frameSize.width) || 12;
+                            height = Number.parseFloat(frameSize.height) || 8;
                         }
 
                         if (!textureUrl) {
@@ -248,6 +301,16 @@ const Frame3DPreviewAdmin = ({
             </Canvas>
         </ErrorBoundary>
     );
+};
+
+Frame3DPreviewAdmin.propTypes = {
+    textureUrl: PropTypes.string,
+    frameColor: PropTypes.string,
+    frameStyle: PropTypes.string,
+    frameSize: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+    orientation: PropTypes.string,
+    glassReflection: PropTypes.bool,
+    wallPreview: PropTypes.string
 };
 
 export default Frame3DPreviewAdmin;

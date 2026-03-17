@@ -1,7 +1,8 @@
-import React, { useRef, useMemo, Suspense } from 'react';
+import React, { useRef, useMemo, Suspense, useState, useCallback } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Environment, ContactShadows, PerspectiveCamera } from '@react-three/drei';
 import * as THREE from 'three';
+import PropTypes from 'prop-types';
 
 /* ─── Error Boundary ─── */
 class ErrorBoundary extends React.Component {
@@ -28,19 +29,21 @@ class ErrorBoundary extends React.Component {
     }
 }
 
+ErrorBoundary.propTypes = {
+    children: PropTypes.node
+};
+
 /* ─── Procedural Photo Frame ─── */
 const PhotoFrame = ({ frameColor, frameStyle, textureCanvas, frameSize, glassReflection, orientation, frameThicknessMultiplier = 1 }) => {
-    const meshRef = useRef();
-
     // Map size labels to 3D dimensions (roughly in meters/units)
     const dims = useMemo(() => {
         const SCALE_TO_METERS = 0.5; // Increased scale for better visibility
         const base = {
-            w: (frameSize?.width || 12) * SCALE_TO_METERS,
-            h: (frameSize?.height || 8) * SCALE_TO_METERS
+            w: (Number.parseFloat(frameSize?.width) || 12) * SCALE_TO_METERS,
+            h: (Number.parseFloat(frameSize?.height) || 8) * SCALE_TO_METERS
         };
 
-        const isSquare = base.w === base.h;
+        const isSquare = Math.abs(base.w - base.h) < 0.01;
         const naturallyPortrait = base.h > base.w;
         const wantPortrait = orientation === 'portrait';
 
@@ -58,14 +61,13 @@ const PhotoFrame = ({ frameColor, frameStyle, textureCanvas, frameSize, glassRef
 
     // Get material color & properties based on style/color
     const materialProps = useMemo(() => {
-        // Now frameColor directly receives a hex code like '#ff0000'
         const col = frameColor || '#111111';
 
-        if (styleStr === 'metal frame' || styleStr === 'metal') {
+        if (styleStr.includes('metal')) {
             return { color: col, metalness: 0.8, roughness: 0.2 };
-        } else if (styleStr === 'acrylic frame' || styleStr === 'acrylic') {
+        } else if (styleStr.includes('acrylic')) {
             return { color: col, metalness: 0.1, roughness: 0.05, opacity: 0.9, transparent: true };
-        } else if (styleStr === 'canvas' || styleStr === 'canvas frame') {
+        } else if (styleStr.includes('canvas')) {
             return { color: '#ffffff', metalness: 0, roughness: 0.9 }; // Canvas usually doesn't have a frame
         }
         return { color: col, metalness: 0.1, roughness: 0.7 }; // Default wooden/matte
@@ -87,8 +89,7 @@ const PhotoFrame = ({ frameColor, frameStyle, textureCanvas, frameSize, glassRef
         }
     });
 
-    const isFloating = frameStyle?.toLowerCase() === 'floating frame' || frameStyle?.toLowerCase() === 'floating';
-    const isCanvas = frameStyle === 'Canvas frame';
+    const isCanvas = styleStr.includes('canvas');
     const computedFrameThickness = 0.15 * frameThicknessMultiplier;
     const frameDepth = 0.2;
 
@@ -150,7 +151,7 @@ const PhotoFrame = ({ frameColor, frameStyle, textureCanvas, frameSize, glassRef
             )}
 
             {/* 4. Glass Overlay (only for some styles) */}
-            {(styleStr === 'wooden frame' || styleStr === 'wooden' || styleStr === 'acrylic frame' || styleStr === 'acrylic') && (
+            {(styleStr.includes('wooden') || styleStr.includes('acrylic')) && (
                 <mesh position={[0, 0, frameDepth / 2 + 0.02]}>
                     <planeGeometry args={[w, h]} />
                     <meshPhysicalMaterial
@@ -167,6 +168,16 @@ const PhotoFrame = ({ frameColor, frameStyle, textureCanvas, frameSize, glassRef
     );
 };
 
+PhotoFrame.propTypes = {
+    frameColor: PropTypes.string,
+    frameStyle: PropTypes.string,
+    textureCanvas: PropTypes.object,
+    frameSize: PropTypes.object,
+    glassReflection: PropTypes.bool,
+    orientation: PropTypes.string,
+    frameThicknessMultiplier: PropTypes.number
+};
+
 const Frame3DPreview = ({
     frameColor = 'Black',
     frameStyle = 'Wooden frame',
@@ -179,6 +190,13 @@ const Frame3DPreview = ({
     frameThickness = 1,
     autoRotate = true
 }) => {
+    // WebGL Context Recovery
+    const [canvasKey, setCanvasKey] = useState(0);
+    const triggerContextRecovery = useCallback(() => {
+        console.warn('Frame3D: WebGL Context Lost — recovering...');
+        setCanvasKey(k => k + 1);
+    }, []);
+
     const wallColor = useMemo(() => {
         if (wallPreview === 'living room') return '#dcdcdc';
         if (wallPreview === 'bedroom') return '#ead8c0';
@@ -186,15 +204,46 @@ const Frame3DPreview = ({
         return '#050510';
     }, [wallPreview]);
 
+    const glConfig = useMemo(() => ({
+        preserveDrawingBuffer: true,
+        antialias: true,
+        toneMapping: THREE.ACESFilmicToneMapping,
+        powerPreference: 'high-performance'
+    }), []);
+
     return (
         <ErrorBoundary>
             <Canvas
+                key={canvasKey}
                 id="three-canvas"
                 shadows
+                dpr={[1, 2]}
                 style={{ width: '100%', height: '100%' }}
-                gl={{ preserveDrawingBuffer: true, antialias: true, toneMapping: THREE.ACESFilmicToneMapping }}
-                onCreated={({ gl }) => {
+                gl={glConfig}
+                onCreated={({ gl, scene }) => {
                     gl.setClearColor(wallColor, 1);
+
+                    const onContextLost = (e) => {
+                        e.preventDefault();
+                        triggerContextRecovery();
+                    };
+
+                    const onContextRestored = () => {
+                        console.log('Frame3D: WebGL Context Restored');
+                        setCanvasKey(k => k + 1);
+                    };
+
+                    const canvas = gl.domElement;
+                    canvas.addEventListener('webglcontextlost', onContextLost, false);
+                    canvas.addEventListener('webglcontextrestored', onContextRestored, false);
+
+                    return () => {
+                        canvas.removeEventListener('webglcontextlost', onContextLost);
+                        canvas.removeEventListener('webglcontextrestored', onContextRestored);
+                        if (gl.forceContextLoss) gl.forceContextLoss();
+                        if (gl.dispose) gl.dispose();
+                        scene.clear();
+                    };
                 }}
             >
                 <PerspectiveCamera makeDefault position={[0, tiltAngle * 0.1, 4.5]} fov={50} />
@@ -211,19 +260,19 @@ const Frame3DPreview = ({
                         // Parse size string like "12x8 – A4" into {width: 12, height: 8}
                         let width = 12, height = 8;
                         if (frameSize && typeof frameSize === 'object') {
-                            width = parseFloat(frameSize.width) || width;
-                            height = parseFloat(frameSize.height) || height;
+                            width = Number.parseFloat(frameSize.width) || width;
+                            height = Number.parseFloat(frameSize.height) || height;
 
                             // Fallback to value parsing if width/height are 0
                             if ((!width || !height) && frameSize.value) {
                                 const parts = String(frameSize.value).split('x');
-                                width = parseFloat(parts[0]) || 12;
-                                if (parts[1]) height = parseFloat(parts[1].split(/[–-]/)[0]) || 8;
+                                width = Number.parseFloat(parts[0]) || 12;
+                                if (parts[1]) height = Number.parseFloat(parts[1].split(/[–-]/)[0]) || 8;
                             }
                         } else if (typeof frameSize === 'string') {
                             const parts = frameSize.split('x');
-                            width = parseFloat(parts[0]) || 12;
-                            if (parts[1]) height = parseFloat(parts[1].split(/[–-]/)[0]) || 8;
+                            width = Number.parseFloat(parts[0]) || 12;
+                            if (parts[1]) height = Number.parseFloat(parts[1].split(/[–-]/)[0]) || 8;
                         }
 
                         return (
@@ -269,6 +318,19 @@ const Frame3DPreview = ({
             </Canvas>
         </ErrorBoundary>
     );
+};
+
+Frame3DPreview.propTypes = {
+    frameColor: PropTypes.string,
+    frameStyle: PropTypes.string,
+    frameSize: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+    textureCanvas: PropTypes.object,
+    wallPreview: PropTypes.string,
+    glassReflection: PropTypes.bool,
+    tiltAngle: PropTypes.number,
+    orientation: PropTypes.string,
+    frameThickness: PropTypes.number,
+    autoRotate: PropTypes.bool
 };
 
 export default Frame3DPreview;

@@ -1,254 +1,280 @@
-import React, { useRef, useMemo, Suspense, useState, useCallback } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
+import React, { useRef, useEffect } from 'react';
 import * as THREE from 'three';
-import { useTexture, Environment, OrbitControls } from '@react-three/drei';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import PropTypes from 'prop-types';
 
+/**
+ * Mug3DPreview: High-stability WebGL component with manual lifecycle management.
+ * Solves: Context loss, memory leaks, and MUI aria-hidden focus warnings.
+ */
+const Mug3DPreview = ({ 
+    mugColor = '#f5f5f0', 
+    insideColor, 
+    textureUrl, 
+    mugType = 'Classic Mug (11oz)', 
+    autoRotate = true,
+    isHidden = false 
+}) => {
+    const containerRef = useRef(null);
+    const rendererRef = useRef(null);
+    const sceneRef = useRef(null);
+    const cameraRef = useRef(null);
+    const controlsRef = useRef(null);
+    const requestRef = useRef(null);
+    const mugGroupRef = useRef(new THREE.Group());
 
-/* ─── Error Boundary ─── */
-class ErrorBoundary extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = { hasError: false };
-    }
-    static getDerivedStateFromError() {
-        return { hasError: true };
-    }
-    render() {
-        if (this.state.hasError) {
-            return (
-                <div style={{
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    height: '100%', color: '#aaa', flexDirection: 'column', gap: 8
-                }}>
-                    <span style={{ fontSize: 48 }}>☕</span>
-                    <span>3D Preview unavailable</span>
-                </div>
-            );
+    // 1. Core Lifecycle: Initialize ONLY once
+    useEffect(() => {
+        const container = containerRef.current;
+        if (!container) return;
+
+        // Cleanup any existing content to prevent duplicates
+        while (container.firstChild) container.removeChild(container.firstChild);
+
+        const width = container.clientWidth || 500;
+        const height = container.clientHeight || 500;
+
+        // Scene, Camera, Renderer setup
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color('#0a0a1a');
+        sceneRef.current = scene;
+
+        const camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 1000);
+        camera.position.set(2.5, 2, 2.5);
+        cameraRef.current = camera;
+
+        const renderer = new THREE.WebGLRenderer({
+            antialias: true,
+            alpha: true,
+            preserveDrawingBuffer: true,
+            powerPreference: 'high-performance'
+        });
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.setSize(width, height);
+        renderer.shadowMap.enabled = true;
+        rendererRef.current = renderer;
+
+        const canvas = renderer.domElement;
+        canvas.style.outline = 'none';
+        canvas.setAttribute('tabindex', '-1'); // Accessibility: prevent focus trapping
+        canvas.setAttribute('role', 'img');
+        canvas.setAttribute('aria-label', '3D Mug Preview');
+        container.appendChild(canvas);
+
+        const controls = new OrbitControls(camera, canvas);
+        controls.enableDamping = true;
+        controls.minDistance = 2.5;
+        controls.maxDistance = 6;
+        controlsRef.current = controls;
+
+        scene.add(mugGroupRef.current);
+
+        // Lights
+        scene.add(new THREE.AmbientLight(0xffffff, 0.7));
+        const dirLight = new THREE.DirectionalLight(0xffffff, 1.2);
+        dirLight.position.set(10, 10, 10);
+        dirLight.castShadow = true;
+        scene.add(dirLight);
+
+        // Animation Loop
+        const animate = () => {
+            requestRef.current = requestAnimationFrame(animate);
+            if (controlsRef.current) controlsRef.current.update();
+            if (rendererRef.current && sceneRef.current && cameraRef.current) {
+                rendererRef.current.render(sceneRef.current, cameraRef.current);
+            }
+        };
+        animate();
+
+        // Event Handlers
+        const handleResize = () => {
+            if (!containerRef.current) return;
+            const w = containerRef.current.clientWidth;
+            const h = containerRef.current.clientHeight || 500;
+            camera.aspect = w / h;
+            camera.updateProjectionMatrix();
+            renderer.setSize(w, h);
+        };
+
+        const onContextLost = (e) => {
+            e.preventDefault();
+            console.warn('Mug3D: WebGL Context Lost');
+            cancelAnimationFrame(requestRef.current);
+        };
+
+        const onContextRestored = () => {
+            console.log('Mug3D: WebGL Context Restored');
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            animate();
+        };
+
+        window.addEventListener('resize', handleResize);
+        canvas.addEventListener('webglcontextlost', onContextLost, false);
+        canvas.addEventListener('webglcontextrestored', onContextRestored, false);
+
+        // Cleanup Strategy
+        return () => {
+            cancelAnimationFrame(requestRef.current);
+            window.removeEventListener('resize', handleResize);
+            canvas.removeEventListener('webglcontextlost', onContextLost);
+            canvas.removeEventListener('webglcontextrestored', onContextRestored);
+
+            scene.traverse((obj) => {
+                if (obj instanceof THREE.Mesh) {
+                    obj.geometry.dispose();
+                    if (obj.material.isMaterial) {
+                        if (obj.material.map) obj.material.map.dispose();
+                        obj.material.dispose();
+                    }
+                }
+            });
+
+            controls.dispose();
+            renderer.forceContextLoss();
+            renderer.dispose();
+            if (container.contains(canvas)) container.removeChild(canvas);
+        };
+    }, []);
+
+    // 2. Reactive Updates: AutoRotate & Hidden State
+    useEffect(() => {
+        if (controlsRef.current) {
+            controlsRef.current.autoRotate = autoRotate && !isHidden;
         }
-        return this.props.children;
-    }
-}
+        
+        const container = containerRef.current;
+        if (!container) return;
+        
+        if (isHidden) {
+            container.setAttribute('inert', ''); // Prevents focus on descendants
+            container.setAttribute('aria-hidden', 'true');
+            if (document.activeElement && container.contains(document.activeElement)) {
+                document.activeElement.blur();
+            }
+        } else {
+            container.removeAttribute('inert');
+            container.removeAttribute('aria-hidden');
+        }
+    }, [autoRotate, isHidden]);
 
-/* ─── Procedural Mug Geometry ─── */
-const MugBody = ({ mugColor, insideColor, textureCanvas, textureUrl, mugType }) => {
-    const meshRef = useRef();
+    // 3. Geometry/Color Updates (optimized)
+    useEffect(() => {
+        if (!sceneRef.current) return;
+        const group = mugGroupRef.current;
+        
+        // Clear old meshes
+        while (group.children.length > 0) {
+            const obj = group.children[0];
+            if (obj.geometry) obj.geometry.dispose();
+            if (obj.material) {
+                if (Array.isArray(obj.material)) {
+                    obj.material.forEach(m => m.dispose());
+                } else {
+                    obj.material.dispose();
+                }
+            }
+            group.remove(obj);
+        }
 
-    // Build a mug via LatheGeometry (revolves a profile curve)
-    const { outerGeo, innerGeo, handleGeo, rimGeo, height } = useMemo(() => {
-        // Height based on mug type
-        const h = mugType === 'Large Mug (15oz)' ? 2.4 : mugType === 'Travel Mug' ? 3.0 : 2.0;
-        const radius = mugType === 'Travel Mug' ? 0.7 : 0.85;
-        const bottomR = mugType === 'Travel Mug' ? 0.6 : 0.82;
+        // Lathe profile for a more realistic mug
+        const h = mugType.includes('15oz') ? 2.4 : mugType.includes('Travel') ? 3.0 : 2.0;
+        const radius = mugType.includes('Travel') ? 0.7 : 0.85;
+        const bottomR = mugType.includes('Travel') ? 0.6 : 0.82;
+        const wall = 0.07;
 
         // Outer profile
         const outerPoints = [
-            new THREE.Vector2(0.0, 0),
+            new THREE.Vector2(0, 0),
             new THREE.Vector2(bottomR, 0),
             new THREE.Vector2(radius, 0.1),
             new THREE.Vector2(radius, h),
             new THREE.Vector2(radius + 0.05, h),
         ];
-        const outer = new THREE.LatheGeometry(outerPoints, 64);
+        const outerGeo = new THREE.LatheGeometry(outerPoints, 64);
 
-        // Fix UV mapping
-        const outerUv = outer.attributes.uv;
-        const outerPos = outer.attributes.position;
-        const uScale = 2.67 / 2.22;
-        for (let i = 0; i < outerUv.count; i++) {
-            const y = outerPos.getY(i);
-            const originalU = outerUv.getX(i);
-            const newU = (originalU - 0.5) * uScale + 0.5;
-            outerUv.setXY(i, newU, y / h);
+        // Fix UV mapping for texture
+        const uv = outerGeo.attributes.uv;
+        const posAttr = outerGeo.attributes.position;
+        for (let i = 0; i < uv.count; i++) {
+            uv.setXY(i, (uv.getX(i) - 0.5) * (2.67 / 2.22) + 0.5, posAttr.getY(i) / h);
         }
 
-        // Inner profile
-        const wall = 0.07;
+        const outerCol = mugColor.toLowerCase().includes('black') ? '#222222' : '#f5f5f0';
+        const bodyMat = new THREE.MeshStandardMaterial({ 
+            color: outerCol, 
+            roughness: 0.3,
+            metalness: 0.05 
+        });
+        
+        const body = new THREE.Mesh(outerGeo, bodyMat);
+        body.castShadow = true;
+        body.receiveShadow = true;
+        group.add(body);
+
+        // Inner surface
         const innerPoints = [
-            new THREE.Vector2(0.0, wall),
+            new THREE.Vector2(0, wall),
             new THREE.Vector2(radius - wall, wall),
             new THREE.Vector2(radius - wall, h + 0.01),
             new THREE.Vector2(radius + 0.05, h + 0.01),
         ];
-        const inner = new THREE.LatheGeometry(innerPoints, 64);
+        const innerCol = insideColor || (mugColor.toLowerCase().includes('red') ? '#cc3333' : mugColor.toLowerCase().includes('blue') ? '#3366cc' : outerCol);
+        const innerMesh = new THREE.Mesh(
+            new THREE.LatheGeometry(innerPoints, 64),
+            new THREE.MeshStandardMaterial({ color: innerCol, roughness: 0.4, side: THREE.BackSide })
+        );
+        group.add(innerMesh);
 
-        const handle = new THREE.TorusGeometry(0.45, 0.08, 16, 32, Math.PI);
+        // Handle
+        const handle = new THREE.Mesh(
+            new THREE.TorusGeometry(0.45, 0.08, 16, 32, Math.PI),
+            new THREE.MeshStandardMaterial({ color: outerCol, roughness: 0.3 })
+        );
+        handle.position.set(radius, h * 0.55, 0);
+        handle.rotation.z = -Math.PI / 2;
+        handle.castShadow = true;
+        group.add(handle);
 
-        const rimPoints = [
-            new THREE.Vector2(radius - wall, h),
-            new THREE.Vector2(radius + 0.05, h),
-            new THREE.Vector2(radius + 0.05, h + 0.04),
-            new THREE.Vector2(radius - wall, h + 0.04),
-        ];
-        const rim = new THREE.LatheGeometry(rimPoints, 64);
-
-        return { outerGeo: outer, innerGeo: inner, handleGeo: handle, rimGeo: rim, height: h };
-    }, [mugType]);
-
-    // Correctly call hook at top level, with fallback to transparent 1x1 base64 png
-    const loadedTexture = useTexture(textureUrl || 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=');
-    
-    const texture = useMemo(() => {
-        if (textureUrl) return loadedTexture;
-        if (textureCanvas) {
-            const tex = new THREE.CanvasTexture(textureCanvas);
-            tex.needsUpdate = true;
-            tex.wrapS = tex.wrapT = THREE.ClampToEdgeWrapping;
-            return tex;
+        // Texture overlay
+        if (textureUrl) {
+            new THREE.TextureLoader().load(textureUrl, (tex) => {
+                tex.wrapS = tex.wrapT = THREE.ClampToEdgeWrapping;
+                const decalMat = new THREE.MeshStandardMaterial({ 
+                    map: tex, 
+                    transparent: true, 
+                    polygonOffset: true, 
+                    polygonOffsetFactor: -1,
+                    roughness: 0.3 
+                });
+                const decalMesh = new THREE.Mesh(outerGeo, decalMat);
+                group.add(decalMesh);
+            });
         }
-        return null;
-    }, [textureUrl, loadedTexture, textureCanvas]);
-
-
-
-    // Update texture each frame
-    useFrame(() => {
-        if (texture && textureCanvas) {
-            texture.needsUpdate = true;
-        }
-    });
-
-    const outerColor = mugColor.toLowerCase().includes('black') ? '#222222' : '#f5f5f0';
-
-    const innerCol = insideColor
-        || (mugColor.toLowerCase().includes('red') ? '#cc3333'
-            : mugColor.toLowerCase().includes('blue') ? '#3366cc' : outerColor);
+    }, [mugColor, insideColor, textureUrl, mugType]);
 
     return (
-        <group position={[0, -height / 2, 0]}>
-            {/* Outer body base */}
-            <mesh ref={meshRef} geometry={outerGeo} castShadow receiveShadow>
-                <meshStandardMaterial
-                    color={outerColor}
-                    roughness={0.3}
-                    metalness={0.05}
-                />
-            </mesh>
-
-            {/* Transparent Decal Overlay */}
-            {texture && (
-                <mesh geometry={outerGeo}>
-                    <meshStandardMaterial
-                        map={texture}
-                        transparent={true}
-                        polygonOffset={true}
-                        polygonOffsetFactor={-1}
-                        color="#ffffff"
-                        roughness={0.3}
-                        metalness={0.05}
-                    />
-                </mesh>
-            )}
-
-            {/* Inner surface */}
-            <mesh geometry={innerGeo}>
-                <meshStandardMaterial
-                    color={innerCol}
-                    roughness={0.4}
-                    metalness={0.0}
-                    side={THREE.BackSide}
-                />
-            </mesh>
-
-            {/* Rim */}
-            <mesh geometry={rimGeo}>
-                <meshStandardMaterial color={outerColor} roughness={0.2} metalness={0.1} />
-            </mesh>
-
-            {/* Handle */}
-            <mesh
-                geometry={handleGeo}
-                position={[0.85, height * 0.55, 0]}
-                rotation={[0, 0, -Math.PI / 2]}
-                castShadow
-            >
-                <meshStandardMaterial color={outerColor} roughness={0.3} metalness={0.05} />
-            </mesh>
-
-        </group>
+        <div 
+            ref={containerRef} 
+            className="mug-3d-preview-container"
+            style={{ 
+                width: '100%', 
+                height: '500px', 
+                position: 'relative',
+                borderRadius: '12px',
+                overflow: 'hidden',
+                background: '#0a0a1a'
+            }}
+        />
     );
 };
 
-/* ─── Floor / Ground Plane ─── */
-const Floor = () => (
-    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1.2, 0]} receiveShadow>
-        <planeGeometry args={[10, 10]} />
-        <shadowMaterial opacity={0.15} />
-    </mesh>
-);
-
-/* ─── Main Exported Component ─── */
-const Mug3DPreview = ({ mugColor = 'White', insideColor, textureCanvas, textureUrl, mugType = 'Classic Mug (11oz)', autoRotate = true }) => {
-    // canvasKey is bumped when WebGL context is lost, forcing a full remount which recovers the renderer
-    const [canvasKey, setCanvasKey] = useState(0);
-    const handleContextLost = useCallback(() => {
-        console.warn('Mug3D: WebGL Context Lost — recovering...');
-        setTimeout(() => setCanvasKey(k => k + 1), 300);
-    }, []);
-
-    return (
-        <ErrorBoundary>
-            <Canvas
-                key={canvasKey}
-                id="three-canvas"
-                shadows
-                camera={{ position: [2.5, 2, 2.5], fov: 40 }}
-                style={{ width: '100%', height: '100%', minHeight: '500px', borderRadius: '12px' }}
-                gl={{
-                    preserveDrawingBuffer: true,
-                    antialias: true,
-                    toneMapping: THREE.ACESFilmicToneMapping,
-                    powerPreference: 'default'
-                }}
-                onCreated={({ gl }) => {
-                    gl.setClearColor('#0a0a1a', 1);
-                    // Listen for context loss and auto-recover
-                    gl.domElement.addEventListener('webglcontextlost', (e) => {
-                        e.preventDefault();
-                        handleContextLost();
-                    });
-                }}
-            >
-                {/* Enhanced Lighting for better visibility of dark mugs */}
-                <ambientLight intensity={0.7} />
-                <directionalLight
-                    position={[10, 10, 10]}
-                    intensity={1.2}
-                    castShadow
-                    shadow-mapSize-width={1024}
-                    shadow-mapSize-height={1024}
-                />
-                <directionalLight position={[-10, 10, -10]} intensity={0.6} />
-                <pointLight position={[5, 5, 5]} intensity={0.8} color="#ffffff" />
-                <pointLight position={[-5, 2, 5]} intensity={0.5} color="#e8e0ff" />
-                <hemisphereLight skyColor="#ffffff" groundColor="#222222" intensity={0.6} />
-                <Environment preset="city" />
-
-
-                {/* Mug */}
-                <MugBody
-                    mugColor={mugColor}
-                    insideColor={insideColor}
-                    textureCanvas={textureCanvas}
-                    textureUrl={textureUrl}
-                    mugType={mugType}
-                />
-
-                {/* Floor shadow */}
-                <Floor />
-
-                {/* Controls */}
-                <OrbitControls
-                    enablePan={false}
-                    minDistance={2.5}
-                    maxDistance={6}
-                    minPolarAngle={Math.PI / 6}
-                    maxPolarAngle={Math.PI / 1.5}
-                    autoRotate={autoRotate}
-                    autoRotateSpeed={1.5}
-                />
-            </Canvas>
-        </ErrorBoundary>
-    );
+Mug3DPreview.propTypes = {
+    mugColor: PropTypes.string,
+    insideColor: PropTypes.string,
+    textureUrl: PropTypes.string,
+    mugType: PropTypes.string,
+    autoRotate: PropTypes.bool,
+    isHidden: PropTypes.bool
 };
 
 export default Mug3DPreview;

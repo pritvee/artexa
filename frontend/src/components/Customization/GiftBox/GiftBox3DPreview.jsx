@@ -624,13 +624,50 @@ const GiftBox3DPreview = ({
     boxDimensions, boxColor = '#1a1a2e', material = 'matte',
     faceDesigns = {}, foamColor: externalFoamColor, ribbonSettings
 }) => {
+    const [canvasKey, setCanvasKey] = useState(0);
     const [isOpen, setIsOpen] = useState(false);
     const foamColor = externalFoamColor || '#f0dde8';
     const dim = useMemo(() => scaleDim(boxDimensions), [boxDimensions]);
 
+    const triggerContextRecovery = useCallback(() => {
+        console.warn('GiftBox3D: WebGL Context Lost — recovering...');
+        setCanvasKey(prev => prev + 1);
+    }, []);
+
+    const glConfig = useMemo(() => ({
+        powerPreference: 'high-performance',
+        antialias: true,
+        stencil: false,
+        depth: true,
+        failIfMajorPerformanceCaveat: false
+    }), []);
+
     return (
         <div style={{ position: 'relative', width: '100%', height: '100%', background: '#050510' }}>
-            <Canvas shadows={{ type: THREE.PCFShadowMap }} camera={{ position: [0, dim.h * 3, dim.w * 5], fov: 35 }}>
+            <Canvas 
+                key={canvasKey}
+                shadows={{ type: THREE.PCFShadowMap }} 
+                camera={{ position: [0, dim.h * 3, dim.w * 5], fov: 35 }}
+                dpr={[1, 2]}
+                gl={glConfig}
+                onCreated={({ gl, scene }) => {
+                    const handleContextLost = (event) => {
+                        event.preventDefault();
+                        triggerContextRecovery();
+                    };
+
+                    const canvas = gl.domElement;
+                    canvas.addEventListener('webglcontextlost', handleContextLost, false);
+                    
+                    // Cleanup
+                    return () => {
+                        canvas.removeEventListener('webglcontextlost', handleContextLost);
+                        if (gl.forceContextLoss) gl.forceContextLoss();
+                        if (gl.dispose) gl.dispose();
+                        scene.clear();
+                    };
+                }}
+            >
                 <GiftBoxScene
                     boxColor={boxColor}
                     mat={material}
@@ -658,6 +695,15 @@ const GiftBox3DPreview = ({
             </div>
         </div>
     );
+};
+
+GiftBox3DPreview.propTypes = {
+    boxDimensions: PropTypes.object,
+    boxColor: PropTypes.string,
+    material: PropTypes.string,
+    faceDesigns: PropTypes.object,
+    foamColor: PropTypes.string,
+    ribbonSettings: PropTypes.object
 };
 
 export default GiftBox3DPreview;

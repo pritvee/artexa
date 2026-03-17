@@ -482,22 +482,16 @@ const ChocolateItem = React.memo(({ type, position, rotation }) => {
     );
 });
 
-// ─── Scene cleanup helper ───
-const SceneDisposer = () => {
-    const { gl } = useThree();
-    useEffect(() => {
-        return () => {
-            // Dispose renderer & context on unmount to free GPU memory
-            gl.dispose();
-        };
-    }, [gl]);
-    return null;
-};
-
 // ─── Main Component ───
 const ChocolateHamper3DPreview = ({ containerStyle, hamperColor, size, chocolates = [], decorations = [] }) => {
+    const [canvasKey, setCanvasKey] = React.useState(0);
     const sVal = (size?.value || 'medium').toLowerCase();
     const scFactor = sVal === 'small' ? 0.75 : (sVal === 'premium' ? 1.25 : 1.0);
+
+    const triggerContextRecovery = React.useCallback(() => {
+        console.warn('ChocolateHamper3D: WebGL Context Lost — recovering...');
+        setCanvasKey(prev => prev + 1);
+    }, []);
 
     const getItemY = () => {
         if (containerStyle === 'gift_basket') return -0.38;
@@ -508,15 +502,40 @@ const ChocolateHamper3DPreview = ({ containerStyle, hamperColor, size, chocolate
     const hasDecor = (t) => decorations.some(d => d.type === t);
     const ribbonDecor = decorations.find(d => d.type === 'ribbon');
 
+    const glConfig = React.useMemo(() => ({ 
+        antialias: true, 
+        powerPreference: 'high-performance',
+        stencil: false,
+        depth: true,
+        failIfMajorPerformanceCaveat: false
+    }), []);
+
     return (
         <div style={{ position: 'relative', width: '100%', height: '100%', background: 'linear-gradient(to bottom, #0f0f1a, #050508)' }}>
             <Canvas 
+                key={canvasKey}
                 shadows={{ type: THREE.PCFShadowMap }} 
                 camera={{ position: [0, 6, 8], fov: 35 }} 
-                dpr={[1, 1.5]} 
-                gl={{ antialias: true, powerPreference: 'high-performance' }}
+                dpr={[1, 2]} 
+                gl={glConfig}
+                onCreated={({ gl, scene }) => {
+                    const handleContextLost = (event) => {
+                        event.preventDefault();
+                        triggerContextRecovery();
+                    };
+
+                    const canvas = gl.domElement;
+                    canvas.addEventListener('webglcontextlost', handleContextLost, false);
+                    
+                    // Cleanup
+                    return () => {
+                        canvas.removeEventListener('webglcontextlost', handleContextLost);
+                        if (gl.forceContextLoss) gl.forceContextLoss();
+                        if (gl.dispose) gl.dispose();
+                        scene.clear();
+                    };
+                }}
             >
-                <SceneDisposer />
                 <Suspense fallback={null}>
                     <ambientLight intensity={0.7} />
                     <spotLight position={[5, 15, 5]} angle={0.3} penumbra={1} intensity={2} castShadow />
@@ -551,6 +570,14 @@ const ChocolateHamper3DPreview = ({ containerStyle, hamperColor, size, chocolate
             </Canvas>
         </div>
     );
+};
+
+ChocolateHamper3DPreview.propTypes = {
+    containerStyle: PropTypes.string,
+    hamperColor: PropTypes.string,
+    size: PropTypes.object,
+    chocolates: PropTypes.array,
+    decorations: PropTypes.array
 };
 
 export default ChocolateHamper3DPreview;

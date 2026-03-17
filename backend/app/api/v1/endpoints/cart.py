@@ -7,49 +7,45 @@ from app.api.v1.endpoints.auth import get_current_user
 
 router = APIRouter()
 
-@router.get("", response_model=CartOut)
+def _get_or_create_cart(db: Session, user_id: int) -> Cart:
+    """Helper to fetch or initialize a cart for a user robustly."""
+    cart = db.query(Cart).filter(Cart.user_id == user_id).first()
+    if not cart:
+        cart = Cart(user_id=user_id)
+        db.add(cart)
+        try:
+            db.commit()
+            db.refresh(cart)
+        except Exception:
+            db.rollback()
+            # If another request created it in the meantime, fetch it
+            cart = db.query(Cart).filter(Cart.user_id == user_id).first()
+            if not cart:
+                raise HTTPException(status_code=500, detail="Could not initialize user cart")
+    return cart
+
+@router.get("", response_model=CartOut, responses={500: {"description": "Internal Server Error"}})
 def get_cart(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     try:
-        cart = db.query(Cart).filter(Cart.user_id == current_user.id).first()
-        if not cart:
-            cart = Cart(user_id=current_user.id)
-            db.add(cart)
-            try:
-                db.commit()
-                db.refresh(cart)
-            except Exception:
-                db.rollback()
-                # If another request created it in the meantime, fetch it
-                cart = db.query(Cart).filter(Cart.user_id == current_user.id).first()
-        return cart
+        return _get_or_create_cart(db, current_user.id)
+    except HTTPException:
+        raise
     except Exception as e:
         db.rollback()
         print(f"CRITICAL: Failed to get/create cart for user {current_user.id}: {str(e)}")
         raise HTTPException(status_code=500, detail="Cart service is currently unavailable")
 
-@router.post("/items", response_model=dict)
+@router.post("/items", response_model=dict, responses={500: {"description": "Internal Server Error"}})
 def add_to_cart(
     item_in: CartItemCreate,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     try:
-        # 1. Get or Create Cart (Robustly)
-        cart = db.query(Cart).filter(Cart.user_id == current_user.id).first()
-        if not cart:
-            cart = Cart(user_id=current_user.id)
-            db.add(cart)
-            try:
-                db.commit()
-                db.refresh(cart)
-            except Exception:
-                db.rollback()
-                cart = db.query(Cart).filter(Cart.user_id == current_user.id).first()
+        # 1. Get or Create Cart
+        cart = _get_or_create_cart(db, current_user.id)
 
-        if not cart:
-            raise HTTPException(status_code=500, detail="Could not initialize user cart")
-
-        # 2. Check for existing item with same customization (Python-side comparison to avoid PG JSON errors)
+        # 2. Check for existing item with same customization
         potential_items = db.query(CartItem).filter(
             CartItem.cart_id == cart.id,
             CartItem.product_id == item_in.product_id
@@ -63,17 +59,21 @@ def add_to_cart(
                 break
 
         if existing_item:
-            existing_item.quantity += item_in.quantity
+            # Add to existing item
+            qty = item_in.quantity if item_in.quantity is not None else 1
+            existing_item.quantity += qty
+            
             # Update preview/photo if provided
             if item_in.preview_image_url:
                 existing_item.preview_image_url = item_in.preview_image_url
             if item_in.uploaded_photo_id:
                 existing_item.uploaded_photo_id = item_in.uploaded_photo_id
         else:
+            # Create new item
             new_item = CartItem(
                 cart_id=cart.id,
                 product_id=item_in.product_id,
-                quantity=item_in.quantity,
+                quantity=item_in.quantity if item_in.quantity is not None else 1,
                 customization_details=item_in.customization_details,
                 preview_image_url=item_in.preview_image_url,
                 uploaded_photo_id=item_in.uploaded_photo_id
