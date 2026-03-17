@@ -52,7 +52,7 @@ const Home = () => {
         <Box sx={{ bgcolor: 'background.default', pb: 10 }}>
             {/* Promo */}
             <Box sx={{ 
-                background: 'linear-gradient(90deg, #6C63FF 0%, #9C4DFF 100%)', 
+                background: 'linear-gradient(90deg, #7C4DFF 0%, #F50057 100%)', 
                 color: '#fff', py: 1, textAlign: 'center', fontSize: '12px', fontWeight: 600
             }}>
                 Use mobile-first design · Free shipping on orders over ₹1000
@@ -92,7 +92,7 @@ const Home = () => {
                                 right: '-10%',
                                 width: '400px',
                                 height: '400px',
-                                background: 'radial-gradient(circle, rgba(108, 99, 255, 0.2) 0%, transparent 70%)',
+                                background: 'radial-gradient(circle, rgba(124, 77, 255, 0.2) 0%, transparent 70%)',
                                 borderRadius: '50%',
                                 filter: 'blur(60px)'
                             }}
@@ -118,7 +118,7 @@ const Home = () => {
                                     className="pulse-glow"
                                     sx={{ 
                                         height: '56px', px: 4, borderRadius: '16px', fontSize: '16px', fontWeight: 700,
-                                        background: 'linear-gradient(135deg, #6C63FF 0%, #9C4DFF 100%)',
+                                        background: 'linear-gradient(135deg, #7C4DFF 0%, #F50057 100%)',
                                     }}
                                 >
                                     Start Creating
@@ -170,7 +170,7 @@ const Home = () => {
                                     inset: -2,
                                     borderRadius: '34px',
                                     padding: '2px',
-                                    background: 'linear-gradient(135deg, rgba(108,99,255,0.5), rgba(156,77,255,0.2))',
+                                    background: 'linear-gradient(135deg, rgba(124,77,255,0.5), rgba(245,0,87,0.2))',
                                     WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
                                     WebkitMaskComposite: 'xor',
                                     maskComposite: 'exclude',
@@ -276,8 +276,8 @@ const Home = () => {
                 <Box sx={{ py: { xs: 4, md: 6 } }}>
                     <Paper sx={{ 
                         p: { xs: 3, md: 5 }, borderRadius: '16px', 
-                        background: 'linear-gradient(135deg, rgba(108, 99, 255, 0.1) 0%, rgba(156, 77, 255, 0.1) 100%)',
-                        border: '1px solid rgba(108, 99, 255, 0.2)',
+                        background: 'linear-gradient(135deg, rgba(124, 77, 255, 0.1) 0%, rgba(245, 0, 87, 0.1) 100%)',
+                        border: '1px solid rgba(124, 77, 255, 0.2)',
                         textAlign: 'center'
                     }}>
                         <Typography variant="h2" sx={{ mb: 1 }}>Design Your Own</Typography>
@@ -313,10 +313,10 @@ const Home = () => {
                                 sx={{ 
                                     borderRadius: '12px', 
                                     height: '48px',
-                                    background: 'linear-gradient(90deg, #6C63FF 0%, #9C4DFF 100%)',
+                                    background: 'linear-gradient(90deg, #7C4DFF 0%, #F50057 100%)',
                                     fontWeight: 700,
                                     mt: 2,
-                                    boxShadow: '0 4px 15px rgba(108, 99, 255, 0.3)'
+                                    boxShadow: '0 4px 15px rgba(124, 77, 255, 0.3)'
                                 }}
                             >
                                 Get AI Recommendations
@@ -418,8 +418,8 @@ const Home = () => {
                         right: 16, 
                         width: 48, 
                         height: 48,
-                        boxShadow: '0 4px 20px rgba(108, 99, 255, 0.4)',
-                        background: 'linear-gradient(135deg, #6C63FF 0%, #9C4DFF 100%)'
+                        boxShadow: '0 4px 20px rgba(124, 77, 255, 0.4)',
+                        background: 'linear-gradient(135deg, #7C4DFF 0%, #F50057 100%)'
                     }}
                 >
                     <ChatBubbleIcon />

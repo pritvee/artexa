@@ -79,7 +79,7 @@ const ProductCard = ({ product }) => {
                         transition: 'all 0.2s'
                     }}
                 >
-                    {wishlist ? <FavoriteIcon sx={{ color: '#FF7A59', fontSize: 20 }} /> : <FavoriteBorderIcon sx={{ color: 'white', fontSize: 20 }} />}
+                    {wishlist ? <FavoriteIcon sx={{ color: '#F50057', fontSize: 20 }} /> : <FavoriteBorderIcon sx={{ color: 'white', fontSize: 20 }} />}
                 </IconButton>
 
                 {/* Image Section */}
@@ -87,7 +87,7 @@ const ProductCard = ({ product }) => {
                     className="product-image-container"
                     sx={{ 
                         position: 'relative', height: { xs: 180, md: 220 }, borderRadius: '18px', 
-                        overflow: 'hidden', mb: 2.5, bgcolor: '#0B0F1A',
+                        overflow: 'hidden', mb: 2.5, bgcolor: '#05070A',
                         transition: 'transform 0.5s cubic-bezier(0.2, 0, 0.2, 1)',
                         transformStyle: "preserve-3d",
                     }}
@@ -105,12 +105,12 @@ const ProductCard = ({ product }) => {
                                 label="NEW" 
                                 size="small" 
                                 sx={{ 
-                                    background: 'linear-gradient(135deg, #FF7A59 0%, #FF4D4D 100%)', 
+                                    background: 'linear-gradient(135deg, #7C4DFF 0%, #F50057 100%)', 
                                     color: 'white',
                                     fontWeight: 800,
                                     fontSize: '10px',
                                     height: 22,
-                                    boxShadow: '0 4px 12px rgba(255, 122, 89, 0.4)'
+                                    boxShadow: '0 4px 12px rgba(124, 77, 255, 0.4)'
                                 }} 
                             />
                         </Box>
@@ -153,7 +153,7 @@ const ProductCard = ({ product }) => {
                                 height: '52px', 
                                 fontSize: '14px', 
                                 fontWeight: 800,
-                                background: 'linear-gradient(135deg, #6C63FF 0%, #9C4DFF 100%)',
+                                background: 'linear-gradient(135deg, #7C4DFF 0%, #F50057 100%)',
                             }}
                         >
                             Customize It

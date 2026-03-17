@@ -189,7 +189,7 @@ const Shop = () => {
                                     fontWeight: 700,
                                     borderRadius: '10px',
                                     '&.Mui-selected': {
-                                        background: 'linear-gradient(135deg, #6C63FF, #9C4DFF)',
+                                        background: 'linear-gradient(135deg, #7C4DFF, #F50057)',
                                         color: '#fff',
                                     }
                                 }

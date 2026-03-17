@@ -11,37 +11,37 @@ export const useThemeMode = () => useContext(ThemeModeContext);
 
 const getDesignTokens = (mode) => ({
     palette: {
-        mode,
+        mode: 'dark',
         primary: {
-            main: '#6C63FF',
-            light: '#8B85FF',
-            dark: '#483fd3',
+            main: '#7C4DFF', // Vibrant Purple
+            light: '#B47CFF',
+            dark: '#3F1DCC',
             contrastText: '#ffffff',
         },
         secondary: {
-            main: '#9C4DFF',
+            main: '#F50057', // Vibrant Magenta/Pink
         },
         accent: {
-            main: '#FF7A59',
+            main: '#00E5FF', // Cyan accent
         },
         background: {
-            default: '#0B0F1A',
-            paper: '#121A2F',
+            default: '#05070A', // Ultra Deep Navy/Black
+            paper: '#0C0E14',   // Slightly lighter for cards
         },
         text: {
-            primary: '#E5E7EB',
-            secondary: '#9CA3AF',
+            primary: '#FFFFFF',
+            secondary: '#A0AEC0',
         },
     },
     typography: {
-        fontFamily: '"Inter", "Poppins", sans-serif',
-        h1: { fontSize: '28px', fontWeight: 800, lineHeight: 1.2 },
-        h2: { fontSize: '22px', fontWeight: 700, lineHeight: 1.3 },
-        h3: { fontSize: '18px', fontWeight: 600, lineHeight: 1.4 },
-        body1: { fontSize: '14px', lineHeight: 1.5 },
-        body2: { fontSize: '14px', lineHeight: 1.5 },
-        caption: { fontSize: '12px', lineHeight: 1.5 },
-        button: { textTransform: 'none', fontWeight: 600, fontSize: '14px' },
+        fontFamily: '"Outfit", "Inter", "Poppins", sans-serif',
+        h1: { fontSize: '48px', fontWeight: 900, lineHeight: 1.1, letterSpacing: '-0.02em' },
+        h2: { fontSize: '32px', fontWeight: 800, lineHeight: 1.2, letterSpacing: '-0.01em' },
+        h3: { fontSize: '24px', fontWeight: 700, lineHeight: 1.3 },
+        body1: { fontSize: '16px', lineHeight: 1.6, color: '#A0AEC0' },
+        body2: { fontSize: '14px', lineHeight: 1.6 },
+        caption: { fontSize: '12px', fontWeight: 500, letterSpacing: '0.05em', textTransform: 'uppercase' },
+        button: { textTransform: 'none', fontWeight: 700, fontSize: '15px', letterSpacing: '0.02em' },
     },
     shape: {
         borderRadius: 12,
@@ -49,38 +49,31 @@ const getDesignTokens = (mode) => ({
     components: {
         MuiButton: {
             styleOverrides: {
-                root: ({ theme }) => ({
-                    minHeight: '44px',
-                    padding: '8px 16px',
-                    borderRadius: '12px',
-                    fontWeight: 600,
-                    textTransform: 'none',
-                    transition: 'all 0.3s ease',
-                }),
-                containedPrimary: ({ theme }) => ({
-                    background: 'linear-gradient(135deg, #6C63FF 0%, #9C4DFF 100%)',
-                    boxShadow: '0 4px 14px 0 rgba(108, 99, 255, 0.39)',
+                root: {
+                    minHeight: '48px',
+                    padding: '10px 24px',
+                    borderRadius: '50px',
+                    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                },
+                containedPrimary: {
+                    background: 'linear-gradient(135deg, #7C4DFF 0%, #F50057 100%)',
+                    boxShadow: '0 8px 20px -6px rgba(124, 77, 255, 0.5)',
                     '&:hover': {
-                        background: 'linear-gradient(135deg, #7a72ff 0%, #a862ff 100%)',
-                        boxShadow: '0 6px 20px rgba(108, 99, 255, 0.4)',
+                        background: 'linear-gradient(135deg, #8C5DFF 0%, #FF1A66 100%)',
+                        boxShadow: '0 12px 28px -8px rgba(124, 77, 255, 0.6)',
+                        transform: 'translateY(-2px)',
                     },
-                }),
-                outlined: ({ theme }) => ({
-                    border: '1px solid rgba(255,255,255,0.2)',
-                    background: 'rgba(255,255,255,0.05)',
+                },
+                outlined: {
+                    border: '1px solid rgba(255,255,255,0.12)',
+                    background: 'rgba(255,255,255,0.03)',
+                    backdropFilter: 'blur(10px)',
                     color: 'white',
                     '&:hover': {
-                        border: '1px solid rgba(255,255,255,0.4)',
-                        background: 'rgba(255,255,255,0.1)',
-                    },
-                }),
-                text: ({ theme }) => ({
-                    color: 'white',
-                    '&:hover': {
+                        border: '1px solid rgba(255,255,255,0.3)',
                         background: 'rgba(255,255,255,0.08)',
-                        backdropFilter: 'blur(10px)',
-                    }
-                })
+                    },
+                },
             },
         },
         MuiCard: {
@@ -102,27 +95,30 @@ const getDesignTokens = (mode) => ({
         },
         MuiPaper: {
             styleOverrides: {
-                root: ({ theme }) => ({
+                root: {
                     backgroundImage: 'none',
                     borderRadius: '16px',
-                    backgroundColor: 'rgba(18, 26, 47, 0.8)',
-                    backdropFilter: 'blur(12px)',
-                    border: '1px solid rgba(255, 255, 255, 0.08)',
-                }),
+                    backgroundColor: 'rgba(12, 14, 20, 0.8)',
+                    backdropFilter: 'blur(20px)',
+                    border: '1px solid rgba(255, 255, 255, 0.05)',
+                },
             },
         },
         MuiAppBar: {
             styleOverrides: {
-                root: ({ theme }) => ({
-                    backgroundColor: 'rgba(11, 15, 26, 0.8)',
-                    backdropFilter: 'blur(12px)',
-                    borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+                root: {
+                    backgroundColor: 'rgba(5, 7, 10, 0.6)',
+                    backdropFilter: 'blur(25px) saturate(200%)',
+                    borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
                     boxShadow: 'none',
-                }),
+                    backgroundImage: 'none',
+                },
             },
         },
                 MuiCssBaseline: {
             styleOverrides: (theme) => `
+                @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
+                
                 html {
                     scroll-behavior: smooth;
                     -webkit-font-smoothing: antialiased;
@@ -132,8 +128,12 @@ const getDesignTokens = (mode) => ({
                     overflow-x: hidden;
                     margin: 0;
                     padding: 0;
-                    background-color: ${theme.palette.background.default};
-                    color: ${theme.palette.text.primary};
+                    background-color: #05070A;
+                    color: #FFFFFF;
+                    background-image: 
+                        radial-gradient(circle at 0% 0%, rgba(124, 77, 255, 0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 100% 100%, rgba(245, 0, 87, 0.05) 0%, transparent 50%);
+                    background-attachment: fixed;
                 }
                 /* Premium Glassmorphism */
                 .glass {
@@ -145,18 +145,18 @@ const getDesignTokens = (mode) => ({
                     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
                 }
                 .glass-card {
-                    background: rgba(18, 26, 47, 0.4);
+                    background: rgba(12, 14, 20, 0.4);
                     backdrop-filter: blur(20px);
-                    border-radius: 20px;
-                    border: 1px solid rgba(255, 255, 255, 0.08);
-                    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+                    border-radius: 24px;
+                    border: 1px solid rgba(255, 255, 255, 0.05);
+                    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
                     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
                 }
                 .glass-card:hover {
-                    background: rgba(18, 26, 47, 0.6);
-                    border-color: rgba(108, 99, 255, 0.3);
+                    background: rgba(12, 14, 20, 0.6);
+                    border-color: rgba(124, 77, 255, 0.3);
                     transform: translateY(-8px);
-                    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+                    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
                 }
                 /* 3D Interactive Tilt */
                 .tilt-3d {
@@ -180,13 +180,14 @@ const getDesignTokens = (mode) => ({
                     animation: glow 3s ease-in-out infinite;
                 }
                 @keyframes glow {
-                    0%, 100% { box-shadow: 0 0 20px rgba(108, 99, 255, 0.2); }
-                    50% { box-shadow: 0 0 40px rgba(108, 99, 255, 0.5); }
+                    0%, 100% { box-shadow: 0 0 20px rgba(124, 77, 255, 0.2); }
+                    50% { box-shadow: 0 0 40px rgba(124, 77, 255, 0.5); }
                 }
                 .gradient-text {
-                    background: linear-gradient(135deg, #6C63FF 0%, #9C4DFF 100%);
+                    background: linear-gradient(135deg, #7C4DFF 0%, #F50057 100%);
                     -webkit-background-clip: text;
                     -webkit-text-fill-color: transparent;
+                    font-weight: 900;
                 }
                 /* Mobile Touch System */
                 @media (max-width: 768px) {
@@ -201,17 +202,17 @@ const getDesignTokens = (mode) => ({
                 }
                 /* Custom Scrollbar */
                 ::-webkit-scrollbar {
-                    width: 6px;
+                    width: 8px;
                 }
                 ::-webkit-scrollbar-track {
-                    background: #0B0F1A;
+                    background: #05070A;
                 }
                 ::-webkit-scrollbar-thumb {
-                    background: rgba(108, 99, 255, 0.3);
+                    background: linear-gradient(to bottom, #7C4DFF, #F50057);
                     border-radius: 10px;
                 }
                 ::-webkit-scrollbar-thumb:hover {
-                    background: #6C63FF;
+                    background: #7C4DFF;
                 }
             `,
         },
