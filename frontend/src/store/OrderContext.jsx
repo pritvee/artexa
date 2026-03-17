@@ -85,10 +85,11 @@ export const OrderProvider = ({ children }) => {
 
     const updateOrderStatus = async (orderId, status) => {
         try {
-            await api.patch(`/admin/orders/${orderId}/status`, { status }, { params: { status: status } });
+            await api.patch(`/admin/orders/${orderId}/status`, { status });
             fetchMyOrders();
         } catch (error) {
             console.error("Error updating order status:", error);
+            throw error;
         }
     };
 

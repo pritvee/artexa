@@ -51,7 +51,7 @@ def add_address(
             addr.is_default = False
             
     db_address = Address(
-        **address_in.dict(exclude={'is_default'}),
+        **address_in.model_dump(exclude={'is_default'}),
         user_id=current_user.id,
         is_default=is_default
     )

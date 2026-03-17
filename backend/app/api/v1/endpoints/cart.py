@@ -130,3 +130,15 @@ def remove_from_cart(
     db.delete(item)
     db.commit()
     return {"message": "Item removed"}
+
+@router.delete("", response_model=dict)
+def clear_cart(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """Clear all items from the user's cart."""
+    cart = db.query(Cart).filter(Cart.user_id == current_user.id).first()
+    if cart:
+        db.query(CartItem).filter(CartItem.cart_id == cart.id).delete(synchronize_session=False)
+        db.commit()
+    return {"message": "Cart cleared"}

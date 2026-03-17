@@ -31,7 +31,7 @@ export const ProductProvider = ({ children }) => {
         } catch (error) {
             console.error("Error fetching categories:", error);
         }
-    }, [api]);
+    }, []);
 
     const fetchProducts = useCallback(async (page = 1, limit = 10, categoryId = null, search = '', onHome = null, onShop = null) => {
         setLoading(true);
@@ -66,7 +66,7 @@ export const ProductProvider = ({ children }) => {
         } finally {
             setLoading(false);
         }
-    }, [api]);
+    }, []);
 
     useEffect(() => {
         // Initial load from local storage for instant UI
@@ -96,7 +96,7 @@ export const ProductProvider = ({ children }) => {
             console.error("Error adding product:", error);
             throw error;
         }
-    }, [api, fetchProducts]);
+    }, [fetchProducts]);
 
     const updateProduct = useCallback(async (id, updatedProduct) => {
         try {
@@ -106,7 +106,7 @@ export const ProductProvider = ({ children }) => {
             console.error("Error updating product:", error);
             throw error;
         }
-    }, [api, fetchProducts]);
+    }, [fetchProducts]);
 
     const deleteProduct = useCallback(async (id) => {
         try {
@@ -116,7 +116,7 @@ export const ProductProvider = ({ children }) => {
             console.error("Error deleting product:", error);
             throw error;
         }
-    }, [api, fetchProducts]);
+    }, [fetchProducts]);
 
     const contextValue = useMemo(() => ({
         products,
@@ -134,7 +134,6 @@ export const ProductProvider = ({ children }) => {
         loading, 
         pagination, 
         categories, 
-        categoryMap,
         fetchProducts, 
         addProduct, 
         updateProduct, 

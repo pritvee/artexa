@@ -76,8 +76,14 @@ export const CartProvider = ({ children }) => {
         }
     };
 
-    const clearCart = () => {
-        setCart([]);
+    const clearCart = async () => {
+        try {
+            await api.delete('/cart');
+            setCart([]);
+        } catch (error) {
+            console.error("Error clearing cart:", error);
+            setCart([]); // Still clear local state even if API fails
+        }
     };
 
     return (
