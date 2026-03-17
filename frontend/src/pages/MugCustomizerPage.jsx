@@ -14,7 +14,7 @@ import TextFieldsIcon from '@mui/icons-material/TextFields';
 import ColorLensIcon from '@mui/icons-material/ColorLens';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
-import api from '../api/axios';
+import api, { getPublicUrl } from '../api/axios';
 import { useAuth } from '../store/AuthContext';
 import InstagramSupportButton from '../components/Shared/InstagramSupportButton';
 import MugCanvasEditor from '../components/Customization/MugBuilder/MugCanvasEditor';
@@ -82,6 +82,7 @@ const MugCustomizerPage = () => {
     const [imageScale, setImageScale] = useState(100);
     const [isImageLoaded, setIsImageLoaded] = useState(false);
     const [enhancedImageSrc, setEnhancedImageSrc] = useState(null); // Result from AI enhancer
+    const [itemQuantity, setItemQuantity] = useState(1);
 
     // Persisted transform states so they survive tab switches
     const [imgProps, setImgProps] = useState({
@@ -109,6 +110,7 @@ const MugCustomizerPage = () => {
 
     // Feedback
     const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
+    const [isUploading, setIsUploading] = useState(false);
 
     // Fetch product
     useEffect(() => {
@@ -132,10 +134,12 @@ const MugCustomizerPage = () => {
                             const details = item.customization_details;
                             if (details.mug_color) setMugColor(details.mug_color);
                             if (details.mug_type) setMugType(details.mug_type);
-                            if (details.image) {
-                                setUserImageSrc(details.image);
-                                setUploadedImageUrl(details.image);
-                            }
+                             if (details.image) {
+                                 const imgUrl = details.image.startsWith('data:') ? details.image : getPublicUrl(details.image);
+                                 setUserImageSrc(imgUrl);
+                                 setUploadedImageUrl(details.image);
+                             }
+                             if (item.quantity) setItemQuantity(item.quantity);
                             if (details.text) {
                                 setTextProps({
                                     text: details.text || '',
@@ -161,11 +165,11 @@ const MugCustomizerPage = () => {
 
     // Dynamic pricing
     useEffect(() => {
-        if (!basePrice || !product) return;
-        const schemaTypes = (product?.customization_schema?.mugTypes || MUG_TYPES).filter(t => t.enabled !== false);
-        const typeExtra = schemaTypes.find(t => t.value === mugType)?.price || 0;
-        setTotalPrice(basePrice + parseFloat(typeExtra));
-    }, [mugType, mugColor, basePrice, product]);
+         if (!basePrice || !product) return;
+         const schemaTypes = (product?.customization_schema?.mugTypes || MUG_TYPES).filter(t => t.enabled !== false);
+         const typeExtra = schemaTypes.find(t => t.value === mugType)?.price || 0;
+         setTotalPrice((basePrice + parseFloat(typeExtra)) * itemQuantity);
+     }, [mugType, mugColor, basePrice, product, itemQuantity]);
 
     // Photo upload handler
     const handleImageUpload = async (e) => {
@@ -188,6 +192,7 @@ const MugCustomizerPage = () => {
         // Backend upload
         const formData = new FormData();
         formData.append('file', file);
+        setIsUploading(true);
         try {
             const res = await api.post('/products/upload-customization', formData, {
                 headers: { 'Content-Type': 'multipart/form-data' }
@@ -197,6 +202,8 @@ const MugCustomizerPage = () => {
         } catch (err) {
             console.error(err);
             setSnackbar({ open: true, message: 'Upload failed. Please try again.', severity: 'error' });
+        } finally {
+            setIsUploading(false);
         }
     };
 
@@ -311,21 +318,22 @@ const MugCustomizerPage = () => {
                 image_scale: imageScale,
             };
 
-            if (cartItemId) {
-                await updateCartItem(parseInt(cartItemId), {
-                    customization_details: finalCustomization,
-                    preview_image_url: modelSnapshotUrl || flatDesignUrl
-                });
-                setSnackbar({ open: true, message: 'Mug customization updated!', severity: 'success' });
-            } else {
-                await api.post('/cart/items/', {
-                    product_id: parseInt(id),
-                    quantity: 1,
-                    preview_image_url: modelSnapshotUrl || flatDesignUrl,
-                    customization_details: finalCustomization
-                });
-                setSnackbar({ open: true, message: 'Customized mug added to cart!', severity: 'success' });
-            }
+                    if (cartItemId) {
+                 await updateCartItem(parseInt(cartItemId), {
+                     customization_details: finalCustomization,
+                     quantity: itemQuantity,
+                     preview_image_url: modelSnapshotUrl || flatDesignUrl
+                 });
+                 setSnackbar({ open: true, message: 'Mug customization updated!', severity: 'success' });
+             } else {
+                 await api.post('/cart/items/', {
+                     product_id: parseInt(id),
+                     quantity: itemQuantity,
+                     preview_image_url: modelSnapshotUrl || flatDesignUrl,
+                     customization_details: finalCustomization
+                 });
+                 setSnackbar({ open: true, message: 'Customized mug added to cart!', severity: 'success' });
+             }
             setTimeout(() => navigate('/cart'), 1500);
         } catch (error) {
             console.error('Failed to process cart request', error);
@@ -499,20 +507,16 @@ const MugCustomizerPage = () => {
                                 <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
                                     📸 Upload Photo
                                 </Typography>
-                                <Button
-                                    variant="outlined"
-                                    component="label"
-                                    fullWidth
-                                    startIcon={<CloudUploadIcon />}
-                                    sx={{
-                                        py: 2,
-                                        border: '2px dashed',
-                                        borderColor: userImageSrc ? 'success.main' : 'divider',
-                                        '&:hover': { borderColor: 'primary.main', bgcolor: 'action.hover' }
-                                    }}
+                                <Button 
+                                    variant="outlined" 
+                                    component="label" 
+                                    fullWidth 
+                                    startIcon={isUploading ? <CircularProgress size={20} /> : <CloudUploadIcon />} 
+                                    disabled={isUploading}
+                                    sx={{ py: 1.5, borderStyle: 'dashed', borderRadius: '12px' }}
                                 >
-                                    {userImageSrc ? '✅ Change Photo' : 'Select Photo from Device'}
-                                    <input type="file" hidden accept="image/png, image/jpeg, image/webp" onChange={handleImageUpload} />
+                                    {isUploading ? 'Uploading...' : 'Upload New Photo'}
+                                    <input type="file" hidden accept="image/png, image/jpeg, image/webp" onChange={handleImageUpload} disabled={isUploading} />
                                 </Button>
                                 {userImageSrc && (
                                     <Box sx={{ mt: 1.5 }}>

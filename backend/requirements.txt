@@ -9,5 +9,6 @@ passlib[bcrypt]
 python-multipart
 python-dotenv
 alembic
+cloudinary
 email-validator
 bcrypt==4.0.1

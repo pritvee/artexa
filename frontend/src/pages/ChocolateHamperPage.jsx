@@ -24,7 +24,7 @@ import BoltIcon from '@mui/icons-material/Bolt';
 
 import ChocolateHamperCanvasEditor from '../components/Customization/ChocolateHamper/ChocolateHamperCanvasEditor';
 import { useAuth } from '../store/AuthContext';
-import api from '../api/axios';
+import api, { getPublicUrl } from '../api/axios';
 import ImageEnhancerPanel from '../components/Customization/Shared/ImageEnhancerPanel';
 import InstagramSupportButton from '../components/Shared/InstagramSupportButton';
 
@@ -152,17 +152,29 @@ const ChocolateHamperPage = () => {
                             if (details.container_style) setContainer(details.container_style);
                             if (details.theme) setTheme(details.theme);
                             if (details.hamper_color) setHamperColor(details.hamper_color);
-                            if (details.quantity) setQuantity(details.quantity);
-                            // To properly restore canvas items, we need the full objects
-                            // But for now let's restore the counts and basic designs
-                            if (details.chocolates) {
-                                const counts = {};
-                                details.chocolates.forEach(c => counts[c.type] = c.qty);
-                                setChocCounts(counts);
-                                // Note: full position restoration might need original canvas state stored
-                            }
-                            // If we have design_image but not full positions, it might be partial restoration
-                            // A better way would be to store full state in customization_details
+                            if (item.quantity) setQuantity(item.quantity);
+                             
+                             // Restore canvas items
+                             if (details.chocolates) {
+                                 const counts = {};
+                                 details.chocolates.forEach(c => counts[c.type] = (counts[c.type] || 0) + 1);
+                                 setChocCounts(counts);
+                                 setCanvasChocs(details.chocolates);
+                             }
+                             if (details.decorations) setDecorations(details.decorations);
+                             if (details.photos) {
+                                 setPhotos(details.photos.map(ph => ({
+                                     ...ph,
+                                     src: ph.src.startsWith('data:') ? ph.src : getPublicUrl(ph.src)
+                                 })));
+                             } else if (details.design_image) {
+                                  // Fallback: if we only have design_image but not split photos, 
+                                  // this might be a legacy save or just for preview
+                             }
+                             if (details.chocolates || details.decorations) {
+                                 // Force arrange if no positions saved? 
+                                 // Usually positions are saved in the array above.
+                             }                           
                         }
                     } catch (e) {
                         console.error("Failed to restore cart item", e);
@@ -244,6 +256,7 @@ const ChocolateHamperPage = () => {
     const [previewTab, setPreviewTab]     = useState(0);
     const [controlTab, setControlTab]     = useState(0);
     const [snackbar, setSnackbar]         = useState({ open: false, message: '', severity: 'success' });
+    const [isUploading, setIsUploading]   = useState(false);
     const [showOverlay, setShowOverlay]   = useState(true);
     const [isDragging, setIsDragging]     = useState(false);
 
@@ -326,7 +339,7 @@ const ChocolateHamperPage = () => {
     };
 
     // ─── Photo upload ───
-    const handlePhotoUpload = (e) => {
+    const handlePhotoUpload = async (e) => {
         if (!user) {
             setSnackbar({ open: true, message: 'Please login to upload photos.', severity: 'warning' });
             setTimeout(() => navigate('/login', { state: { from: location.pathname } }), 1000);
@@ -334,14 +347,28 @@ const ChocolateHamperPage = () => {
         }
         const file = e.target.files[0];
         if (!file) return;
-        const reader = new FileReader();
-        reader.onload = (ev) => {
+        setIsUploading(true);
+        setSnackbar({ open: true, message: 'Uploading photo...', severity: 'info' });
+        try {
+            const formData = new FormData();
+            formData.append('file', file);
+            const res = await api.post('/products/upload-customization', formData, {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            });
+            const url = res.data.image_url || res.data.url;
             setPhotos(prev => [...prev, {
-                id: `photo-${Date.now()}`, src: ev.target.result,
+                id: `photo-${Date.now()}`, 
+                src: getPublicUrl(url),
+                originalPath: url,
                 x: 220, y: 180, width: 110, height: 110, rotation: 0, scaleX: 1, scaleY: 1
             }]);
-        };
-        reader.readAsDataURL(file);
+            setSnackbar({ open: true, message: 'Photo uploaded!', severity: 'success' });
+        } catch (err) {
+            console.error(err);
+            setSnackbar({ open: true, message: 'Upload failed', severity: 'error' });
+        } finally {
+            setIsUploading(false);
+        }
     };
 
 
@@ -463,9 +490,20 @@ const ChocolateHamperPage = () => {
                 rotation: d.rotation,
                 size: d.size
             })),
+            photos: photos.map(ph => ({
+                id: ph.id,
+                src: ph.originalPath || ph.src,
+                x: ph.x,
+                y: ph.y,
+                width: ph.width,
+                height: ph.height,
+                rotation: ph.rotation,
+                scaleX: ph.scaleX,
+                scaleY: ph.scaleY
+            })),
             photos_count: photos.length,
             design_image: designImg,
-            quantity,
+            quantity: quantity,
         };
 
         try {
@@ -996,12 +1034,20 @@ const ChocolateHamperPage = () => {
                                             {/* Photo upload */}
                                             <Typography variant="subtitle2" sx={{ color: 'rgba(255,255,255,0.65)', fontWeight: 700 }}>📸 Photo Card</Typography>
                                             <Stack spacing={1}>
-                                                <Button variant="outlined" component="label" fullWidth startIcon={<CloudUploadIcon />}
-                                                    sx={{ borderColor: 'rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.6)', borderStyle: 'dashed',
-                                                        '&:hover': { borderColor: '#d4af37', color: '#d4af37' } }}>
-                                                    Upload Photo
-                                                    <input type="file" hidden accept="image/*" onChange={handlePhotoUpload} />
-                                                </Button>
+                                                 <Button 
+                                                     variant="outlined" component="label" fullWidth 
+                                                     startIcon={isUploading ? <CircularProgress size={18} /> : <CloudUploadIcon />}
+                                                     disabled={isUploading}
+                                                     sx={{ 
+                                                         borderColor: isUploading ? 'rgba(212,175,55,0.3)' : 'rgba(255,255,255,0.12)', 
+                                                         color: isUploading ? '#d4af37' : 'rgba(255,255,255,0.6)', 
+                                                         borderStyle: 'dashed',
+                                                         '&:hover': { borderColor: '#d4af37', color: '#d4af37' } 
+                                                     }}
+                                                 >
+                                                     {isUploading ? 'Uploading...' : 'Upload Photo'}
+                                                     <input type="file" hidden accept="image/*" onChange={handlePhotoUpload} disabled={isUploading} />
+                                                 </Button>
                                                 <Stack direction="row" spacing={1}>
                                                     <Button variant="outlined" size="small" startIcon={<AutoFixHighIcon />} fullWidth
                                                         sx={{ borderColor: 'rgba(212,175,55,0.3)', color: '#d4af37', fontSize: 11,

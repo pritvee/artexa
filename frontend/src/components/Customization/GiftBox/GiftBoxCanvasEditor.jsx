@@ -1,11 +1,14 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Stage, Layer, Rect, Text, Group, Transformer, Circle, Line } from 'react-konva';
+import { Stage, Layer, Rect, Text, Group, Transformer, Circle, Line, Image as KonvaImage } from 'react-konva';
+import useImage from 'use-image';
 
 /* ─── Editable Item on Canvas ─── */
 const EditableItem = ({ dec, isSelected, onSelect, onTransformEnd, itemCfg }) => {
     const shapeRef = useRef();
+    const [img] = useImage(dec.photoUrl || '', 'anonymous');
     const emoji = itemCfg?.emoji || '🎁';
     const label = itemCfg?.name || itemCfg?.label || dec.type;
+    const size = dec.size || 40;
 
     return (
         <Group
@@ -27,22 +30,47 @@ const EditableItem = ({ dec, isSelected, onSelect, onTransformEnd, itemCfg }) =>
         >
             {/* Shadow */}
             <Circle radius={(dec.size || 40) + 6} fill="rgba(0,0,0,0.2)" y={4} />
-            {/* Background bubble */}
-            <Circle
-                radius={dec.size || 40}
-                fill={isSelected ? 'rgba(255,217,61,0.25)' : 'rgba(255,255,255,0.12)'}
-                stroke={isSelected ? '#FFD93D' : 'rgba(255,255,255,0.2)'}
-                strokeWidth={isSelected ? 2 : 1.2}
-            />
-            {/* Emoji */}
-            <Text
-                ref={shapeRef}
-                text={emoji}
-                fontSize={dec.size ? dec.size * 0.9 : 36}
-                x={-(dec.size || 40) * 0.9 / 2}
-                y={-(dec.size || 40) * 0.9 / 2}
-                align="center"
-            />
+            {/* Background bubble / Photo */}
+            {dec.photoUrl && img ? (
+                <Group>
+                    <Rect
+                        width={size * 2}
+                        height={size * 2}
+                        x={-size}
+                        y={-size}
+                        fill="#fff"
+                        stroke={isSelected ? '#FFD93D' : 'rgba(255,255,255,0.2)'}
+                        strokeWidth={isSelected ? 2 : 1}
+                        cornerRadius={4}
+                    />
+                    <KonvaImage
+                        image={img}
+                        width={size * 1.8}
+                        height={size * 1.8}
+                        x={-size * 0.9}
+                        y={-size * 0.9}
+                    />
+                </Group>
+            ) : (
+                <Circle
+                    radius={size}
+                    fill={isSelected ? 'rgba(255,217,61,0.25)' : 'rgba(255,255,255,0.12)'}
+                    stroke={isSelected ? '#FFD93D' : 'rgba(255,255,255,0.2)'}
+                    strokeWidth={isSelected ? 2 : 1.2}
+                />
+            )}
+
+            {/* Emoji (only if no photo) */}
+            {!dec.photoUrl && (
+                <Text
+                    ref={shapeRef}
+                    text={emoji}
+                    fontSize={size * 0.9}
+                    x={-size * 0.9 / 2}
+                    y={-size * 0.9 / 2}
+                    align="center"
+                />
+            )}
             {/* Label */}
             <Text
                 text={label}

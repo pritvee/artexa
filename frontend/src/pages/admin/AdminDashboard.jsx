@@ -48,7 +48,11 @@ const AdminDashboard = () => {
                     fetchAllOrders(1, 5)
                 ]);
                 setStatsData(statsRes.data);
-                if (ordersRes) setRecentOrders(ordersRes.items);
+                if (ordersRes && ordersRes.items) {
+                    setRecentOrders(ordersRes.items);
+                } else {
+                    setRecentOrders([]);
+                }
             } catch (err) {
                 console.error("Dashboard load failed", err);
             } finally {
@@ -260,7 +264,7 @@ const AdminDashboard = () => {
                                                     {order.items?.slice(0, 3).map((item, i) => (
                                                         <Tooltip key={i} title={item.product?.name}>
                                                             <Avatar 
-                                                                src={item.product?.image_url} 
+                                                                src={getPublicUrl(item.product?.image_url)} 
                                                                 variant="rounded" 
                                                                 sx={{ width: 32, height: 32, border: '1px solid #eee' }} 
                                                             />

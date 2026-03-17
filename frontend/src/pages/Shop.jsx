@@ -18,11 +18,14 @@ const Shop = () => {
     const [searchQuery, setSearchQuery] = useState("");
     const [sortBy, setSortBy] = useState("newest");
 
-
+    // Debounce search so we don't call API on every keystroke
     useEffect(() => {
-        const catId = categoryQuery ? categoryMap[categoryQuery.toLowerCase()] : null;
-        fetchProducts(1, 12, catId, searchQuery, null, true);
-    }, [categoryQuery]);
+        const timer = setTimeout(() => {
+            const catId = categoryQuery ? categoryMap[categoryQuery.toLowerCase()] : null;
+            fetchProducts(1, 12, catId, searchQuery, null, true);
+        }, searchQuery ? 300 : 0); // No delay when category changes
+        return () => clearTimeout(timer);
+    }, [categoryQuery, searchQuery]);
 
     const handlePageChange = (event, value) => {
         const catId = categoryQuery ? categoryMap[categoryQuery.toLowerCase()] : null;
@@ -34,9 +37,15 @@ const Shop = () => {
         setSearchQuery(e.target.value);
     };
 
-    const filteredProducts = products.filter(p => 
-        p.name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    // Apply client-side sorting to fetched results
+    const sortedProducts = [...products].sort((a, b) => {
+        if (sortBy === 'price-low') return (a.price || 0) - (b.price || 0);
+        if (sortBy === 'price-high') return (b.price || 0) - (a.price || 0);
+        if (sortBy === 'popular') return (b.id || 0) - (a.id || 0);
+        return 0; // newest (default order from server)
+    });
+
+    const filteredProducts = sortedProducts;
 
     return (
         <Box sx={{ bgcolor: 'background.default', minHeight: '100vh', py: { xs: 6, md: 10 } }}>

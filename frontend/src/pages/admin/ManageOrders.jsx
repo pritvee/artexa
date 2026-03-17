@@ -484,7 +484,20 @@ const ManageOrders = () => {
                                     />
                                 </Stack>
                             ) : (
-                                <Box sx={{ mb: 4 }}>
+                                <>
+                                    <Box sx={{ mb: 4, p: 2, bgcolor: 'rgba(0,0,0,0.02)', borderRadius: 2, border: '1px solid rgba(0,0,0,0.05)' }}>
+                                        <Typography variant="caption" sx={{ fontWeight: 800, opacity: 0.5, letterSpacing: 1, display: 'block', mb: 1 }}>SHIPPING ADDRESS</Typography>
+                                        <Typography variant="body2">{selectedOrder.shipping_address}</Typography>
+                                        
+                                        {selectedOrder.gift_note && (
+                                            <Box sx={{ mt: 2, p: 1.5, bgcolor: 'rgba(236, 72, 153, 0.08)', borderRadius: 1.5, border: '1px solid rgba(236, 72, 153, 0.2)' }}>
+                                                <Typography variant="caption" sx={{ fontWeight: 800, color: '#EC4899', display: 'block', mb: 0.5, letterSpacing: 0.5 }}>PERSONAL GIFT NOTE</Typography>
+                                                <Typography variant="body1" sx={{ fontStyle: 'italic', fontWeight: 600, color: '#111' }}>"{selectedOrder.gift_note}"</Typography>
+                                            </Box>
+                                        )}
+                                    </Box>
+
+                                    <Divider sx={{ mb: 3 }} />
                                     <Stepper activeStep={statusIndex >= 0 ? statusIndex : 0} orientation="vertical">
                                         {ORDER_STATUSES.map((s, idx) => (
                                             <Step key={s.key}>
@@ -505,7 +518,7 @@ const ManageOrders = () => {
                                             {selectedOrder.estimated_delivery && <Typography variant="body2"><strong>Est. Delivery:</strong> {new Date(selectedOrder.estimated_delivery).toLocaleDateString()}</Typography>}
                                         </Box>
                                     )}
-                                </Box>
+                                </>
                             )}
 
                             <Divider sx={{ mb: 3 }} />

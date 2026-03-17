@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { Container, Paper, Typography, TextField, Button, Box, Link, Alert } from '@mui/material';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-
 import api from '../api/axios';
+
 
 const Register = () => {
     const [name, setName] = useState('');

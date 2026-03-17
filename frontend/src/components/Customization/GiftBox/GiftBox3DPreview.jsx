@@ -166,7 +166,10 @@ const RibbonSystem = ({ dim, settings, isOpen, isLidPart }) => {
 
 // Frame with photo
 const FrameItemWithPhoto = ({ cfg, scale, photoUrl }) => {
-    const texture = useLoader(THREE.TextureLoader, photoUrl);
+    const texture = useLoader(THREE.TextureLoader, photoUrl, (loader) => {
+        loader.setCrossOrigin('anonymous');
+    });
+    
     return (
         <group rotation={[-Math.PI/2, 0, 0]} position={[0, scale*0.1, 0]}>
             <mesh castShadow position={[0, 0, -scale*0.1]}>

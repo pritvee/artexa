@@ -3,9 +3,11 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import {
     Container, Grid, Box, Typography, Button, CircularProgress,
     TextField, MenuItem, Select, FormControl, InputLabel,
-    Divider, Paper, Radio, FormControlLabel
+    Divider, Paper, Radio, FormControlLabel, Snackbar, Alert, Stack
 } from '@mui/material';
-import api from '../api/axios';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
+import api, { getPublicUrl } from '../api/axios';
 import { useAuth } from '../store/AuthContext';
 import { useCart } from '../store/CartContext';
 import InstagramSupportButton from '../components/Shared/InstagramSupportButton';
@@ -21,8 +23,11 @@ const ProductCustomizerPage = () => {
 
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [isUploading, setIsUploading] = useState(false);
     const [customizationData, setCustomizationData] = useState({});
     const [totalPrice, setTotalPrice] = useState(0);
+    const [itemQuantity, setItemQuantity] = useState(1);
+    const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
 
     // UI state
     const [userImageSrc, setUserImageSrc] = useState(null);
@@ -71,7 +76,8 @@ const ProductCustomizerPage = () => {
                                     color: details.text_color || '#000000'
                                 });
                             }
-                            if (details.image) setUserImageSrc(details.image);
+                            if (details.image) setUserImageSrc(details.image.startsWith('data:') ? details.image : getPublicUrl(details.image));
+                            if (item.quantity) setItemQuantity(item.quantity);
                         }
                     } catch (e) {
                         console.error("Failed to fetch cart item for re-edit", e);
@@ -93,8 +99,8 @@ const ProductCustomizerPage = () => {
         if (customizationData.type === 'Magic Mug') base += 5;
         if (customizationData.size === '12x18-A3') base += 10;
         if (customizationData.size === '16.5x23.4-A2') base += 20;
-        setTotalPrice(base);
-    }, [customizationData, product]);
+        setTotalPrice(base * itemQuantity);
+    }, [customizationData, product, itemQuantity]);
 
     const uploadContextCanvas = async (source, filename, isStage = false) => {
         if (!source) return null;
@@ -144,8 +150,8 @@ const ProductCustomizerPage = () => {
 
     const handleImageUpload = async (e) => {
         if (!user) {
-            alert('Please login to upload photos.');
-            navigate('/login', { state: { from: location.pathname } });
+            setSnackbar({ open: true, message: 'Please login to upload photos.', severity: 'warning' });
+            setTimeout(() => navigate('/login', { state: { from: location.pathname } }), 1000);
             return;
         }
         const file = e.target.files[0];
@@ -155,28 +161,37 @@ const ProductCustomizerPage = () => {
         reader.readAsDataURL(file);
         const formData = new FormData();
         formData.append('file', file);
+        setIsUploading(true);
         try {
-            const res = await api.post('/customization/upload-image', formData, {
+            const uploadRes = await api.post('/products/upload-customization', formData, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
-            setCustomizationData(prev => ({ ...prev, uploadedImageUrl: res.data.url }));
-        } catch (err) { console.error(err); }
+            setCustomizationData(prev => ({ ...prev, uploadedImageUrl: uploadRes.data.url || uploadRes.data.image_url }));
+        } catch (err) { 
+            console.error("Upload failed", err);
+            setSnackbar({ open: true, message: 'Upload failed. Please try again.', severity: 'error' });
+        } finally {
+            setIsUploading(false);
+        }
     };
 
     const handleAddToCart = async () => {
         if (!user) {
-            alert('Please login to add items to cart.');
-            navigate('/login', { state: { from: location.pathname } });
+            setSnackbar({ open: true, message: 'Please login to add items to cart.', severity: 'warning' });
+            setTimeout(() => navigate('/login', { state: { from: location.pathname } }), 1000);
             return;
         }
 
+        setSnackbar({ open: true, message: '🎨 Adding masterpiece to cart...', severity: 'info' });
         let flatDesignUrl = customizationData.flat_design_image || null;
+        
         try {
-            if (textureCanvas) flatDesignUrl = await uploadContextCanvas(textureCanvas, 'flat_texture.png', true);
-        } catch (e) { console.warn("Snapshot failed"); }
+            if (textureCanvas && !flatDesignUrl) {
+                flatDesignUrl = await uploadContextCanvas(textureCanvas, 'design.png');
+            }
 
-        try {
             const finalCustomization = {
+                product: schema.type || product.customization_type || 'Custom-Product',
                 ...customizationData,
                 text: textProps.text,
                 font: textProps.fontFamily,
@@ -189,20 +204,25 @@ const ProductCustomizerPage = () => {
             };
 
             if (cartItemId) {
-                await updateCartItem(parseInt(cartItemId), { customization_details: finalCustomization });
-                alert("Cart item updated!");
+                await updateCartItem(parseInt(cartItemId), { 
+                    customization_details: finalCustomization,
+                    quantity: itemQuantity,
+                    preview_image_url: flatDesignUrl || product.image_url
+                });
+                setSnackbar({ open: true, message: '✅ Cart item updated!', severity: 'success' });
             } else {
                 await api.post('/cart/items/', {
                     product_id: parseInt(id),
-                    quantity: 1,
+                    quantity: itemQuantity,
+                    preview_image_url: flatDesignUrl || product.image_url,
                     customization_details: finalCustomization
                 });
-                alert("Added to cart!");
+                setSnackbar({ open: true, message: '✅ Added to cart!', severity: 'success' });
             }
-            navigate('/cart');
+            setTimeout(() => navigate('/cart'), 1200);
         } catch (error) {
             console.error("Failed to add/update cart", error);
-            alert("Failed to process request.");
+            setSnackbar({ open: true, message: '❌ Failed to process request.', severity: 'error' });
         }
     };
 
@@ -393,10 +413,17 @@ const ProductCustomizerPage = () => {
                         {['Mug', 'Frame', 'Crystal'].includes(schema.type || product.customization_type) && (
                             <Paper variant="outlined" sx={{ p: 2 }}>
                                 <Typography variant="subtitle1" gutterBottom fontWeight="bold">Upload Photo</Typography>
-                                <Button variant="outlined" component="label" fullWidth>
-                                    Select Image
-                                    <input type="file" hidden accept="image/*" onChange={handleImageUpload} />
-                                </Button>
+                                     <Button 
+                                         variant="outlined" 
+                                         component="label" 
+                                         fullWidth 
+                                         startIcon={isUploading ? <CircularProgress size={20} /> : <CloudUploadIcon />} 
+                                         disabled={isUploading}
+                                         sx={{ py: 1.5, borderStyle: 'dashed', borderRadius: '12px', mb: 2 }}
+                                     >
+                                         {isUploading ? 'Uploading...' : (userImageSrc ? 'Change Photo' : 'Upload Your Photo')}
+                                         <input type="file" hidden accept="image/*" onChange={handleImageUpload} disabled={isUploading} />
+                                     </Button>
                             </Paper>
                         )}
 
@@ -466,6 +493,16 @@ const ProductCustomizerPage = () => {
                     </Button>
                 </Grid>
             </Grid>
+            <Snackbar 
+                open={snackbar.open} 
+                autoHideDuration={6000} 
+                onClose={() => setSnackbar({ ...snackbar, open: false })}
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+            >
+                <Alert onClose={() => setSnackbar({ ...snackbar, open: false })} severity={snackbar.severity} sx={{ width: '100%' }}>
+                    {snackbar.message}
+                </Alert>
+            </Snackbar>
         </Container>
     );
 };

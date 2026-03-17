@@ -40,7 +40,7 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
-import api from '../api/axios';
+import api, { getPublicUrl } from '../api/axios';
 import { useAuth } from '../store/AuthContext';
 import InstagramSupportButton from '../components/Shared/InstagramSupportButton';
 import { Reorder, AnimatePresence } from 'framer-motion';
@@ -314,11 +314,21 @@ const FrameCustomizerPage = () => {
                         if (item && item.customization_details) {
                             const details = item.customization_details;
                             initialSnapshot = {
-                                ...initialSnapshot,
-                                ...details,
-                                hiddenLayers: new Set(details.layers_config?.hiddenLayers || []),
-                            };
-                            setQuantity(item.quantity || 1);
+                                 ...initialSnapshot,
+                                 frameSize: details.size || initialSnapshot.frameSize,
+                                 frameColor: details.frame_color || initialSnapshot.frameColor,
+                                 frameStyle: details.frame_style || initialSnapshot.frameStyle,
+                                 layout: details.layout || initialSnapshot.layout,
+                                 userImages: (details.images || []).map(img => (img && typeof img === 'string' && img.startsWith('/') && !img.startsWith('data:')) ? getPublicUrl(img) : img),
+                                 uploadedFileUrls: (details.images || []).map(img => (img && typeof img === 'string' && img.startsWith('/') && !img.startsWith('data:')) ? getPublicUrl(img) : img),
+                                 textLayers: details.text_layers || details.textLayers || initialSnapshot.textLayers,
+                                 stickers: details.stickers || initialSnapshot.stickers,
+                                 orientation: details.orientation || initialSnapshot.orientation,
+                                 borderDesign: details.border_design || initialSnapshot.borderDesign,
+                                 layerOrder: details.layers_config?.layerOrder || details.layerOrder || initialSnapshot.layerOrder,
+                                 hiddenLayers: new Set(details.layers_config?.hiddenLayers || details.hiddenLayers || []),
+                             };
+                             setQuantity(item.quantity || 1);
                         }
                     } catch (e) {
                         console.error("Failed to fetch cart item for re-edit", e);
@@ -416,6 +426,8 @@ const FrameCustomizerPage = () => {
         }
     };
 
+    const [isUploading, setIsUploading] = useState(false);
+
     const handleImageUpload = async (e) => {
         if (!user) {
             setSnackbar({ open: true, message: 'Please login to upload photos.', severity: 'warning' });
@@ -427,23 +439,48 @@ const FrameCustomizerPage = () => {
 
         const layoutSlots = LAYOUTS.find(l => l.value === layout)?.slots || 1;
         const remainingSlots = layoutSlots - userImages.length;
+        if (remainingSlots <= 0) {
+            setSnackbar({ open: true, message: 'All slots are full! Remove a photo to add a new one.', severity: 'info' });
+            return;
+        }
+
         const slotsToFill = files.slice(0, Math.max(0, remainingSlots));
+        setIsUploading(true);
+        setSnackbar({ open: true, message: `Uploading ${slotsToFill.length} photo(s)...`, severity: 'info' });
 
-        for (const file of slotsToFill) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setUserImages(prev => [...prev, reader.result]);
-            };
-            reader.readAsDataURL(file);
+        try {
+            // Process previews and uploads in parallel for better performance
+            const previewPromises = slotsToFill.map(file => new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onloadend = () => resolve(reader.result);
+                reader.readAsDataURL(file);
+            }));
 
-            const formData = new FormData();
-            formData.append('file', file);
-            try {
-                const res = await api.post('/products/upload-customization', formData, {
+            const uploadPromises = slotsToFill.map(file => {
+                const formData = new FormData();
+                formData.append('file', file);
+                return api.post('/products/upload-customization', formData, {
                     headers: { 'Content-Type': 'multipart/form-data' }
                 });
-                setUploadedFileUrls(prev => [...prev, res.data.url || res.data.image_url]);
-            } catch (err) { console.error(err); }
+            });
+
+            const previews = await Promise.all(previewPromises);
+            const uploadResults = await Promise.all(uploadPromises);
+            const newUrls = uploadResults.map(res => res.data.url || res.data.image_url);
+
+            // Single history push for all uploaded images
+            pushHistory(d => ({
+                ...d,
+                userImages: [...d.userImages, ...previews],
+                uploadedFileUrls: [...d.uploadedFileUrls, ...newUrls]
+            }));
+
+            setSnackbar({ open: true, message: 'Photos uploaded successfully!', severity: 'success' });
+        } catch (err) {
+            console.error("Upload error:", err);
+            setSnackbar({ open: true, message: 'Upload failed. Please try again.', severity: 'error' });
+        } finally {
+            setIsUploading(false);
         }
     };
 
@@ -580,6 +617,7 @@ const FrameCustomizerPage = () => {
 
             if (cartItemId) {
                 await updateCartItem(parseInt(cartItemId), {
+                    quantity: quantity,
                     customization_details: finalCustomization,
                     preview_image_url: modelSnapshotUrl || flatDesignUrl
                 });
@@ -704,17 +742,21 @@ const FrameCustomizerPage = () => {
     const deleteLayer = (id) => {
         pushHistory(d => ({
             ...d,
-            textLayers: id.startsWith('text-') ? d.textLayers.filter(t => t.id !== id) : d.textLayers,
-            stickers: id.startsWith('sticker-') ? d.stickers.filter(s => s.id !== id) : d.stickers,
+            textLayers: (id || '').startsWith('text-') ? d.textLayers.filter(t => t.id !== id) : d.textLayers,
+            stickers: (id || '').startsWith('sticker-') ? d.stickers.filter(s => s.id !== id) : d.stickers,
             layerOrder: d.layerOrder.filter(lid => lid !== id)
         }));
         if (selectedId === id) setSelectedId(null);
     };
-
-
     // Memoize the merged image array to prevent heavy re-renders
     const combinedImages = useMemo(() => {
-        return userImages.map((img, i) => enhancedImages[i] || img);
+        return userImages.map((img, i) => {
+            const src = enhancedImages[i] || img;
+            if (src && typeof src === 'string' && src.startsWith('/') && !src.startsWith('data:')) {
+                return getPublicUrl(src);
+            }
+            return src;
+        });
     }, [userImages, enhancedImages]);
 
     if (loading) return <Container sx={{ py: 8, textAlign: 'center' }}><CircularProgress /></Container>;
@@ -1063,9 +1105,15 @@ const FrameCustomizerPage = () => {
 
                             {controlTab === 1 && (
                                 <Stack spacing={3}>
-                                    <Button variant="outlined" component="label" fullWidth startIcon={<CloudUploadIcon />} sx={{ py: 1.5, border: '2px dashed' }}>
-                                        Upload Photos ({userImages.length}) <input type="file" hidden multiple onChange={handleImageUpload} />
-                                    </Button>
+                                    <Button 
+                                         variant="outlined" component="label" fullWidth 
+                                         startIcon={isUploading ? <CircularProgress size={20} /> : <CloudUploadIcon />} 
+                                         disabled={isUploading}
+                                         sx={{ py: 1.5, border: '2px dashed' }}
+                                     >
+                                         {isUploading ? 'Uploading...' : `Upload Photos (${userImages.length})`}
+                                         <input type="file" hidden multiple onChange={handleImageUpload} disabled={isUploading} />
+                                     </Button>
 
                                     {/* AI Enhancer Targeting Check */}
                                     {((selectedId?.startsWith('img-') && userImages.length > 0) || (selectedId?.startsWith('sticker-') && stickers.find(s=>s.id===selectedId)?.url) || (!selectedId && userImages.length > 0)) && (

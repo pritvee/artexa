@@ -165,7 +165,9 @@ const MyOrders = () => {
                                                             px: 1,
                                                             height: 32,
                                                             bgcolor: currentStatus.color === 'primary' ? 'primary.main' : undefined,
-                                                            boxShadow: currentStatus.color !== 'default' ? `0 4px 12px ${theme.palette[currentStatus.color || 'primary'].main}44` : 'none'
+                                                            boxShadow: (currentStatus.color && currentStatus.color !== 'default' && theme.palette[currentStatus.color]) 
+                                                                ? `0 4px 12px ${theme.palette[currentStatus.color].main}44` 
+                                                                : 'none'
                                                         }}
                                                     />
                                                     <Button 
@@ -228,6 +230,22 @@ const MyOrders = () => {
                                                                         <Typography variant="body2" sx={{ fontWeight: 600, maxWidth: 300 }}>{order.shipping_address}</Typography>
                                                                     </Box>
                                                                 </Box>
+
+                                                                 {order.gift_note && (
+                                                                    <Box sx={{ 
+                                                                        display: 'flex', gap: 2, p: 2, 
+                                                                        borderRadius: '16px', 
+                                                                        bgcolor: isDark ? 'rgba(236, 72, 153, 0.1)' : 'rgba(236, 72, 153, 0.05)',
+                                                                        border: '1px solid',
+                                                                        borderColor: isDark ? 'rgba(236, 72, 153, 0.2)' : 'rgba(236, 72, 153, 0.1)'
+                                                                    }}>
+                                                                        <GiftIcon sx={{ color: '#EC4899', fontSize: '1.4rem' }} />
+                                                                        <Box>
+                                                                            <Typography variant="caption" sx={{ fontWeight: 800, color: '#EC4899', display: 'block', letterSpacing: 1 }}>GIFT NOTE</Typography>
+                                                                            <Typography variant="body2" sx={{ fontWeight: 600, fontStyle: 'italic' }}>"{order.gift_note}"</Typography>
+                                                                        </Box>
+                                                                    </Box>
+                                                                )}
 
                                                                 {order.tracking_id && (
                                                                     <Box sx={{ display: 'flex', gap: 2 }}>

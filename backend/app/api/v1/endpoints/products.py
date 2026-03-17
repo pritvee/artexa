@@ -10,6 +10,18 @@ from app.schemas.product import ProductOut, ProductCreate, CategoryOut, ProductL
 import os
 import shutil
 from app.core.config import settings
+import cloudinary
+import cloudinary.uploader
+import uuid
+
+# Configure Cloudinary if keys are present
+if settings.CLOUDINARY_CLOUD_NAME:
+    cloudinary.config(
+        cloud_name=settings.CLOUDINARY_CLOUD_NAME,
+        api_key=settings.CLOUDINARY_API_KEY,
+        api_secret=settings.CLOUDINARY_API_SECRET,
+        secure=True
+    )
 
 router = APIRouter()
 
@@ -99,7 +111,14 @@ def upload_image(
     file: UploadFile = File(...),
     admin: User = Depends(get_current_active_admin)
 ):
-    import uuid
+    if settings.CLOUDINARY_CLOUD_NAME:
+        try:
+            result = cloudinary.uploader.upload(file.file, folder="artexa/products")
+            return {"image_url": result.get("secure_url")}
+        except Exception as e:
+            print(f"Cloudinary upload failed: {str(e)}")
+            # Fallback to local if Cloudinary fails
+    
     if not os.path.exists(settings.UPLOAD_DIR):
         os.makedirs(settings.UPLOAD_DIR)
     
@@ -118,6 +137,23 @@ def upload_customization_photo(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
+    if settings.CLOUDINARY_CLOUD_NAME:
+        try:
+            result = cloudinary.uploader.upload(file.file, folder="artexa/user_customizations")
+            image_url = result.get("secure_url")
+            
+            db_photo = UploadedPhoto(
+                user_id=current_user.id,
+                file_path=image_url
+            )
+            db.add(db_photo)
+            db.commit()
+            db.refresh(db_photo)
+            
+            return {"id": db_photo.id, "image_url": db_photo.file_path}
+        except Exception as e:
+            print(f"Cloudinary upload failed: {str(e)}")
+
     user_upload_dir = os.path.join(settings.UPLOAD_DIR, "user_uploads")
     if not os.path.exists(user_upload_dir):
         os.makedirs(user_upload_dir)

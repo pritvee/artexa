@@ -237,7 +237,9 @@ const Mug3DPreview = ({
 
         // Texture overlay
         if (textureUrl) {
-            new THREE.TextureLoader().load(textureUrl, (tex) => {
+            const loader = new THREE.TextureLoader();
+            loader.setCrossOrigin('anonymous');
+            loader.load(textureUrl, (tex) => {
                 tex.wrapS = tex.wrapT = THREE.ClampToEdgeWrapping;
                 const decalMat = new THREE.MeshStandardMaterial({ 
                     map: tex, 
@@ -248,6 +250,8 @@ const Mug3DPreview = ({
                 });
                 const decalMesh = new THREE.Mesh(outerGeo, decalMat);
                 group.add(decalMesh);
+            }, undefined, (err) => {
+                console.error("Mug3D: Failed to load texture", textureUrl, err);
             });
         }
     }, [mugColor, insideColor, textureUrl, mugType]);

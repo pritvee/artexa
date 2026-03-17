@@ -18,7 +18,7 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import GiftBoxCanvasEditor from '../components/Customization/GiftBox/GiftBoxCanvasEditor';
 import { useAuth } from '../store/AuthContext';
-import api from '../api/axios';
+import api, { getPublicUrl } from '../api/axios';
 
 const GiftBox3DPreview = lazy(() => import('../components/Customization/GiftBox/GiftBox3DPreview'));
 
@@ -113,6 +113,7 @@ const GiftBoxCustomizerPage = () => {
 
     const [showOverlay, setShowOverlay] = useState(true);
     const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
+    const [isUploading, setIsUploading] = useState(false);
     const [product, setProduct] = useState(null);
     const stageRef = useRef(null);
     const [loading, setLoading] = useState(true);
@@ -208,7 +209,19 @@ const GiftBoxCustomizerPage = () => {
                             if (details.material) setMaterial(details.material);
                             if (details.box_color) setBoxColor(details.box_color);
                             if (details.foam_color) setFoamColor(details.foam_color);
-                            if (details.face_designs) setFaceDesigns(details.face_designs);
+                            if (details.face_designs) {
+                                // Path resolution for any uploaded photos inside the box
+                                const resolvedDesigns = { ...details.face_designs };
+                                Object.keys(resolvedDesigns).forEach(face => {
+                                    resolvedDesigns[face] = resolvedDesigns[face].map(item => {
+                                        if (item.photoUrl && typeof item.photoUrl === 'string' && !item.photoUrl.startsWith('data:')) {
+                                            return { ...item, photoUrl: getPublicUrl(item.photoUrl) };
+                                        }
+                                        return item;
+                                    });
+                                });
+                                setFaceDesigns(resolvedDesigns);
+                            }
                             if (details.inside_items) setInsideItems(details.inside_items);
                             if (details.ribbon) {
                                 setRibbonEnabled(details.ribbon.enabled);
@@ -281,6 +294,7 @@ const GiftBoxCustomizerPage = () => {
         }
         const file = e.target.files[0];
         if (!file) return;
+        setIsUploading(true);
         setSnackbar({ open: true, message: 'Uploading photo...', severity: 'info' });
         try {
             const formData = new FormData();
@@ -294,6 +308,8 @@ const GiftBoxCustomizerPage = () => {
         } catch (err) {
             console.error(err);
             setSnackbar({ open: true, message: 'Failed to upload photo.', severity: 'error' });
+        } finally {
+            setIsUploading(false);
         }
     };
 
@@ -426,6 +442,7 @@ const GiftBoxCustomizerPage = () => {
         try {
             if (cartItemId) {
                 await updateCartItem(parseInt(cartItemId), {
+                    quantity: quantity,
                     customization_details,
                     preview_image_url: previewUrl
                 });
@@ -867,9 +884,14 @@ const GiftBoxCustomizerPage = () => {
                                                     
                                                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                                                         {item.hasPhotoUpload ? (
-                                                            <Button variant="outlined" size="small" component="label" sx={{ color: '#FFD93D', borderColor: '#FFD93D', textTransform: 'none' }}>
-                                                                Upload Photo
-                                                                <input type="file" hidden accept="image/*" onChange={(e) => handleUploadAndAdd(e, item.type || item.name)} />
+                                                            <Button 
+                                                                variant="outlined" size="small" component="label" 
+                                                                disabled={isUploading}
+                                                                startIcon={isUploading ? <CircularProgress size={16} color="inherit" /> : null}
+                                                                sx={{ color: '#FFD93D', borderColor: '#FFD93D', textTransform: 'none' }}
+                                                            >
+                                                                {isUploading ? 'Uploading...' : 'Upload Photo'}
+                                                                <input type="file" hidden accept="image/*" onChange={(e) => handleUploadAndAdd(e, item.type || item.name)} disabled={isUploading} />
                                                             </Button>
                                                         ) : (
                                                             <IconButton 

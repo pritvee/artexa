@@ -1,0 +1,848 @@
+{
+  "timestamp": "2026-03-17T09:40:43.135Z",
+  "summary": {
+    "nodeCount": 11,
+    "edgeCount": 79,
+    "nodeTypes": {
+      "symbol": 11
+    },
+    "edgeTypes": {
+      "calls": 79
+    },
+    "errorNodes": 0,
+    "suspectNodes": 0
+  },
+  "sampleNodes": [
+    {
+      "id": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_ErrorBoundary",
+      "label": "ErrorBoundary",
+      "kind": "symbol",
+      "file": "d:\\project\\photoframe website\\frontend\\src\\components\\Shared\\ErrorBoundary.jsx",
+      "line": 1,
+      "badges": [
+        "spine"
+      ]
+    },
+    {
+      "id": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_catch",
+      "label": "catch",
+      "kind": "symbol",
+      "file": "d:\\project\\photoframe website\\frontend\\src\\components\\Shared\\ErrorBoundary.jsx",
+      "line": 1,
+      "badges": []
+    },
+    {
+      "id": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_post",
+      "label": "post",
+      "kind": "symbol",
+      "file": "d:\\project\\photoframe website\\frontend\\src\\components\\Shared\\ErrorBoundary.jsx",
+      "line": 1,
+      "badges": []
+    },
+    {
+      "id": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_toString",
+      "label": "toString",
+      "kind": "symbol",
+      "file": "d:\\project\\photoframe website\\frontend\\src\\components\\Shared\\ErrorBoundary.jsx",
+      "line": 1,
+      "badges": []
+    },
+    {
+      "id": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_setState",
+      "label": "setState",
+      "kind": "symbol",
+      "file": "d:\\project\\photoframe website\\frontend\\src\\components\\Shared\\ErrorBoundary.jsx",
+      "line": 1,
+      "badges": []
+    },
+    {
+      "id": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_match",
+      "label": "match",
+      "kind": "symbol",
+      "file": "d:\\project\\photoframe website\\frontend\\src\\components\\Shared\\ErrorBoundary.jsx",
+      "line": 1,
+      "badges": []
+    },
+    {
+      "id": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_setState",
+      "label": "setState",
+      "kind": "symbol",
+      "file": "d:/project/photoframe website/frontend/src/components/Shared/ErrorBoundary.jsx",
+      "line": 1,
+      "badges": []
+    },
+    {
+      "id": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_match",
+      "label": "match",
+      "kind": "symbol",
+      "file": "d:/project/photoframe website/frontend/src/components/Shared/ErrorBoundary.jsx",
+      "line": 1,
+      "badges": []
+    },
+    {
+      "id": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_post",
+      "label": "post",
+      "kind": "symbol",
+      "file": "d:/project/photoframe website/frontend/src/components/Shared/ErrorBoundary.jsx",
+      "line": 1,
+      "badges": []
+    },
+    {
+      "id": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_toString",
+      "label": "toString",
+      "kind": "symbol",
+      "file": "d:/project/photoframe website/frontend/src/components/Shared/ErrorBoundary.jsx",
+      "line": 1,
+      "badges": []
+    }
+  ],
+  "sampleEdges": [
+    {
+      "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_ErrorBoundary",
+      "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_setState",
+      "kind": "calls",
+      "confidence": 0.4
+    },
+    {
+      "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_ErrorBoundary",
+      "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_match",
+      "kind": "calls",
+      "confidence": 0.4
+    },
+    {
+      "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_ErrorBoundary",
+      "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_post",
+      "kind": "calls",
+      "confidence": 0.4
+    },
+    {
+      "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_ErrorBoundary",
+      "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_toString",
+      "kind": "calls",
+      "confidence": 0.4
+    },
+    {
+      "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_catch",
+      "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_setState",
+      "kind": "calls",
+      "confidence": 0.4
+    },
+    {
+      "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_catch",
+      "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_match",
+      "kind": "calls",
+      "confidence": 0.4
+    },
+    {
+      "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_catch",
+      "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_post",
+      "kind": "calls",
+      "confidence": 0.4
+    },
+    {
+      "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_catch",
+      "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_toString",
+      "kind": "calls",
+      "confidence": 0.4
+    },
+    {
+      "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_post",
+      "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_setState",
+      "kind": "calls",
+      "confidence": 0.4
+    },
+    {
+      "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_post",
+      "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_match",
+      "kind": "calls",
+      "confidence": 0.4
+    }
+  ],
+  "fullGraph": {
+    "nodes": [
+      {
+        "id": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_ErrorBoundary",
+        "label": "ErrorBoundary",
+        "file": "d:\\project\\photoframe website\\frontend\\src\\components\\Shared\\ErrorBoundary.jsx",
+        "kind": "symbol",
+        "line": 1,
+        "badges": [
+          "spine"
+        ]
+      },
+      {
+        "id": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_catch",
+        "label": "catch",
+        "file": "d:\\project\\photoframe website\\frontend\\src\\components\\Shared\\ErrorBoundary.jsx",
+        "kind": "symbol",
+        "line": 1,
+        "badges": []
+      },
+      {
+        "id": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_post",
+        "label": "post",
+        "file": "d:\\project\\photoframe website\\frontend\\src\\components\\Shared\\ErrorBoundary.jsx",
+        "kind": "symbol",
+        "line": 1,
+        "badges": []
+      },
+      {
+        "id": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_toString",
+        "label": "toString",
+        "file": "d:\\project\\photoframe website\\frontend\\src\\components\\Shared\\ErrorBoundary.jsx",
+        "kind": "symbol",
+        "line": 1,
+        "badges": []
+      },
+      {
+        "id": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_setState",
+        "label": "setState",
+        "file": "d:\\project\\photoframe website\\frontend\\src\\components\\Shared\\ErrorBoundary.jsx",
+        "kind": "symbol",
+        "line": 1,
+        "badges": []
+      },
+      {
+        "id": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_match",
+        "label": "match",
+        "file": "d:\\project\\photoframe website\\frontend\\src\\components\\Shared\\ErrorBoundary.jsx",
+        "kind": "symbol",
+        "line": 1,
+        "badges": []
+      },
+      {
+        "id": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_setState",
+        "label": "setState",
+        "file": "d:/project/photoframe website/frontend/src/components/Shared/ErrorBoundary.jsx",
+        "kind": "symbol",
+        "line": 1,
+        "badges": []
+      },
+      {
+        "id": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_match",
+        "label": "match",
+        "file": "d:/project/photoframe website/frontend/src/components/Shared/ErrorBoundary.jsx",
+        "kind": "symbol",
+        "line": 1,
+        "badges": []
+      },
+      {
+        "id": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_post",
+        "label": "post",
+        "file": "d:/project/photoframe website/frontend/src/components/Shared/ErrorBoundary.jsx",
+        "kind": "symbol",
+        "line": 1,
+        "badges": []
+      },
+      {
+        "id": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_toString",
+        "label": "toString",
+        "file": "d:/project/photoframe website/frontend/src/components/Shared/ErrorBoundary.jsx",
+        "kind": "symbol",
+        "line": 1,
+        "badges": []
+      },
+      {
+        "id": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_catch",
+        "label": "catch",
+        "file": "d:/project/photoframe website/frontend/src/components/Shared/ErrorBoundary.jsx",
+        "kind": "symbol",
+        "line": 1,
+        "badges": []
+      }
+    ],
+    "edges": [
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_ErrorBoundary",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_setState",
+        "kind": "calls",
+        "confidence": 0.4
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_ErrorBoundary",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_match",
+        "kind": "calls",
+        "confidence": 0.4
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_ErrorBoundary",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_post",
+        "kind": "calls",
+        "confidence": 0.4
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_ErrorBoundary",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_toString",
+        "kind": "calls",
+        "confidence": 0.4
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_catch",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_setState",
+        "kind": "calls",
+        "confidence": 0.4
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_catch",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_match",
+        "kind": "calls",
+        "confidence": 0.4
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_catch",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_post",
+        "kind": "calls",
+        "confidence": 0.4
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_catch",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_toString",
+        "kind": "calls",
+        "confidence": 0.4
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_post",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_setState",
+        "kind": "calls",
+        "confidence": 0.4
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_post",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_match",
+        "kind": "calls",
+        "confidence": 0.4
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_post",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_post",
+        "kind": "calls",
+        "confidence": 0.4
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_post",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_toString",
+        "kind": "calls",
+        "confidence": 0.4
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_toString",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_setState",
+        "kind": "calls",
+        "confidence": 0.4
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_toString",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_match",
+        "kind": "calls",
+        "confidence": 0.4
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_toString",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_post",
+        "kind": "calls",
+        "confidence": 0.4
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_toString",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_toString",
+        "kind": "calls",
+        "confidence": 0.4
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_setState",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_match",
+        "kind": "calls",
+        "confidence": 0.4
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_setState",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_post",
+        "kind": "calls",
+        "confidence": 0.4
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_setState",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_toString",
+        "kind": "calls",
+        "confidence": 0.4
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_catch",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_setState",
+        "kind": "calls",
+        "confidence": 0.4
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_catch",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_match",
+        "kind": "calls",
+        "confidence": 0.4
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_catch",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_post",
+        "kind": "calls",
+        "confidence": 0.4
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_catch",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_toString",
+        "kind": "calls",
+        "confidence": 0.4
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_match",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_setState",
+        "kind": "calls",
+        "confidence": 0.4
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_match",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_post",
+        "kind": "calls",
+        "confidence": 0.4
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_match",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_toString",
+        "kind": "calls",
+        "confidence": 0.4
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_post",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_setState",
+        "kind": "calls",
+        "confidence": 0.4
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_post",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_match",
+        "kind": "calls",
+        "confidence": 0.4
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_post",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_toString",
+        "kind": "calls",
+        "confidence": 0.4
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_toString",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_setState",
+        "kind": "calls",
+        "confidence": 0.4
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_toString",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_match",
+        "kind": "calls",
+        "confidence": 0.4
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_toString",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_post",
+        "kind": "calls",
+        "confidence": 0.4
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_setState",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_setState",
+        "kind": "calls",
+        "confidence": 0.4
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_setState",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_match",
+        "kind": "calls",
+        "confidence": 0.4
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_setState",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_post",
+        "kind": "calls",
+        "confidence": 0.4
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_setState",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_toString",
+        "kind": "calls",
+        "confidence": 0.4
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_match",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_setState",
+        "kind": "calls",
+        "confidence": 0.4
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_match",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_match",
+        "kind": "calls",
+        "confidence": 0.4
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_match",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_post",
+        "kind": "calls",
+        "confidence": 0.4
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_match",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_toString",
+        "kind": "calls",
+        "confidence": 0.4
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_ErrorBoundary",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_catch",
+        "kind": "calls",
+        "confidence": 0.4,
+        "evidence": [
+          "ast-forward"
+        ]
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_ErrorBoundary",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_post",
+        "kind": "calls",
+        "confidence": 0.4,
+        "evidence": [
+          "ast-forward"
+        ]
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_ErrorBoundary",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_toString",
+        "kind": "calls",
+        "confidence": 0.4,
+        "evidence": [
+          "ast-forward"
+        ]
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_ErrorBoundary",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_setState",
+        "kind": "calls",
+        "confidence": 0.4,
+        "evidence": [
+          "ast-forward"
+        ]
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_ErrorBoundary",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_match",
+        "kind": "calls",
+        "confidence": 0.4,
+        "evidence": [
+          "ast-forward"
+        ]
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_catch",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_catch",
+        "kind": "calls",
+        "confidence": 0.4,
+        "evidence": [
+          "ast-forward"
+        ]
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_catch",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_post",
+        "kind": "calls",
+        "confidence": 0.4,
+        "evidence": [
+          "ast-forward"
+        ]
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_catch",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_toString",
+        "kind": "calls",
+        "confidence": 0.4,
+        "evidence": [
+          "ast-forward"
+        ]
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_catch",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_setState",
+        "kind": "calls",
+        "confidence": 0.4,
+        "evidence": [
+          "ast-forward"
+        ]
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_catch",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_match",
+        "kind": "calls",
+        "confidence": 0.4,
+        "evidence": [
+          "ast-forward"
+        ]
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_post",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_catch",
+        "kind": "calls",
+        "confidence": 0.4,
+        "evidence": [
+          "ast-forward"
+        ]
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_post",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_post",
+        "kind": "calls",
+        "confidence": 0.4,
+        "evidence": [
+          "ast-forward"
+        ]
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_post",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_toString",
+        "kind": "calls",
+        "confidence": 0.4,
+        "evidence": [
+          "ast-forward"
+        ]
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_post",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_setState",
+        "kind": "calls",
+        "confidence": 0.4,
+        "evidence": [
+          "ast-forward"
+        ]
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_post",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_match",
+        "kind": "calls",
+        "confidence": 0.4,
+        "evidence": [
+          "ast-forward"
+        ]
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_toString",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_catch",
+        "kind": "calls",
+        "confidence": 0.4,
+        "evidence": [
+          "ast-forward"
+        ]
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_toString",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_post",
+        "kind": "calls",
+        "confidence": 0.4,
+        "evidence": [
+          "ast-forward"
+        ]
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_toString",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_toString",
+        "kind": "calls",
+        "confidence": 0.4,
+        "evidence": [
+          "ast-forward"
+        ]
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_toString",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_setState",
+        "kind": "calls",
+        "confidence": 0.4,
+        "evidence": [
+          "ast-forward"
+        ]
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_toString",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_match",
+        "kind": "calls",
+        "confidence": 0.4,
+        "evidence": [
+          "ast-forward"
+        ]
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_setState",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_catch",
+        "kind": "calls",
+        "confidence": 0.4,
+        "evidence": [
+          "ast-forward"
+        ]
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_setState",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_setState",
+        "kind": "calls",
+        "confidence": 0.4,
+        "evidence": [
+          "ast-forward"
+        ]
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_catch",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_catch",
+        "kind": "calls",
+        "confidence": 0.4,
+        "evidence": [
+          "ast-forward"
+        ]
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_match",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_catch",
+        "kind": "calls",
+        "confidence": 0.4,
+        "evidence": [
+          "ast-forward"
+        ]
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_match",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_match",
+        "kind": "calls",
+        "confidence": 0.4,
+        "evidence": [
+          "ast-forward"
+        ]
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_post",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_catch",
+        "kind": "calls",
+        "confidence": 0.4,
+        "evidence": [
+          "ast-forward"
+        ]
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_post",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_post",
+        "kind": "calls",
+        "confidence": 0.4,
+        "evidence": [
+          "ast-forward"
+        ]
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_toString",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_catch",
+        "kind": "calls",
+        "confidence": 0.4,
+        "evidence": [
+          "ast-forward"
+        ]
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_toString",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_toString",
+        "kind": "calls",
+        "confidence": 0.4,
+        "evidence": [
+          "ast-forward"
+        ]
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_setState",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_catch",
+        "kind": "calls",
+        "confidence": 0.4,
+        "evidence": [
+          "ast-forward"
+        ]
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_setState",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_post",
+        "kind": "calls",
+        "confidence": 0.4,
+        "evidence": [
+          "ast-forward"
+        ]
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_setState",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_toString",
+        "kind": "calls",
+        "confidence": 0.4,
+        "evidence": [
+          "ast-forward"
+        ]
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_setState",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_setState",
+        "kind": "calls",
+        "confidence": 0.4,
+        "evidence": [
+          "ast-forward"
+        ]
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_setState",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_match",
+        "kind": "calls",
+        "confidence": 0.4,
+        "evidence": [
+          "ast-forward"
+        ]
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_match",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_catch",
+        "kind": "calls",
+        "confidence": 0.4,
+        "evidence": [
+          "ast-forward"
+        ]
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_match",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_post",
+        "kind": "calls",
+        "confidence": 0.4,
+        "evidence": [
+          "ast-forward"
+        ]
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_match",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_toString",
+        "kind": "calls",
+        "confidence": 0.4,
+        "evidence": [
+          "ast-forward"
+        ]
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_match",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_setState",
+        "kind": "calls",
+        "confidence": 0.4,
+        "evidence": [
+          "ast-forward"
+        ]
+      },
+      {
+        "from": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_match",
+        "to": "method_d__project_photoframe_website_frontend_src_components_Shared_ErrorBoundary_jsx_match",
+        "kind": "calls",
+        "confidence": 0.4,
+        "evidence": [
+          "ast-forward"
+        ]
+      }
+    ]
+  }
+}

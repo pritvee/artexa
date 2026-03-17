@@ -24,6 +24,7 @@ class OrderItemOut(OrderItemBase):
 
 class OrderBase(BaseModel):
     shipping_address: str
+    gift_note: Optional[str] = None
     total_price: float
     status: str
     payment_method: str

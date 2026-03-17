@@ -98,6 +98,7 @@ class Order(Base):
     total_price = Column(Float)
     status = Column(String(50), default="placed") # placed, processing, printed, shipped, out_for_delivery, delivered
     shipping_address = Column(String(1000))
+    gift_note = Column(String(1000), nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
     
     # Tracking fields (moved directly into order for simplicity)
@@ -115,6 +116,9 @@ class Order(Base):
     # Soft delete fields
     is_deleted = Column(Boolean, default=False)
     deleted_at = Column(DateTime, nullable=True)
+
+    # Store checked out item IDs to clear from cart after payment
+    cart_item_ids = Column(JSON, nullable=True)
 
     user = relationship("User", back_populates="orders")
     items = relationship("OrderItem", back_populates="order")

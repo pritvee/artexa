@@ -39,9 +39,11 @@ def create_order(
         user_id=current_user.id,
         total_price=total_price,
         shipping_address=order_in.shipping_address,
+        gift_note=order_in.gift_note,
         payment_method=order_in.payment_method,
         status="placed",
-        payment_status="pending" if order_in.payment_method == "online" else "cod_pending"
+        payment_status="pending" if order_in.payment_method == "online" else "cod_pending",
+        cart_item_ids=[item.id for item in checkout_items]
     )
     db.add(order)
     db.flush() # To get order.id
@@ -95,14 +97,10 @@ def verify_payment(
     order.razorpay_signature = data.razorpay_signature
     
     # Clear only the items that were in this order from the cart
-    cart = db.query(Cart).filter(Cart.user_id == current_user.id).first()
-    if cart:
-        for oi in order.items:
-            db.query(CartItem).filter(
-                CartItem.cart_id == cart.id,
-                CartItem.product_id == oi.product_id,
-                CartItem.quantity == oi.quantity
-            ).delete(synchronize_session=False)
+    if order.cart_item_ids:
+        db.query(CartItem).filter(
+            CartItem.id.in_(order.cart_item_ids)
+        ).delete(synchronize_session=False)
         
     db.commit()
     return {"status": "success", "message": "Payment verified (Razorpay Removed)"}

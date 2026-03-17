@@ -117,5 +117,171 @@
     "createdAt": "2026-03-17T07:35:31.506Z",
     "updatedAt": "2026-03-17T07:39:27.172Z",
     "type": "code-review"
+  },
+  {
+    "id": "9b325b8b-0764-4f2e-9e5f-22957b33b93a",
+    "title": "Code Review - 3/17/2026, 2:04:36 PM",
+    "status": "active",
+    "messageCount": 2,
+    "totalTokens": 0,
+    "totalCost": 0,
+    "lastMessageAt": "2026-03-17T09:23:39.033Z",
+    "tags": [],
+    "metadata": {
+      "projectId": "default-project",
+      "model": "free-trial-model-with-daily-limit",
+      "mode": "debugging",
+      "connectedCodebasePath": "d:\\project\\photoframe website"
+    },
+    "codeContextIds": [],
+    "previous_session_intent": "pure_discussion",
+    "pinnedFilePaths": [
+      "d:\\project\\photoframe website\\frontend\\src\\components\\Customization\\MugBuilder\\Mug3DPreview.jsx"
+    ],
+    "createdAt": "2026-03-17T08:34:36.661Z",
+    "updatedAt": "2026-03-17T09:23:39.034Z",
+    "type": "code-review"
+  },
+  {
+    "id": "c2579079-77cb-461b-aac3-0a08a5a81058",
+    "title": "Code Review - 3/17/2026, 3:07:12 PM",
+    "status": "active",
+    "messageCount": 2,
+    "totalTokens": 0,
+    "totalCost": 0,
+    "lastMessageAt": "2026-03-17T09:38:36.358Z",
+    "tags": [],
+    "metadata": {
+      "projectId": "default-project",
+      "model": "free-trial-model-with-daily-limit",
+      "mode": "debugging",
+      "connectedCodebasePath": "d:\\project\\photoframe website"
+    },
+    "codeContextIds": [],
+    "previous_session_intent": "pure_discussion",
+    "pinnedFilePaths": [
+      "d:\\project\\photoframe website\\frontend\\src\\components\\Shared\\ErrorBoundary.jsx"
+    ],
+    "createdAt": "2026-03-17T09:37:12.088Z",
+    "updatedAt": "2026-03-17T09:38:36.360Z",
+    "type": "code-review"
+  },
+  {
+    "id": "ddff8a46-5cd6-4d23-ab53-9ea429c0ec52",
+    "title": "Code Review - 3/17/2026, 3:10:21 PM",
+    "status": "active",
+    "messageCount": 2,
+    "totalTokens": 0,
+    "totalCost": 0,
+    "lastMessageAt": "2026-03-17T09:41:56.037Z",
+    "tags": [],
+    "metadata": {
+      "projectId": "default-project",
+      "model": "free-trial-model-with-daily-limit",
+      "mode": "debugging",
+      "connectedCodebasePath": "d:\\project\\photoframe website"
+    },
+    "codeContextIds": [],
+    "previous_session_intent": "pure_discussion",
+    "pinnedFilePaths": [
+      "d:\\project\\photoframe website\\frontend\\src\\components\\Shared\\ErrorBoundary.jsx"
+    ],
+    "createdAt": "2026-03-17T09:40:21.555Z",
+    "updatedAt": "2026-03-17T09:41:56.039Z",
+    "type": "code-review"
+  },
+  {
+    "id": "b2e80582-ef5f-4f6c-a691-73fb3d402c8c",
+    "title": "Code Review - 3/17/2026, 4:32:41 PM",
+    "status": "active",
+    "messageCount": 2,
+    "totalTokens": 0,
+    "totalCost": 0,
+    "lastMessageAt": "2026-03-17T11:04:29.457Z",
+    "tags": [],
+    "metadata": {
+      "projectId": "default-project",
+      "model": "free-trial-model-with-daily-limit",
+      "mode": "debugging",
+      "connectedCodebasePath": "d:\\project\\photoframe website"
+    },
+    "codeContextIds": [],
+    "previous_session_intent": "pure_discussion",
+    "pinnedFilePaths": [
+      "d:\\project\\photoframe website\\frontend\\src\\pages\\FrameCustomizerPage.jsx"
+    ],
+    "createdAt": "2026-03-17T11:02:42.005Z",
+    "updatedAt": "2026-03-17T11:04:29.461Z",
+    "type": "code-review"
+  },
+  {
+    "id": "6673bc0c-42fd-478a-b000-22aac7731983",
+    "title": "New Conversation",
+    "status": "active",
+    "messageCount": 0,
+    "totalTokens": 0,
+    "totalCost": 0,
+    "lastMessageAt": "2026-03-17T11:05:40.258Z",
+    "tags": [],
+    "metadata": {
+      "projectId": "default-project",
+      "model": "free-trial-model-with-daily-limit",
+      "mode": "debugging",
+      "connectedCodebasePath": "d:\\project\\photoframe website"
+    },
+    "codeContextIds": [],
+    "previous_session_intent": "pure_discussion",
+    "pinnedFilePaths": [],
+    "createdAt": "2026-03-17T11:05:40.258Z",
+    "updatedAt": "2026-03-17T11:05:40.258Z"
+  },
+  {
+    "id": "fe001001-87e6-4c43-82de-c4c8a43944f8",
+    "title": "Code Review - 3/17/2026, 4:38:11 PM",
+    "status": "active",
+    "messageCount": 2,
+    "totalTokens": 0,
+    "totalCost": 0,
+    "lastMessageAt": "2026-03-17T11:10:06.275Z",
+    "tags": [],
+    "metadata": {
+      "projectId": "default-project",
+      "model": "free-trial-model-with-daily-limit",
+      "mode": "debugging",
+      "connectedCodebasePath": "d:\\project\\photoframe website"
+    },
+    "codeContextIds": [],
+    "previous_session_intent": "pure_discussion",
+    "pinnedFilePaths": [
+      "d:\\project\\photoframe website\\frontend\\src\\pages\\GiftBoxCustomizerPage.jsx",
+      "d:\\project\\photoframe website\\frontend\\src\\components\\Customization\\GiftBox\\GiftBoxCanvasEditor.jsx"
+    ],
+    "createdAt": "2026-03-17T11:08:11.983Z",
+    "updatedAt": "2026-03-17T11:10:06.279Z",
+    "type": "code-review"
+  },
+  {
+    "id": "f11a553a-3c74-43c9-995d-d2fa68acc96e",
+    "title": "Code Review - 3/17/2026, 4:40:59 PM",
+    "status": "active",
+    "messageCount": 0,
+    "totalTokens": 0,
+    "totalCost": 0,
+    "lastMessageAt": "2026-03-17T11:10:59.551Z",
+    "tags": [],
+    "metadata": {
+      "projectId": "default-project",
+      "model": "free-trial-model-with-daily-limit",
+      "mode": "debugging",
+      "connectedCodebasePath": "d:\\project\\photoframe website"
+    },
+    "codeContextIds": [],
+    "previous_session_intent": "pure_discussion",
+    "pinnedFilePaths": [
+      "d:\\project\\photoframe website\\frontend\\src\\pages\\FrameCustomizerPage.jsx"
+    ],
+    "createdAt": "2026-03-17T11:10:59.551Z",
+    "updatedAt": "2026-03-17T11:10:59.605Z",
+    "type": "code-review"
   }
 ]

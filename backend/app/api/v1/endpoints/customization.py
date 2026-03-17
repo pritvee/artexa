@@ -22,6 +22,24 @@ async def upload_customization_image(
     if not file.content_type.startswith('image/'):
         raise HTTPException(status_code=400, detail="Invalid file type. Only images are allowed.")
     
+    if settings.CLOUDINARY_CLOUD_NAME:
+        try:
+            import cloudinary
+            import cloudinary.uploader
+            cloudinary.config(
+                cloud_name=settings.CLOUDINARY_CLOUD_NAME,
+                api_key=settings.CLOUDINARY_API_KEY,
+                api_secret=settings.CLOUDINARY_API_SECRET,
+                secure=True
+            )
+            result = cloudinary.uploader.upload(file.file, folder="artexa/customization")
+            return {
+                "url": result.get("secure_url"),
+                "message": "Image uploaded successfully to Cloudinary"
+            }
+        except Exception as e:
+            print(f"Cloudinary upload failed: {str(e)}")
+
     # Ensure upload directory exists
     os.makedirs(settings.UPLOAD_DIR, exist_ok=True)
     
