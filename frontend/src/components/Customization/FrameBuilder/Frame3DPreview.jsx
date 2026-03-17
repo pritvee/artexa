@@ -34,7 +34,7 @@ ErrorBoundary.propTypes = {
 };
 
 /* ─── Procedural Photo Frame ─── */
-const PhotoFrame = ({ frameColor, frameStyle, textureCanvas, frameSize, glassReflection, orientation, frameThicknessMultiplier = 1 }) => {
+const PhotoFrame = React.memo(({ frameColor, frameStyle, textureCanvas, frameSize, glassReflection, orientation, frameThicknessMultiplier = 1 }) => {
     // Map size labels to 3D dimensions (roughly in meters/units)
     const dims = useMemo(() => {
         const SCALE_TO_METERS = 0.5; // Increased scale for better visibility
@@ -80,14 +80,17 @@ const PhotoFrame = ({ frameColor, frameStyle, textureCanvas, frameSize, glassRef
         tex.needsUpdate = true;
         tex.wrapS = THREE.ClampToEdgeWrapping;
         tex.wrapT = THREE.ClampToEdgeWrapping;
+        tex.anisotropy = 4; // Optimize angle viewing quality
         return tex;
     }, [textureCanvas]);
 
-    useFrame(() => {
-        if (texture && textureCanvas) {
-            texture.needsUpdate = true;
-        }
-    });
+    // Removed expensive useFrame running at 60fps unnecessarily. 
+    // Replaced with unmount cleanup to avoid GPU WebGL memory leaks.
+    React.useEffect(() => {
+        return () => {
+             if (texture) texture.dispose();
+        };
+    }, [texture]);
 
     const isCanvas = styleStr.includes('canvas');
     const computedFrameThickness = 0.15 * frameThicknessMultiplier;
@@ -166,7 +169,7 @@ const PhotoFrame = ({ frameColor, frameStyle, textureCanvas, frameSize, glassRef
             )}
         </group>
     );
-};
+}); // Close React.memo
 
 PhotoFrame.propTypes = {
     frameColor: PropTypes.string,
@@ -178,7 +181,7 @@ PhotoFrame.propTypes = {
     frameThicknessMultiplier: PropTypes.number
 };
 
-const Frame3DPreview = ({
+const Frame3DPreview = React.memo(({
     frameColor = 'Black',
     frameStyle = 'Wooden frame',
     frameSize = '12x8 – A4',
@@ -211,6 +214,53 @@ const Frame3DPreview = ({
         powerPreference: 'high-performance'
     }), []);
 
+    // Memoize frame size parsing so it's not repeatedly calculated every render
+    const parsedFrameSize = useMemo(() => {
+        let width = 12, height = 8;
+        if (frameSize && typeof frameSize === 'object') {
+            width = Number.parseFloat(frameSize.width) || width;
+            height = Number.parseFloat(frameSize.height) || height;
+
+            if ((!width || !height) && frameSize.value) {
+                const parts = String(frameSize.value).split('x');
+                width = Number.parseFloat(parts[0]) || 12;
+                if (parts[1]) height = Number.parseFloat(parts[1].split(/[–-]/)[0]) || 8;
+            }
+        } else if (typeof frameSize === 'string') {
+            const parts = frameSize.split('x');
+            width = Number.parseFloat(parts[0]) || 12;
+            if (parts[1]) height = Number.parseFloat(parts[1].split(/[–-]/)[0]) || 8;
+        }
+        return { width, height };
+    }, [frameSize]);
+
+    // Handle gl initialization and cleanup outside of JSX to prevent inline anonymous fn allocations
+    const handleCanvasCreated = useCallback(({ gl, scene }) => {
+        gl.setClearColor(wallColor, 1);
+
+        const onContextLost = (e) => {
+            e.preventDefault();
+            triggerContextRecovery();
+        };
+
+        const onContextRestored = () => {
+            console.log('Frame3D: WebGL Context Restored');
+            setCanvasKey(k => k + 1);
+        };
+
+        const canvas = gl.domElement;
+        canvas.addEventListener('webglcontextlost', onContextLost, false);
+        canvas.addEventListener('webglcontextrestored', onContextRestored, false);
+
+        return () => {
+            canvas.removeEventListener('webglcontextlost', onContextLost);
+            canvas.removeEventListener('webglcontextrestored', onContextRestored);
+            if (gl.forceContextLoss) gl.forceContextLoss();
+            if (gl.dispose) gl.dispose();
+            scene.clear();
+        };
+    }, [triggerContextRecovery, wallColor]);
+
     return (
         <ErrorBoundary>
             <Canvas
@@ -220,31 +270,7 @@ const Frame3DPreview = ({
                 dpr={[1, 2]}
                 style={{ width: '100%', height: '100%' }}
                 gl={glConfig}
-                onCreated={({ gl, scene }) => {
-                    gl.setClearColor(wallColor, 1);
-
-                    const onContextLost = (e) => {
-                        e.preventDefault();
-                        triggerContextRecovery();
-                    };
-
-                    const onContextRestored = () => {
-                        console.log('Frame3D: WebGL Context Restored');
-                        setCanvasKey(k => k + 1);
-                    };
-
-                    const canvas = gl.domElement;
-                    canvas.addEventListener('webglcontextlost', onContextLost, false);
-                    canvas.addEventListener('webglcontextrestored', onContextRestored, false);
-
-                    return () => {
-                        canvas.removeEventListener('webglcontextlost', onContextLost);
-                        canvas.removeEventListener('webglcontextrestored', onContextRestored);
-                        if (gl.forceContextLoss) gl.forceContextLoss();
-                        if (gl.dispose) gl.dispose();
-                        scene.clear();
-                    };
-                }}
+                onCreated={handleCanvasCreated}
             >
                 <PerspectiveCamera makeDefault position={[0, tiltAngle * 0.1, 4.5]} fov={50} />
 
@@ -256,37 +282,15 @@ const Frame3DPreview = ({
 
                 {/* Photo Frame */}
                 <Suspense fallback={null}>
-                    {(() => {
-                        // Parse size string like "12x8 – A4" into {width: 12, height: 8}
-                        let width = 12, height = 8;
-                        if (frameSize && typeof frameSize === 'object') {
-                            width = Number.parseFloat(frameSize.width) || width;
-                            height = Number.parseFloat(frameSize.height) || height;
-
-                            // Fallback to value parsing if width/height are 0
-                            if ((!width || !height) && frameSize.value) {
-                                const parts = String(frameSize.value).split('x');
-                                width = Number.parseFloat(parts[0]) || 12;
-                                if (parts[1]) height = Number.parseFloat(parts[1].split(/[–-]/)[0]) || 8;
-                            }
-                        } else if (typeof frameSize === 'string') {
-                            const parts = frameSize.split('x');
-                            width = Number.parseFloat(parts[0]) || 12;
-                            if (parts[1]) height = Number.parseFloat(parts[1].split(/[–-]/)[0]) || 8;
-                        }
-
-                        return (
-                            <PhotoFrame
-                                frameColor={frameColor}
-                                frameStyle={frameStyle}
-                                frameSize={{ width, height }}
-                                textureCanvas={textureCanvas}
-                                glassReflection={glassReflection}
-                                orientation={orientation}
-                                frameThicknessMultiplier={frameThickness}
-                            />
-                        );
-                    })()}
+                    <PhotoFrame
+                        frameColor={frameColor}
+                        frameStyle={frameStyle}
+                        frameSize={parsedFrameSize}
+                        textureCanvas={textureCanvas}
+                        glassReflection={glassReflection}
+                        orientation={orientation}
+                        frameThicknessMultiplier={frameThickness}
+                    />
 
                     {/* Background Wall if enabled */}
                     {wallPreview !== 'none' && (
@@ -318,7 +322,7 @@ const Frame3DPreview = ({
             </Canvas>
         </ErrorBoundary>
     );
-};
+});
 
 Frame3DPreview.propTypes = {
     frameColor: PropTypes.string,
