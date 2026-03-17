@@ -213,24 +213,34 @@ const MugCustomizerPage = () => {
     const uploadContextCanvas = async (source, filename, isStage = false) => {
         if (!source) return null;
         try {
-            // PRODUCTION CLEANUP: Hide transformers & bleed markers for the final print file
-            let transformers = [];
-            let bleeds = [];
+            let canvas = null;
+            let dataUrl = null;
+
             if (isStage) {
-                transformers = source.find('Transformer');
+                // Konva Stage (2D)
+                const transformers = source.find('Transformer');
                 transformers.forEach(s => s.hide());
-                bleeds = source.find('Rect');
+                const bleeds = source.find('Rect');
                 bleeds.forEach(r => r.hide());
-            }
-
-            const dataUrl = isStage
-                ? source.toDataURL({ pixelRatio: 4, mimeType: 'image/png' })
-                : source.toDataURL('image/png');
-
-            // Restore visibility after snapshot
-            if (isStage) {
-                if (selectedId) transformers.forEach(s => s.show());
+                dataUrl = source.toDataURL({ pixelRatio: 3, mimeType: 'image/png' });
+                transformers.forEach(s => s.show());
                 bleeds.forEach(r => r.show());
+            } else {
+                // HTML Canvas or R3F Container
+                if (source instanceof HTMLCanvasElement) {
+                    canvas = source;
+                } else if (source.domElement instanceof HTMLCanvasElement) {
+                    canvas = source.domElement; // R3F gl
+                } else {
+                    // It might be the DIV container from R3F
+                    canvas = source.querySelector('canvas');
+                }
+
+                if (!canvas || typeof canvas.toDataURL !== 'function') {
+                    console.error("Source is not a valid HTMLCanvasElement and contains no canvas");
+                    return null;
+                }
+                dataUrl = canvas.toDataURL('image/png');
             }
 
             const arr = dataUrl.split(',');

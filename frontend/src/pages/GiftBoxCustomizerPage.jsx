@@ -334,17 +334,32 @@ const GiftBoxCustomizerPage = () => {
     const uploadContextCanvas = async (source, filename, isStage = false) => {
         if (!source) return null;
         try {
-            let transformers = [];
+            let canvas = null;
+            let dataUrl = null;
+
             if (isStage) {
-                transformers = source.find('Transformer');
+                // Konva Stage (2D)
+                if (typeof source.toDataURL !== 'function') return null;
+                const transformers = source.find('Transformer');
                 transformers.forEach(t => t.hide());
+                dataUrl = source.toDataURL({ pixelRatio: 3, mimeType: 'image/png' });
+                transformers.forEach(t => t.show());
+            } else {
+                // HTML Canvas or R3F Container
+                if (source instanceof HTMLCanvasElement) {
+                    canvas = source;
+                } else if (source.domElement instanceof HTMLCanvasElement) {
+                    canvas = source.domElement; // R3F gl
+                } else {
+                    canvas = source.querySelector('canvas');
+                }
+
+                if (!canvas || typeof canvas.toDataURL !== 'function') {
+                    console.error("Source is not a valid HTMLCanvasElement and contains no canvas");
+                    return null;
+                }
+                dataUrl = canvas.toDataURL('image/png');
             }
-
-            const dataUrl = isStage
-                ? source.toDataURL({ pixelRatio: 3, mimeType: 'image/png' })
-                : source.toDataURL('image/png');
-
-            if (isStage) transformers.forEach(t => t.show());
 
             const arr = dataUrl.split(',');
             const mime = arr[0].match(/:(.*?);/)[1];

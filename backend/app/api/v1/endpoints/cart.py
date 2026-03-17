@@ -12,17 +12,20 @@ def get_cart(current_user: User = Depends(get_current_user), db: Session = Depen
     try:
         cart = db.query(Cart).filter(Cart.user_id == current_user.id).first()
         if not cart:
-            # Fallback for if registration cart creation failed or for older users
             cart = Cart(user_id=current_user.id)
             db.add(cart)
-            db.commit()
-            db.refresh(cart)
+            try:
+                db.commit()
+                db.refresh(cart)
+            except Exception:
+                db.rollback()
+                # If another request created it in the meantime, fetch it
+                cart = db.query(Cart).filter(Cart.user_id == current_user.id).first()
         return cart
     except Exception as e:
         db.rollback()
-        print(f"ERROR fetching cart for user {current_user.id}: {str(e)}")
-        # Raise 404 or returning a dummy cart could be an option, but 500 with a message is safer for debugging here
-        raise HTTPException(status_code=500, detail="Could not retrieve cart information.")
+        print(f"CRITICAL: Failed to get/create cart for user {current_user.id}: {str(e)}")
+        raise HTTPException(status_code=500, detail="Cart service is currently unavailable")
 
 @router.post("/items", response_model=dict)
 def add_to_cart(
@@ -31,23 +34,37 @@ def add_to_cart(
     db: Session = Depends(get_db)
 ):
     try:
-        # Ensure cart exists
+        # 1. Get or Create Cart (Robustly)
         cart = db.query(Cart).filter(Cart.user_id == current_user.id).first()
         if not cart:
             cart = Cart(user_id=current_user.id)
             db.add(cart)
-            db.commit()
-            db.refresh(cart)
-        
-        # Check if item with same product and customization already exists
-        existing_item = db.query(CartItem).filter(
+            try:
+                db.commit()
+                db.refresh(cart)
+            except Exception:
+                db.rollback()
+                cart = db.query(Cart).filter(Cart.user_id == current_user.id).first()
+
+        if not cart:
+            raise HTTPException(status_code=500, detail="Could not initialize user cart")
+
+        # 2. Check for existing item with same customization (Python-side comparison to avoid PG JSON errors)
+        potential_items = db.query(CartItem).filter(
             CartItem.cart_id == cart.id,
-            CartItem.product_id == item_in.product_id,
-            CartItem.customization_details == item_in.customization_details
-        ).first()
+            CartItem.product_id == item_in.product_id
+        ).all()
+
+        existing_item = None
+        for item in potential_items:
+            # We compare in Python to avoid "operator does not exist: json = json"
+            if item.customization_details == item_in.customization_details:
+                existing_item = item
+                break
 
         if existing_item:
             existing_item.quantity += item_in.quantity
+            # Update preview/photo if provided
             if item_in.preview_image_url:
                 existing_item.preview_image_url = item_in.preview_image_url
             if item_in.uploaded_photo_id:
@@ -64,10 +81,12 @@ def add_to_cart(
             db.add(new_item)
         
         db.commit()
-        return {"message": "Item added to cart", "status": "success"}
+        return {"message": "Success", "status": "item_added"}
+    except HTTPException:
+        raise
     except Exception as e:
         db.rollback()
-        print(f"ERROR adding item to cart for user {current_user.id}: {str(e)}")
+        print(f"CRITICAL: add_to_cart failed for user {current_user.id}: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Failed to add item to cart: {str(e)}")
 @router.patch("/items/{item_id}", response_model=dict)
 def update_cart_item(

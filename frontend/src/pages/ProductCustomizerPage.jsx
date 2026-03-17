@@ -99,27 +99,45 @@ const ProductCustomizerPage = () => {
     const uploadContextCanvas = async (source, filename, isStage = false) => {
         if (!source) return null;
         try {
-            const dataUrl = isStage
-                ? source.toDataURL({ pixelRatio: 3, mimeType: 'image/png' })
-                : source.toDataURL('image/png');
+            let canvas = null;
+            let dataUrl = null;
+
+            if (isStage) {
+                // Konva Stage (2D)
+                if (typeof source.toDataURL !== 'function') return null;
+                dataUrl = source.toDataURL({ pixelRatio: 3, mimeType: 'image/png' });
+            } else {
+                // HTML Canvas or R3F Container
+                if (source instanceof HTMLCanvasElement) {
+                    canvas = source;
+                } else if (source.domElement instanceof HTMLCanvasElement) {
+                    canvas = source.domElement; // R3F gl
+                } else {
+                    canvas = source.querySelector('canvas');
+                }
+
+                if (!canvas || typeof canvas.toDataURL !== 'function') {
+                    console.error("Source is not a valid HTMLCanvasElement and contains no canvas");
+                    return null;
+                }
+                dataUrl = canvas.toDataURL('image/png');
+            }
 
             const arr = dataUrl.split(',');
             const mime = arr[0].match(/:(.*?);/)[1];
             const bstr = atob(arr[1]);
             let n = bstr.length;
-            const u8arr = new Uint8Array(n);
-            while (n--) {
-                u8arr[n] = bstr.charCodeAt(n);
-            }
-            const file = new File([u8arr], filename, { type: mime });
-            const formData = new FormData();
-            formData.append('file', file);
-            const res = await api.post('/products/upload-customization', formData, {
+            const u8 = new Uint8Array(n);
+            while (n--) u8[n] = bstr.charCodeAt(n);
+            
+            const fd = new FormData();
+            fd.append('file', new File([u8], filename, { type: mime }));
+            const res = await api.post('/products/upload-customization', fd, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
             return res.data.image_url || res.data.url;
         } catch (e) {
-            console.error("Snapshot upload failed", e);
+            console.error('Snapshot upload failed', e);
             return null;
         }
     };

@@ -376,6 +376,53 @@ const ChocolateHamperPage = () => {
     }, []);
     const photoTransEnd= useCallback((id, pr) => setPhotos(p => p.map(ph => ph.id === id ? { ...ph, ...pr } : ph)), []);
 
+    const uploadContextCanvas = async (source, filename, isStage = false) => {
+        if (!source) return null;
+        try {
+            let canvas = null;
+            let dataUrl = null;
+
+            if (isStage) {
+                // Konva Stage (2D)
+                if (typeof source.toDataURL !== 'function') return null;
+                const trs = source.find('Transformer');
+                trs.forEach(t => t.hide());
+                dataUrl = source.toDataURL({ pixelRatio: 2, mimeType: 'image/png' });
+                trs.forEach(t => t.show());
+            } else {
+                // HTML Canvas or R3F Container
+                if (source instanceof HTMLCanvasElement) {
+                    canvas = source;
+                } else if (source.domElement instanceof HTMLCanvasElement) {
+                    canvas = source.domElement; // R3F gl
+                } else {
+                    canvas = source.querySelector('canvas');
+                }
+
+                if (!canvas || typeof canvas.toDataURL !== 'function') {
+                    console.error("Source is not a valid HTMLCanvasElement and contains no canvas");
+                    return null;
+                }
+                dataUrl = canvas.toDataURL('image/png');
+            }
+
+            const arr = dataUrl.split(',');
+            const mime = arr[0].match(/:(.*?);/)[1];
+            const bstr = atob(arr[1]);
+            let n = bstr.length; const u8 = new Uint8Array(n);
+            while (n--) u8[n] = bstr.charCodeAt(n);
+            const fd = new FormData();
+            fd.append('file', new File([u8], filename, { type: mime }));
+            const res = await api.post('/products/upload-customization', fd, {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            });
+            return res.data.image_url || res.data.url;
+        } catch (e) {
+            console.error('Snapshot upload failed', e);
+            return null;
+        }
+    };
+
     // ─── Add to Cart ───
     const handleAddToCart = async () => {
         if (!user) {
@@ -388,21 +435,7 @@ const ChocolateHamperPage = () => {
         let designImg = null;
         try {
             if (stageRef.current) {
-                const trs = stageRef.current.find('Transformer');
-                trs.forEach(t => t.hide());
-                const dataUrl = stageRef.current.toDataURL({ pixelRatio: 2, mimeType: 'image/png' });
-                trs.forEach(t => t.show());
-                const arr = dataUrl.split(',');
-                const mime = arr[0].match(/:(.*?);/)[1];
-                const bstr = atob(arr[1]);
-                let n = bstr.length; const u8 = new Uint8Array(n);
-                while (n--) u8[n] = bstr.charCodeAt(n);
-                const fd = new FormData();
-                fd.append('file', new File([u8], 'hamper_design.png', { type: mime }));
-                const res = await api.post('/products/upload-customization', fd, {
-                    headers: { 'Content-Type': 'multipart/form-data' }
-                });
-                designImg = res.data.image_url || res.data.url;
+                designImg = await uploadContextCanvas(stageRef.current, 'hamper_design.png', true);
             }
         } catch (e) { console.warn('Snapshot failed', e); }
 

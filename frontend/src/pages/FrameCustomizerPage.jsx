@@ -369,12 +369,18 @@ const FrameCustomizerPage = () => {
                 
                 transformers.forEach(t => t.show());
             } else {
-                // Handle HTML Canvas Element (e.g. from Three.js or simple canvas)
-                const canvas = source instanceof HTMLCanvasElement ? source : 
-                              (source.domElement instanceof HTMLCanvasElement ? source.domElement : null);
+                // Handle HTML Canvas Element or Container DIV
+                let canvas = null;
+                if (source instanceof HTMLCanvasElement) {
+                    canvas = source;
+                } else if (source && source.domElement instanceof HTMLCanvasElement) {
+                    canvas = source.domElement; // R3F gl
+                } else if (source && typeof source.querySelector === 'function') {
+                    canvas = source.querySelector('canvas');
+                }
                 
                 if (!canvas || typeof canvas.toDataURL !== 'function') {
-                    console.error("Source is not a valid HTMLCanvasElement", source);
+                    console.error("Source is not a valid HTMLCanvasElement and contains no canvas", source);
                     return null;
                 }
                 
