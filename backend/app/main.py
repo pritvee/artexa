@@ -71,6 +71,17 @@ async def global_exception_handler(request: Request, exc: Exception):
         
     return response
 
+@app.middleware("http")
+async def ensure_cors_for_all_responses(request: Request, call_next):
+    response = await call_next(request)
+    origin = request.headers.get("origin")
+    if origin in allowed_origins and "access-control-allow-origin" not in {k.lower() for k in response.headers.keys()}:
+        response.headers["Access-Control-Allow-Origin"] = origin
+        response.headers["Access-Control-Allow-Credentials"] = "true"
+        response.headers["Access-Control-Allow-Methods"] = "*"
+        response.headers["Access-Control-Allow-Headers"] = "*"
+    return response
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=allowed_origins,

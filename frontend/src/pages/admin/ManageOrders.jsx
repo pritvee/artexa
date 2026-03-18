@@ -376,7 +376,8 @@ const ManageOrders = () => {
                                             <TableCell>
                                                 <Stack direction="row" spacing={0.5}>
                                                     <Tooltip title="View Details">
-                                                        <IconButton size="small" onClick={() => {
+                                                        <IconButton size="small" onClick={(e) => {
+                                                            e.currentTarget.blur();
                                                             setSelectedOrder(order);
                                                             setTrackingForm({
                                                                 statusIndex: ORDER_STATUSES.findIndex(s => s.key === order.status),
@@ -389,23 +390,23 @@ const ManageOrders = () => {
                                                         </IconButton>
                                                     </Tooltip>
                                                     <Tooltip title="Production Preview">
-                                                        <IconButton size="small" color="secondary" onClick={() => setPreviewOrder(order)}>
+                                                        <IconButton size="small" color="secondary" onClick={(e) => { e.currentTarget.blur(); setPreviewOrder(order); }}>
                                                             <PaletteIcon fontSize="small" />
                                                         </IconButton>
                                                     </Tooltip>
                                                     <Tooltip title="Invoice">
-                                                        <IconButton size="small" color="primary" onClick={() => setInvoiceOrder(order)}>
+                                                        <IconButton size="small" color="primary" onClick={(e) => { e.currentTarget.blur(); setInvoiceOrder(order); }}>
                                                             <AssignmentIcon fontSize="small" />
                                                         </IconButton>
                                                     </Tooltip>
                                                     <Tooltip title="Delete Order">
-                                                        <IconButton size="small" color="error" onClick={() => setDeleteConfirm(order.id)}>
+                                                        <IconButton size="small" color="error" onClick={(e) => { e.currentTarget.blur(); setDeleteConfirm(order.id); }}>
                                                             <DeleteIcon fontSize="small" />
                                                         </IconButton>
                                                     </Tooltip>
                                                     {showDeleted && (
                                                         <Tooltip title="Recover Order">
-                                                            <IconButton size="small" color="success" onClick={() => handleRecoverOrder(order.id)}>
+                                                            <IconButton size="small" color="success" onClick={(e) => { e.currentTarget.blur(); handleRecoverOrder(order.id); }}>
                                                                 <RestoreFromTrashIcon fontSize="small" />
                                                             </IconButton>
                                                         </Tooltip>
