@@ -1,0 +1,6 @@
+{
+  "source_directories": ["."],
+  "search_path": ["backend"],
+  "pythonpath": ["backend", "."],
+  "on_case_insensitive_filesystem": true
+}
