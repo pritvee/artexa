@@ -49,76 +49,79 @@ const Home = () => {
     }, []);
 
     return (
-        <Box sx={{ bgcolor: 'background.default', pb: 10 }}>
-            {/* Promo */}
+        <Box sx={{ bgcolor: 'transparent', pb: 10, position: 'relative' }}>
+            {/* Promo Banner - Glassy */}
             <Box sx={{ 
-                background: 'linear-gradient(90deg, #7C4DFF 0%, #F50057 100%)', 
-                color: '#fff', py: 1, textAlign: 'center', fontSize: '12px', fontWeight: 600
+                background: 'rgba(124, 77, 255, 0.1)', 
+                backdropFilter: 'blur(10px)',
+                borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
+                color: '#fff', py: 1, textAlign: 'center', fontSize: '12px', fontWeight: 600,
+                position: 'relative', zIndex: 10
             }}>
-                Use mobile-first design · Free shipping on orders over ₹1000
+                <motion.div
+                    animate={{ opacity: [0.7, 1, 0.7] }}
+                    transition={{ duration: 3, repeat: Infinity }}
+                >
+                    ✨ Experience Premium Gifting · Free shipping on orders over ₹1000
+                </motion.div>
             </Box>
 
             <Container maxWidth="xl" sx={{ px: { xs: 2, sm: 3, md: 4 } }}>
                 {/* HERO SECTION */}
                 <Box sx={{ 
-                    py: { xs: 6, md: 10 }, 
+                    py: { xs: 8, md: 15 }, 
                     display: 'flex', 
                     flexDirection: { xs: 'column', md: 'row' }, 
                     alignItems: 'center',
-                    gap: { xs: 6, md: 4 },
-                    position: 'relative'
+                    gap: { xs: 8, md: 4 },
+                    position: 'relative',
+                    zIndex: 2
                 }}>
-                    {/* Background Blobs */}
-                    <Box sx={{
-                        position: 'absolute',
-                        top: '50%',
-                        left: '50%',
-                        transform: 'translate(-50%, -50%)',
-                        width: '100%',
-                        height: '100%',
-                        zIndex: -1,
-                        overflow: 'hidden'
-                    }}>
+                    <Box sx={{ flex: 1.2 }}>
                         <motion.div 
-                            animate={{ 
-                                scale: [1, 1.2, 1],
-                                rotate: [0, 90, 0],
-                                opacity: [0.3, 0.5, 0.3]
-                            }}
-                            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                            style={{
-                                position: 'absolute',
-                                top: '-20%',
-                                right: '-10%',
-                                width: '400px',
-                                height: '400px',
-                                background: 'radial-gradient(circle, rgba(124, 77, 255, 0.2) 0%, transparent 70%)',
-                                borderRadius: '50%',
-                                filter: 'blur(60px)'
-                            }}
-                        />
-                    </Box>
-
-                    <Box sx={{ flex: 1 }}>
-                        <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }}>
+                            initial={{ opacity: 0, y: 30 }} 
+                            animate={{ opacity: 1, y: 0 }} 
+                            transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+                        >
+                            <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 1, px: 2, py: 0.5, borderRadius: '100px', background: 'rgba(108, 99, 255, 0.1)', border: '1px solid rgba(108, 99, 255, 0.2)', mb: 3 }}>
+                                <Box sx={{ width: 8, height: 8, borderRadius: '50%', bgcolor: '#6C63FF', boxShadow: '0 0 10px #6C63FF' }} />
+                                <Typography variant="caption" sx={{ color: '#6C63FF', fontWeight: 800 }}>Premium Custom Gifts</Typography>
+                            </Box>
+                            
                             <Typography variant="h1" sx={{ 
-                                fontSize: { xs: '40px', md: '64px' }, 
-                                fontWeight: 900, mb: 2, lineHeight: 1.05,
-                                letterSpacing: '-0.04em'
+                                fontSize: { xs: '48px', md: '82px' }, 
+                                fontWeight: 900, mb: 3, lineHeight: 0.95,
+                                letterSpacing: '-0.05em',
+                                color: '#fff'
                             }}>
-                                Gift the <Box component="span" className="gradient-text">Extraordinary</Box>
+                                Gift the <Box component="span" sx={{ 
+                                    background: 'linear-gradient(135deg, #6C63FF 0%, #FF4D9D 50%, #FF7A59 100%)',
+                                    WebkitBackgroundClip: 'text',
+                                    WebkitTextFillColor: 'transparent',
+                                    display: { xs: 'block', md: 'inline' }
+                                }}>Extraordinary</Box>
                             </Typography>
-                            <Typography variant="h3" color="text.secondary" sx={{ mb: 4, fontWeight: 500, maxWidth: 600, fontSize: { xs: '16px', md: '20px' } }}>
+                            
+                            <Typography variant="h3" sx={{ 
+                                mb: 5, fontWeight: 400, maxWidth: 600, 
+                                fontSize: { xs: '18px', md: '22px' },
+                                color: 'rgba(255, 255, 255, 0.7)',
+                                lineHeight: 1.6
+                            }}>
                                 Elevate your memories with Artexa's premium custom photo gifts. Designed for those who appreciate the finer things.
                             </Typography>
 
-                            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ width: { xs: '100%', sm: 'auto' } }}>
+                            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2.5} sx={{ width: { xs: '100%', sm: 'auto' } }}>
                                 <Button 
                                     component={RouterLink} to="/shop" variant="contained" 
-                                    className="pulse-glow"
                                     sx={{ 
-                                        height: '56px', px: 4, borderRadius: '16px', fontSize: '16px', fontWeight: 700,
-                                        background: 'linear-gradient(135deg, #7C4DFF 0%, #F50057 100%)',
+                                        height: '64px', px: 5, borderRadius: '20px', fontSize: '18px', fontWeight: 800,
+                                        background: 'linear-gradient(135deg, #6C63FF 0%, #FF4D9D 100%)',
+                                        boxShadow: '0 20px 40px rgba(108, 99, 255, 0.3)',
+                                        '&:hover': {
+                                            boxShadow: '0 25px 50px rgba(108, 99, 255, 0.4)',
+                                            transform: 'translateY(-3px)'
+                                        }
                                     }}
                                 >
                                     Start Creating
@@ -126,26 +129,30 @@ const Home = () => {
                                 <Button 
                                     component={RouterLink} to="/shop?category=frames" variant="outlined" 
                                     sx={{ 
-                                        height: '56px', px: 4, borderRadius: '16px', fontSize: '16px', fontWeight: 700,
-                                        border: '1px solid rgba(255,255,255,0.1)',
-                                        background: 'rgba(255,255,255,0.02)',
-                                        backdropFilter: 'blur(10px)',
-                                        '&:hover': { background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.2)' }
+                                        height: '64px', px: 5, borderRadius: '20px', fontSize: '18px', fontWeight: 800,
+                                        border: '1px solid rgba(255, 255, 255, 0.1)',
+                                        background: 'rgba(255, 255, 255, 0.03)',
+                                        backdropFilter: 'blur(20px)',
+                                        '&:hover': { 
+                                            background: 'rgba(255, 255, 255, 0.08)', 
+                                            border: '1px solid rgba(255, 255, 255, 0.3)',
+                                            transform: 'translateY(-3px)'
+                                        }
                                     }}
                                 >
                                     Explore Gallery
                                 </Button>
                             </Stack>
 
-                            <Stack direction="row" spacing={3} sx={{ mt: 6 }}>
+                            <Stack direction="row" spacing={5} sx={{ mt: 8 }}>
                                 {[
                                     { label: 'Happy Users', val: '10k+' },
                                     { label: 'Total Gifts', val: '50k+' },
-                                    { label: 'Fast delivery', val: '24h' }
+                                    { label: 'Delivery', val: '24h' }
                                 ].map((stat) => (
                                     <Box key={stat.label}>
-                                        <Typography sx={{ fontWeight: 800, fontSize: '20px', color: 'primary.main' }}>{stat.val}</Typography>
-                                        <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 600 }}>{stat.label}</Typography>
+                                        <Typography sx={{ fontWeight: 900, fontSize: '28px', color: '#fff' }}>{stat.val}</Typography>
+                                        <Typography variant="caption" sx={{ color: 'rgba(255, 255, 255, 0.5)', fontWeight: 700, letterSpacing: '0.1em' }}>{stat.label}</Typography>
                                     </Box>
                                 ))}
                             </Stack>
@@ -154,65 +161,87 @@ const Home = () => {
 
                     <Box sx={{ flex: 1, position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                         <motion.div 
-                            initial={{ opacity: 0, scale: 0.8 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ duration: 1, delay: 0.2 }}
-                            style={{ position: 'relative', width: '100%', maxWidth: '500px' }}
+                            initial={{ opacity: 0, scale: 0.9, rotateY: 20 }}
+                            animate={{ opacity: 1, scale: 1, rotateY: 0 }}
+                            transition={{ duration: 1.5, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                            style={{ position: 'relative', width: '100%', maxWidth: '550px', perspective: '1000px' }}
                         >
-                            <Box sx={{ 
-                                position: 'relative',
-                                borderRadius: '32px',
-                                overflow: 'visible',
-                                boxShadow: '0 30px 60px rgba(0,0,0,0.5)',
-                                '&::before': {
-                                    content: '""',
-                                    position: 'absolute',
-                                    inset: -2,
-                                    borderRadius: '34px',
-                                    padding: '2px',
-                                    background: 'linear-gradient(135deg, rgba(124,77,255,0.5), rgba(245,0,87,0.2))',
-                                    WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
-                                    WebkitMaskComposite: 'xor',
-                                    maskComposite: 'exclude',
-                                }
-                            }}>
+                            <Box 
+                                className="tilt-3d"
+                                sx={{ 
+                                    position: 'relative',
+                                    borderRadius: '40px',
+                                    overflow: 'visible',
+                                    boxShadow: '0 50px 100px rgba(0,0,0,0.5)',
+                                    background: 'rgba(255, 255, 255, 0.03)',
+                                    backdropFilter: 'blur(20px)',
+                                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                                    padding: '10px'
+                                }}
+                            >
                                 <img 
                                     src={getPublicUrl("/assets/hero.png")} 
                                     alt="Artexa Premium Product" 
-                                    style={{ width: '100%', borderRadius: '32px', display: 'block' }}
+                                    style={{ width: '100%', borderRadius: '30px', display: 'block', pointerEvents: 'none' }}
                                 />
                                 
-                                {/* Floating mini images */}
+                                {/* Floating elements */}
                                 <motion.div 
-                                    className="float"
+                                    animate={{ y: [0, -20, 0] }}
+                                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                                     style={{ 
-                                        position: 'absolute', top: '-10%', right: '-5%', width: '120px',
-                                        background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(10px)',
-                                        padding: '10px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.2)'
+                                        position: 'absolute', top: '-15%', right: '-10%', width: '140px',
+                                        background: 'rgba(255, 255, 255, 0.05)', backdropFilter: 'blur(15px)',
+                                        padding: '12px', borderRadius: '24px', border: '1px solid rgba(255, 255, 255, 0.15)',
+                                        boxShadow: '0 20px 40px rgba(0,0.0.3)'
                                     }}
                                 >
-                                    <img src={getPublicUrl("/assets/cat_frames.png")} style={{ width: '100%', borderRadius: '10px' }} alt="" />
+                                    <img src={getPublicUrl("/assets/cat_frames.png")} style={{ width: '100%', borderRadius: '16px' }} alt="" />
                                 </motion.div>
+
                                 <motion.div 
-                                    className="float"
+                                    animate={{ y: [0, 20, 0] }}
+                                    transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
                                     style={{ 
-                                        position: 'absolute', bottom: '10%', left: '-10%', width: '100px',
-                                        background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(10px)',
-                                        padding: '10px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.2)',
-                                        animationDelay: '1s'
+                                        position: 'absolute', bottom: '15%', left: '-15%', width: '120px',
+                                        background: 'rgba(255, 255, 255, 0.05)', backdropFilter: 'blur(15px)',
+                                        padding: '12px', borderRadius: '24px', border: '1px solid rgba(255, 255, 255, 0.15)',
+                                        boxShadow: '0 20px 40px rgba(0,0.0.3)'
                                     }}
                                 >
-                                    <img src={getPublicUrl("/assets/cat_mugs.png")} style={{ width: '100%', borderRadius: '10px' }} alt="" />
+                                    <img src={getPublicUrl("/assets/cat_mugs.png")} style={{ width: '100%', borderRadius: '16px' }} alt="" />
                                 </motion.div>
+
+                                {/* Decorative glow behind hero image */}
+                                <Box sx={{
+                                    position: 'absolute',
+                                    top: '50%', left: '50%',
+                                    width: '120%', height: '120%',
+                                    transform: 'translate(-50%, -50%)',
+                                    background: 'radial-gradient(circle, rgba(108, 99, 255, 0.2) 0%, transparent 70%)',
+                                    zIndex: -1,
+                                    borderRadius: '50%',
+                                    filter: 'blur(40px)'
+                                }} />
                             </Box>
                         </motion.div>
                     </Box>
                 </Box>
 
                 {/* FEATURED CATEGORIES */}
-                <Box sx={{ py: { xs: 4, md: 6 } }}>
-                    <Typography variant="h2" sx={{ mb: 3 }}>Popular Categories</Typography>
-                    <Grid container spacing={1.5}>
+                <Box sx={{ py: { xs: 8, md: 10 } }}>
+                    <Typography variant="h2" sx={{ 
+                        mb: 5, fontSize: { xs: '32px', md: '48px' }, 
+                        fontWeight: 900, color: '#fff',
+                        textAlign: { xs: 'center', md: 'left' }
+                    }}>
+                        Popular <Box component="span" sx={{ 
+                            background: 'linear-gradient(135deg, #6C63FF 0%, #FF4D9D 100%)',
+                            WebkitBackgroundClip: 'text',
+                            WebkitTextFillColor: 'transparent'
+                        }}>Categories</Box>
+                    </Typography>
+                    <Grid container spacing={3}>
                         {CATEGORIES_DATA.map((cat, i) => (
                             <Grid item xs={6} sm={3} key={cat.name}>
                                 <motion.div 
@@ -225,17 +254,29 @@ const Home = () => {
                                     <Card 
                                         onClick={() => navigate(cat.path)}
                                         sx={{ 
-                                            borderRadius: '16px', cursor: 'pointer', overflow: 'hidden', 
-                                            position: 'relative', border: 'none',
-                                            bgcolor: 'rgba(18, 26, 47, 0.4)',
+                                            borderRadius: '24px', cursor: 'pointer', overflow: 'hidden', 
+                                            position: 'relative', border: '1px solid rgba(255, 255, 255, 0.05)',
+                                            bgcolor: 'rgba(255, 255, 255, 0.02)',
+                                            backdropFilter: 'blur(10px)',
                                             display: 'flex', flexDirection: 'column', alignItems: 'center',
-                                            p: 2, textAlign: 'center'
+                                            p: 3, textAlign: 'center',
+                                            transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+                                            '&:hover': {
+                                                transform: 'translateY(-10px) scale(1.02)',
+                                                bgcolor: 'rgba(255, 255, 255, 0.05)',
+                                                borderColor: 'rgba(108, 99, 255, 0.3)',
+                                                boxShadow: '0 20px 40px rgba(0,0,0,0.4)'
+                                            }
                                         }}
                                     >
-                                        <Box sx={{ width: 64, height: 64, mb: 1.5, borderRadius: '50%', overflow: 'hidden', bgcolor: 'rgba(255,255,255,0.05)' }}>
+                                        <Box sx={{ 
+                                            width: 80, height: 80, mb: 2, borderRadius: '24px', 
+                                            overflow: 'hidden', bgcolor: 'rgba(108, 99, 255, 0.1)',
+                                            display: 'flex', alignItems: 'center', justifyContent: 'center'
+                                        }}>
                                             <img src={cat.img} alt={cat.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                         </Box>
-                                        <Typography variant="body2" sx={{ fontWeight: 600 }}>{cat.name}</Typography>
+                                        <Typography variant="body1" sx={{ fontWeight: 800, color: '#fff' }}>{cat.name}</Typography>
                                     </Card>
                                 </motion.div>
                             </Grid>
@@ -243,16 +284,33 @@ const Home = () => {
                     </Grid>
                 </Box>
 
-                {/* FEATURED COLLECTIONS (Best Sellers) */}
-                <Box sx={{ py: { xs: 4, md: 6 } }}>
-                    <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 3 }}>
-                        <Typography variant="h2">Best Sellers</Typography>
-                        <Button color="primary" size="small" onClick={() => navigate('/shop')} sx={{ fontWeight: 600 }}>See All</Button>
+                {/* BEST SELLERS */}
+                <Box sx={{ py: { xs: 8, md: 10 } }}>
+                    <Stack direction="row" justifyContent="space-between" alignItems="flex-end" sx={{ mb: 6 }}>
+                        <Typography variant="h2" sx={{ 
+                            fontSize: { xs: '32px', md: '48px' }, 
+                            fontWeight: 900, color: '#fff' 
+                        }}>
+                             <Box component="span" sx={{ 
+                                background: 'linear-gradient(135deg, #FF7A59 0%, #FF4D9D 100%)',
+                                WebkitBackgroundClip: 'text',
+                                WebkitTextFillColor: 'transparent'
+                            }}>Best</Box> Sellers
+                        </Typography>
+                        <Button 
+                            onClick={() => navigate('/shop')} 
+                            sx={{ 
+                                fontWeight: 800, color: '#FF4D9D', fontSize: '16px',
+                                '&:hover': { background: 'rgba(255, 77, 157, 0.1)' }
+                            }}
+                        >
+                            View All →
+                        </Button>
                     </Stack>
                     
-                    <Grid container spacing={1.5}>
+                    <Grid container spacing={4}>
                         {loading ? (
-                             [1,2,3,4].map(i => <Grid item xs={6} sm={4} md={3} key={i}><Box sx={{ height: 280, bgcolor: 'rgba(255,255,255,0.05)', borderRadius: '16px' }} /></Grid>)
+                             [1,2,3,4].map(i => <Grid item xs={6} sm={4} md={3} key={i}><Box sx={{ height: 350, bgcolor: 'rgba(255,255,255,0.03)', borderRadius: '24px', border: '1px solid rgba(255,255,255,0.05)' }} /></Grid>)
                         ) : (
                             products.slice(0, 4).map((product, index) => (
                                 <Grid item xs={6} sm={4} md={3} key={product.id}>
@@ -272,157 +330,177 @@ const Home = () => {
                     </Grid>
                 </Box>
 
-                {/* LIVE CUSTOMIZATION BANNER */}
-                <Box sx={{ py: { xs: 4, md: 6 } }}>
-                    <Paper sx={{ 
-                        p: { xs: 3, md: 5 }, borderRadius: '16px', 
-                        background: 'linear-gradient(135deg, rgba(124, 77, 255, 0.1) 0%, rgba(245, 0, 87, 0.1) 100%)',
-                        border: '1px solid rgba(124, 77, 255, 0.2)',
-                        textAlign: 'center'
-                    }}>
-                        <Typography variant="h2" sx={{ mb: 1 }}>Design Your Own</Typography>
-                        <Typography variant="body2" color="text.secondary" sx={{ mb: 3, maxWidth: 300, mx: 'auto' }}>
-                            Upload a photo, add text, and see a live preview instantly.
-                        </Typography>
-                        <Button variant="contained" onClick={() => navigate('/shop?category=frames')} sx={{ height: '48px', borderRadius: '12px', px: 4, fontWeight: 700 }}>
-                            Start Designing
-                        </Button>
-                    </Paper>
-                </Box>
-
-                {/* AI GIFT RECOMMENDATION TOOL */}
-                <Box sx={{ py: { xs: 4, md: 6 } }}>
-                    <Typography variant="h2" sx={{ mb: 3 }}>AI Gift Matchmaker</Typography>
-                    <Paper sx={{ p: 2.5, borderRadius: '16px', bgcolor: 'rgba(18, 26, 47, 0.8)', border: '1px solid rgba(108, 99, 255, 0.3)' }}>
-                        <Stack spacing={2}>
-                            <Typography variant="body2" sx={{ color: 'text.secondary', fontWeight: 600 }}>Who are you shopping for?</Typography>
-                            <Box sx={{ display: 'flex', gap: 1, overflowX: 'auto', pb: 1, '&::-webkit-scrollbar': { display: 'none' } }}>
-                                {['For Girlfriend', 'For Mom', 'For Friend'].map(filter => (
-                                    <Chip key={filter} label={filter} sx={{ bgcolor: 'rgba(255,255,255,0.08)', fontWeight: 600, color: 'white', border: '1px solid rgba(255,255,255,0.1)', flexShrink: 0 }} />
-                                ))}
-                            </Box>
-                            <Typography variant="body2" sx={{ color: 'text.secondary', fontWeight: 600 }}>Occasion?</Typography>
-                            <Box sx={{ display: 'flex', gap: 1, overflowX: 'auto', pb: 1, '&::-webkit-scrollbar': { display: 'none' } }}>
-                                {['Birthday', 'Anniversary', 'Farewell'].map(filter => (
-                                    <Chip key={filter} label={filter} sx={{ bgcolor: 'rgba(255,255,255,0.08)', fontWeight: 600, color: 'white', border: '1px solid rgba(255,255,255,0.1)', flexShrink: 0 }} />
-                                ))}
-                            </Box>
-                            <Button 
-                                variant="contained" 
-                                fullWidth 
-                                sx={{ 
-                                    borderRadius: '12px', 
-                                    height: '48px',
-                                    background: 'linear-gradient(90deg, #7C4DFF 0%, #F50057 100%)',
-                                    fontWeight: 700,
-                                    mt: 2,
-                                    boxShadow: '0 4px 15px rgba(124, 77, 255, 0.3)'
-                                }}
-                            >
-                                Get AI Recommendations
-                            </Button>
-                        </Stack>
-                    </Paper>
-                </Box>
-
-                {/* TRENDING GIFTS */}
-                <Box sx={{ py: { xs: 4, md: 6 } }}>
-                    <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 3 }}>
-                        <Typography variant="h2">Trending Gifts</Typography>
-                    </Stack>
-                    
-                    <Grid container spacing={1.5}>
-                        {products.length > 4 ? products.slice(4, 8).map((product, index) => (
-                            <Grid item xs={6} sm={4} md={3} key={product.id}>
-                                <motion.div 
-                                    variants={fadeUp}
-                                    initial="hidden"
-                                    whileInView="show"
-                                    viewport={{ once: true }}
-                                    transition={{ delay: index * 0.1 }}
-                                    style={{ height: '100%' }}
+                {/* CTA BANNER - Large Glassmorphism */}
+                <Box sx={{ py: { xs: 8, md: 12 } }}>
+                    <motion.div
+                        whileHover={{ scale: 1.01 }}
+                        transition={{ duration: 0.4 }}
+                    >
+                        <Paper sx={{ 
+                            p: { xs: 6, md: 10 }, borderRadius: '40px', 
+                            background: 'linear-gradient(135deg, rgba(108, 99, 255, 0.1) 0%, rgba(255, 77, 157, 0.05) 100%)',
+                            backdropFilter: 'blur(30px)',
+                            border: '1px solid rgba(255, 255, 255, 0.1)',
+                            textAlign: 'center',
+                            position: 'relative',
+                            overflow: 'hidden'
+                        }}>
+                            <Box sx={{
+                                position: 'absolute', top: '-20%', left: '-10%', width: '40%', height: '150%',
+                                background: 'radial-gradient(circle, rgba(108, 99, 255, 0.15) 0%, transparent 70%)',
+                                zIndex: 0, pointerEvents: 'none'
+                            }} />
+                            
+                            <Box sx={{ position: 'relative', zIndex: 1 }}>
+                                <Typography variant="h1" sx={{ 
+                                    mb: 2, fontSize: { xs: '36px', md: '56px' }, fontWeight: 900,
+                                    color: '#fff'
+                                }}>
+                                    Your Memory, <Box component="span" sx={{ color: '#6C63FF' }}>Our Masterpiece</Box>
+                                </Typography>
+                                <Typography variant="h3" sx={{ mb: 6, color: 'rgba(255,255,255,0.6)', maxWidth: 600, mx: 'auto', fontWeight: 400 }}>
+                                    Join over 10,000 satisfied customers who've captured their most precious moments with Artexa.
+                                </Typography>
+                                <Button 
+                                    variant="contained" 
+                                    onClick={() => navigate('/shop')} 
+                                    sx={{ 
+                                        height: '64px', borderRadius: '20px', px: 6, fontSize: '18px', fontWeight: 800,
+                                        background: 'linear-gradient(135deg, #6C63FF 0%, #FF4D9D 100%)',
+                                        boxShadow: '0 20px 40px rgba(108, 99, 255, 0.3)'
+                                    }}
                                 >
-                                    <ProductCard product={product} />
-                                </motion.div>
-                            </Grid>
-                        )) : (
-                            <Grid item xs={12}><Typography variant="body2" color="text.secondary">More products arriving soon.</Typography></Grid>
-                        )}
+                                    Start Designing Now
+                                </Button>
+                            </Box>
+                        </Paper>
+                    </motion.div>
+                </Box>
+
+                {/* AI SHOPPING SECTION */}
+                <Box sx={{ py: { xs: 8, md: 10 } }}>
+                    <Grid container spacing={6} alignItems="center">
+                        <Grid item xs={12} md={5}>
+                             <Typography variant="h2" sx={{ 
+                                mb: 3, fontSize: { xs: '32px', md: '48px' }, 
+                                fontWeight: 900, color: '#fff' 
+                            }}>
+                                Need Help <br/>
+                                <Box component="span" sx={{ 
+                                    background: 'linear-gradient(135deg, #FF7A59 0%, #6C63FF 100%)',
+                                    WebkitBackgroundClip: 'text',
+                                    WebkitTextFillColor: 'transparent'
+                                }}>Deciding?</Box>
+                            </Typography>
+                            <Typography variant="body1" sx={{ mb: 4, color: 'rgba(255, 255, 255, 0.6)' }}>
+                                Our AI Gift Matchmaker analyzes your preferences to find the perfect gift for any occasion.
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={12} md={7}>
+                            <Paper sx={{ 
+                                p: 4, borderRadius: '32px', 
+                                bgcolor: 'rgba(255, 255, 255, 0.02)', 
+                                backdropFilter: 'blur(20px)',
+                                border: '1px solid rgba(255, 255, 255, 0.08)' 
+                            }}>
+                                <Stack spacing={3}>
+                                    <Box>
+                                        <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.5)', fontWeight: 800, mb: 1.5, letterSpacing: '0.1em', textTransform: 'uppercase' }}>Who is it for?</Typography>
+                                        <Box sx={{ display: 'flex', gap: 1.5, overflowX: 'auto', pb: 1, '&::-webkit-scrollbar': { display: 'none' } }}>
+                                            {['For Partner', 'For Parents', 'For Friends', 'For Self'].map(filter => (
+                                                <Chip key={filter} label={filter} sx={{ 
+                                                    py: 2.5, px: 1, borderRadius: '12px',
+                                                    bgcolor: 'rgba(255,255,255,0.03)', fontWeight: 700, color: 'white', 
+                                                    border: '1px solid rgba(255,255,255,0.1)', cursor: 'pointer',
+                                                    '&:hover': { bgcolor: 'rgba(108, 99, 255, 0.15)', borderColor: '#6C63FF' }
+                                                }} />
+                                            ))}
+                                        </Box>
+                                    </Box>
+                                    <Box>
+                                        <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.5)', fontWeight: 800, mb: 1.5, letterSpacing: '0.1em', textTransform: 'uppercase' }}>What's the Occasion?</Typography>
+                                        <Box sx={{ display: 'flex', gap: 1.5, overflowX: 'auto', pb: 1, '&::-webkit-scrollbar': { display: 'none' } }}>
+                                            {['Anniversary', 'Birthday', 'Wedding', 'Graduation'].map(filter => (
+                                                <Chip key={filter} label={filter} sx={{ 
+                                                    py: 2.5, px: 1, borderRadius: '12px',
+                                                    bgcolor: 'rgba(255,255,255,0.03)', fontWeight: 700, color: 'white', 
+                                                    border: '1px solid rgba(255,255,255,0.1)', cursor: 'pointer',
+                                                    '&:hover': { bgcolor: 'rgba(255, 77, 157, 0.15)', borderColor: '#FF4D9D' }
+                                                }} />
+                                            ))}
+                                        </Box>
+                                    </Box>
+                                    <Button 
+                                        variant="contained" 
+                                        fullWidth 
+                                        sx={{ 
+                                            borderRadius: '16px', 
+                                            height: '60px',
+                                            background: 'linear-gradient(90deg, #6C63FF 0%, #FF4D9D 100%)',
+                                            fontWeight: 800,
+                                            fontSize: '18px',
+                                            mt: 2
+                                        }}
+                                    >
+                                        Generate AI Suggestions
+                                    </Button>
+                                </Stack>
+                            </Paper>
+                        </Grid>
                     </Grid>
                 </Box>
 
-                {/* CUSTOMER REVIEWS */}
-                <Box sx={{ py: { xs: 4, md: 6 } }}>
-                    <Typography variant="h2" sx={{ mb: 3 }}>Customer Reviews</Typography>
-                    <Box sx={{ display: 'flex', gap: 2, overflowX: 'auto', pb: 2, snapType: 'x mandatory', '&::-webkit-scrollbar': { display: 'none' } }}>
+                {/* CUSTOMER REVIEWS - Glassy Carousel */}
+                <Box sx={{ py: { xs: 8, md: 10 } }}>
+                    <Typography variant="h2" sx={{ mb: 6, fontWeight: 900, color: '#fff', fontSize: '42px' }}>What Our <Box component="span" sx={{ color: '#FF7A59' }}>Users Say</Box></Typography>
+                    <Box sx={{ display: 'flex', gap: 3, overflowX: 'auto', pb: 4, snapType: 'x mandatory', '&::-webkit-scrollbar': { display: 'none' } }}>
                         {REVIEWS.map((rev, i) => (
                             <Card key={rev.name} sx={{ 
-                                minWidth: 260, maxWidth: 300, p: 2.5, borderRadius: '16px', scrollSnapAlign: 'start', flexShrink: 0,
-                                bgcolor: 'rgba(18, 26, 47, 0.6)', border: '1px solid rgba(255,255,255,0.05)'
+                                minWidth: 320, maxWidth: 350, p: 4, borderRadius: '32px', scrollSnapAlign: 'start', flexShrink: 0,
+                                bgcolor: 'rgba(255, 255, 255, 0.02)', border: '1px solid rgba(255,255,255,0.05)',
+                                backdropFilter: 'blur(20px)',
+                                transition: '0.4s ease',
+                                '&:hover': { transform: 'translateY(-10px)', borderColor: 'rgba(255,255,255,0.1)' }
                             }}>
-                                <Rating value={rev.rating} readOnly size="small" sx={{ mb: 1.5 }} />
-                                <Typography variant="body2" sx={{ fontWeight: 500, mb: 2, fontStyle: 'italic', color: 'rgba(255,255,255,0.8)', minHeight: '3em' }}>"{rev.text}"</Typography>
-                                <Stack direction="row" spacing={1.5} alignItems="center">
-                                    <Avatar sx={{ bgcolor: 'primary.main', width: 32, height: 32, fontSize: '14px', fontWeight: 600 }}>{rev.avatar}</Avatar>
+                                <Rating value={rev.rating} readOnly size="small" sx={{ mb: 2, color: '#FF7A59' }} />
+                                <Typography variant="body1" sx={{ fontWeight: 500, mb: 4, fontStyle: 'italic', color: 'rgba(255,255,255,0.8)', minHeight: '4.5em', lineHeight: 1.6 }}>"{rev.text}"</Typography>
+                                <Stack direction="row" spacing={2} alignItems="center">
+                                    <Avatar sx={{ 
+                                        background: 'linear-gradient(135deg, #6C63FF 0%, #FF4D9D 100%)', 
+                                        width: 48, height: 48, fontSize: '18px', fontWeight: 800 
+                                    }}>{rev.avatar}</Avatar>
                                     <Box>
-                                        <Typography variant="caption" sx={{ fontWeight: 700, display: 'block' }}>{rev.name}</Typography>
+                                        <Typography variant="body1" sx={{ fontWeight: 800, color: '#fff', display: 'block' }}>{rev.name}</Typography>
+                                        <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.4)', fontWeight: 700 }}>Verified Customer</Typography>
                                     </Box>
                                 </Stack>
                             </Card>
                         ))}
                     </Box>
                 </Box>
-                
-                {/* INSTAGRAM GALLERY */}
-                <Box sx={{ py: { xs: 4, md: 6 } }}>
-                    <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 3 }}>
-                        <Typography variant="h2">@ArtexaGifts on Instagram</Typography>
-                        <Button color="primary" size="small" sx={{ fontWeight: 600 }}>Follow Us</Button>
-                    </Stack>
-                    <Grid container spacing={1}>
-                        {[1, 2, 3, 4].map((i) => (
-                            <Grid item xs={6} md={3} key={i}>
-                                <Box sx={{ 
-                                    aspectRatio: '1', 
-                                    borderRadius: '16px', 
-                                    overflow: 'hidden',
-                                    position: 'relative',
-                                    bgcolor: 'rgba(255,255,255,0.05)',
-                                    backgroundImage: `url(https://picsum.photos/seed/insta${i}/400/400)`,
-                                    backgroundSize: 'cover',
-                                    backgroundPosition: 'center',
-                                    '&:hover .insta-overlay': { opacity: 1 }
-                                }}>
-                                    <Box className="insta-overlay" sx={{ 
-                                        position: 'absolute', inset: 0, bgcolor: 'rgba(0,0,0,0.5)', 
-                                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                        opacity: 0, transition: 'opacity 0.2s', cursor: 'pointer'
-                                    }}>
-                                        <FavoriteIcon sx={{ color: 'white' }} />
-                                    </Box>
-                                </Box>
-                            </Grid>
-                        ))}
-                    </Grid>
-                </Box>
             </Container>
 
-            {/* FLOATING ACTION BUTTON */}
-            <Tooltip title="Chat with Support">
+            {/* FLOATING ACTION BUTTON - Interactive Glow */}
+            <Tooltip title="Chat with Artexa Support">
                 <Fab 
                     color="primary" 
                     aria-label="chat" 
                     sx={{ 
                         position: 'fixed', 
-                        bottom: 16, 
-                        right: 16, 
-                        width: 48, 
-                        height: 48,
-                        boxShadow: '0 4px 20px rgba(124, 77, 255, 0.4)',
-                        background: 'linear-gradient(135deg, #7C4DFF 0%, #F50057 100%)'
+                        bottom: 30, 
+                        right: 30, 
+                        width: 64, 
+                        height: 64,
+                        boxShadow: '0 15px 30px rgba(108, 99, 255, 0.4)',
+                        background: 'linear-gradient(135deg, #6C63FF 0%, #FF4D9D 100%)',
+                        transition: 'all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+                        '&:hover': {
+                            transform: 'scale(1.1) rotate(5deg)',
+                            boxShadow: '0 20px 40px rgba(108, 99, 255, 0.6)',
+                        }
                     }}
                 >
-                    <ChatBubbleIcon />
+                    <ChatBubbleIcon sx={{ fontSize: '28px' }} />
                 </Fab>
             </Tooltip>
         </Box>

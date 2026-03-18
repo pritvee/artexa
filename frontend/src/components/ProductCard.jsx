@@ -49,47 +49,77 @@ const ProductCard = ({ product }) => {
             <Card 
                 sx={{ 
                     height: '100%', 
-                    borderRadius: '24px', 
-                    p: 2, 
+                    borderRadius: '32px', 
+                    p: 2.5, 
                     display: 'flex',
                     flexDirection: 'column',
                     position: 'relative',
                     overflow: 'hidden',
                     cursor: 'pointer',
-                    bgcolor: 'rgba(255, 255, 255, 0.03)',
+                    background: 'rgba(255, 255, 255, 0.02)',
+                    backdropFilter: 'blur(20px)',
                     border: '1px solid rgba(255, 255, 255, 0.08)',
-                    transition: 'border-color 0.3s ease',
+                    transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
                     transformStyle: "preserve-3d",
                     '&:hover': {
-                        borderColor: 'primary.main',
-                        '& .product-image-container': { transform: 'translateZ(20px) scale(1.05)' }
+                        borderColor: 'rgba(108, 99, 255, 0.5)',
+                        background: 'rgba(255, 255, 255, 0.05)',
+                        boxShadow: '0 20px 40px rgba(0,0,0,0.4), 0 0 20px rgba(108, 99, 255, 0.1)',
+                        '& .product-image-container': { transform: 'translateZ(30px) scale(1.05)' },
+                        '& .glow-effect': { opacity: 1 }
                     }
                 }}
                 onClick={() => navigate(`/product/${product.id}`)}
             >
+                {/* Background Glow Effect */}
+                <Box 
+                    className="glow-effect"
+                    sx={{
+                        position: 'absolute',
+                        top: '-20%',
+                        left: '-20%',
+                        width: '140%',
+                        height: '140%',
+                        background: 'radial-gradient(circle at center, rgba(108, 99, 255, 0.08) 0%, transparent 70%)',
+                        opacity: 0,
+                        transition: 'opacity 0.4s ease',
+                        pointerEvents: 'none',
+                        zIndex: 0
+                    }}
+                />
+
                 {/* Wishlist Icon */}
                 <IconButton 
                     onClick={(e) => { e.stopPropagation(); setWishlist(!wishlist); }}
                     sx={{ 
-                        position: 'absolute', top: 12, right: 12, zIndex: 10, 
-                        bgcolor: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(8px)',
-                        width: 36, height: 36, 
+                        position: 'absolute', top: 20, right: 20, zIndex: 10, 
+                        bgcolor: 'rgba(5, 7, 10, 0.6)', backdropFilter: 'blur(10px)',
+                        width: 44, height: 44, 
                         border: '1px solid rgba(255,255,255,0.1)',
-                        '&:hover': { bgcolor: 'rgba(0,0,0,0.7)', transform: 'scale(1.1) translateZ(30px)' },
+                        '&:hover': { 
+                            bgcolor: 'rgba(5, 7, 10, 0.8)', 
+                            transform: 'scale(1.1) translateZ(40px)',
+                            borderColor: '#FF4D9D'
+                        },
                         transition: 'all 0.2s'
                     }}
                 >
-                    {wishlist ? <FavoriteIcon sx={{ color: '#F50057', fontSize: 20 }} /> : <FavoriteBorderIcon sx={{ color: 'white', fontSize: 20 }} />}
+                    {wishlist ? <FavoriteIcon sx={{ color: '#FF4D9D', fontSize: 22 }} /> : <FavoriteBorderIcon sx={{ color: 'white', fontSize: 22 }} />}
                 </IconButton>
 
                 {/* Image Section */}
                 <Box 
                     className="product-image-container"
                     sx={{ 
-                        position: 'relative', height: { xs: 180, md: 220 }, borderRadius: '18px', 
-                        overflow: 'hidden', mb: 2.5, bgcolor: '#05070A',
-                        transition: 'transform 0.5s cubic-bezier(0.2, 0, 0.2, 1)',
+                        position: 'relative', 
+                        height: { xs: 200, md: 240 }, 
+                        borderRadius: '24px', 
+                        overflow: 'hidden', 
+                        mb: 3, 
+                        bgcolor: 'rgba(0,0,0,0.2)',
+                        transition: 'transform 0.6s cubic-bezier(0.2, 0, 0.2, 1)',
                         transformStyle: "preserve-3d",
+                        border: '1px solid rgba(255,255,255,0.05)'
                     }}
                 >
                     <CardMedia
@@ -100,17 +130,19 @@ const ProductCard = ({ product }) => {
                         sx={{ height: '100%', width: '100%', objectFit: 'cover' }}
                     />
                     {product.is_new && (
-                        <Box sx={{ position: 'absolute', top: 12, left: 12 }}>
+                        <Box sx={{ position: 'absolute', top: 16, left: 16 }}>
                             <Chip 
                                 label="NEW" 
                                 size="small" 
                                 sx={{ 
-                                    background: 'linear-gradient(135deg, #7C4DFF 0%, #F50057 100%)', 
+                                    background: 'linear-gradient(135deg, #6C63FF 0%, #FF4D9D 100%)', 
                                     color: 'white',
-                                    fontWeight: 800,
-                                    fontSize: '10px',
-                                    height: 22,
-                                    boxShadow: '0 4px 12px rgba(124, 77, 255, 0.4)'
+                                    fontWeight: 900,
+                                    fontSize: '11px',
+                                    height: 24,
+                                    px: 1,
+                                    boxShadow: '0 8px 16px rgba(108, 99, 255, 0.4)',
+                                    border: 'none'
                                 }} 
                             />
                         </Box>
@@ -118,10 +150,10 @@ const ProductCard = ({ product }) => {
                 </Box>
 
                 {/* Content Section */}
-                <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', transform: 'translateZ(10px)' }}>
+                <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', transform: 'translateZ(20px)', zIndex: 1 }}>
                     <Typography variant="body2" sx={{ 
                         fontWeight: 800, 
-                        mb: 1, 
+                        mb: 1.5, 
                         lineHeight: 1.4, 
                         display: '-webkit-box', 
                         WebkitLineClamp: 2, 
@@ -129,35 +161,53 @@ const ProductCard = ({ product }) => {
                         overflow: 'hidden', 
                         minHeight: '2.8em',
                         color: 'white',
-                        fontSize: '16px'
+                        fontSize: '18px',
+                        letterSpacing: '-0.01em'
                     }}>
                         {product.name}
                     </Typography>
 
-                    <Stack direction="row" spacing={0.5} alignItems="center" sx={{ mb: 2 }}>
-                        <Rating value={5} readOnly size="small" sx={{ fontSize: '12px', color: '#FFD700' }} />
-                        <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.4)', fontWeight: 600 }}>({Math.floor(Math.random() * 50) + 10} reviews)</Typography>
+                    <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 2.5 }}>
+                        <Rating value={5} readOnly size="small" sx={{ fontSize: '14px', color: '#FF7A59' }} />
+                        <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.4)', fontWeight: 700, fontSize: '12px' }}>
+                            ({Math.floor(Math.random() * 50) + 120} REVIEWS)
+                        </Typography>
                     </Stack>
                     
                     <Box sx={{ mt: 'auto' }}>
-                        <Typography variant="h3" sx={{ color: 'primary.main', fontWeight: 900, mb: 2, fontSize: '22px' }}>
+                        <Typography variant="h4" sx={{ 
+                            color: 'white', 
+                            fontWeight: 900, 
+                            mb: 2.5, 
+                            fontSize: '24px',
+                            background: 'linear-gradient(135deg, #FFFFFF 0%, #6C63FF 100%)',
+                            WebkitBackgroundClip: 'text',
+                            WebkitTextFillColor: 'transparent',
+                        }}>
                             ₹{(product.price || 0).toLocaleString()}
                         </Typography>
                         
-                        <ThreeDButton 
+                        <Button 
                             variant="contained" 
                             fullWidth
                             onClick={(e) => { e.stopPropagation(); navigate(`/product/${product.id}`); }}
                             sx={{ 
-                                borderRadius: '14px', 
-                                height: '52px', 
-                                fontSize: '14px', 
-                                fontWeight: 800,
-                                background: 'linear-gradient(135deg, #7C4DFF 0%, #F50057 100%)',
+                                borderRadius: '18px', 
+                                height: '56px', 
+                                fontSize: '15px', 
+                                fontWeight: 900,
+                                textTransform: 'none',
+                                background: 'linear-gradient(135deg, #6C63FF 0%, #FF4D9D 100%)',
+                                boxShadow: '0 10px 20px rgba(108, 99, 255, 0.3)',
+                                '&:hover': {
+                                    background: 'linear-gradient(135deg, #6C63FF 0%, #FF4D9D 100%)',
+                                    transform: 'translateY(-2px)',
+                                    boxShadow: '0 15px 30px rgba(108, 99, 255, 0.4)',
+                                }
                             }}
                         >
-                            Customize It
-                        </ThreeDButton>
+                            Personalize Now
+                        </Button>
                     </Box>
                 </Box>
             </Card>

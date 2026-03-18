@@ -4,6 +4,8 @@ import os
 from sqlalchemy import create_engine, text
 from dotenv import load_dotenv
 
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 # Add current directory to path
 sys.path.append(os.getcwd())
 

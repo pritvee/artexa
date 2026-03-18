@@ -22,6 +22,7 @@ import PhotoLibraryIcon from '@mui/icons-material/PhotoLibrary';
 
 import api, { getPublicUrl } from '../api/axios';
 import { useAuth } from '../store/AuthContext';
+import { sanitizeUrl } from '../api/security';
 import { useCart } from '../store/CartContext';
 import LoadingState from '../components/Shared/LoadingState';
 import ErrorState from '../components/Shared/ErrorState';
@@ -339,12 +340,19 @@ const ChocolateHamperPage = () => {
                                 </Button>
                                 {photos.length > 0 && (
                                     <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 1 }}>
-                                        {photos.map(p => (
-                                            <Box key={p.id} sx={{ position: 'relative', pt: '100%', borderRadius: '8px', overflow: 'hidden' }}>
-                                                <img src={p.url} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
-                                                <IconButton size="small" onClick={() => setPhotos(prev => prev.filter(item => item.id !== p.id))} sx={{ position: 'absolute', top: 2, right: 2, bgcolor: 'rgba(0,0,0,0.5)' }}><DeleteIcon sx={{ fontSize: 12 }} /></IconButton>
-                                            </Box>
-                                        ))}
+                                        {photos.map(p => {
+                                            const safePhotoUrl = sanitizeUrl(p.url);
+                                            return (
+                                                <Box key={p.id} sx={{ position: 'relative', pt: '100%', borderRadius: '8px', overflow: 'hidden' }}>
+                                                    <img 
+                                                        src={safePhotoUrl} 
+                                                        alt="User uploaded"
+                                                        style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover' }} 
+                                                    />
+                                                    <IconButton size="small" onClick={() => setPhotos(prev => prev.filter(item => item.id !== p.id))} sx={{ position: 'absolute', top: 2, right: 2, bgcolor: 'rgba(0,0,0,0.5)' }}><DeleteIcon sx={{ fontSize: 12 }} /></IconButton>
+                                                </Box>
+                                            );
+                                        })}
                                     </Box>
                                 )}
                             </Stack>

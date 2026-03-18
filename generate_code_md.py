@@ -22,7 +22,9 @@ with open(output_file, "w", encoding="utf-8") as out:
             continue
             
         for root, dirs, files in os.walk(base_dir):
-            dirs[:] = [d for d in dirs if d not in exclude_dirs]
+            filtered_dirs = [d for d in dirs if d not in exclude_dirs]
+            dirs.clear()
+            dirs.extend(filtered_dirs)
             
             for file in files:
                 ext = os.path.splitext(file)[1]

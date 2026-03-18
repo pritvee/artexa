@@ -1,12 +1,13 @@
 import pymysql
 import sys
+import os
 
 def test_conn():
     try:
         conn = pymysql.connect(
             host='localhost',
             user='root',
-            password='Root@123',
+            password=os.getenv('DB_PASSWORD', ''),
             port=3306
         )
         print("Successfully connected to MySQL server!")

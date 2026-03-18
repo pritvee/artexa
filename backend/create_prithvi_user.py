@@ -9,7 +9,7 @@ from app.core.security import get_password_hash, verify_password
 db = SessionLocal()
 
 EMAIL = "prithvi@gmail.com"
-PASSWORD = "p1r2i3t4"
+PASSWORD = os.getenv("ADMIN_PASSWORD", "") # Admin password must be set in Environment
 
 print("=== All current users ===")
 users = db.query(User).all()

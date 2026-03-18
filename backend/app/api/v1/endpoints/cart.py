@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+from typing import Optional, cast
 from app.db.session import get_db
 from app.models.models import Cart, CartItem, Product, User
 from app.schemas.cart import CartOut, CartItemCreate
@@ -58,16 +59,18 @@ def add_to_cart(
                 existing_item = item
                 break
 
-        if existing_item:
+        if existing_item is not None:
             # Add to existing item
+            # Using cast to satisfy static analysis as existing_item is guaranteed non-None here
+            item_to_update = cast(CartItem, existing_item)
             qty = item_in.quantity if item_in.quantity is not None else 1
-            existing_item.quantity += qty
+            item_to_update.quantity += qty
             
             # Update preview/photo if provided
             if item_in.preview_image_url:
-                existing_item.preview_image_url = item_in.preview_image_url
+                item_to_update.preview_image_url = item_in.preview_image_url
             if item_in.uploaded_photo_id:
-                existing_item.uploaded_photo_id = item_in.uploaded_photo_id
+                item_to_update.uploaded_photo_id = item_in.uploaded_photo_id
         else:
             # Create new item
             new_item = CartItem(

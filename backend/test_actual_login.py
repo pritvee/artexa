@@ -1,13 +1,13 @@
-
+import os
 from sqlalchemy import create_engine, text
 from app.core import security
 
-DB_URL = "mysql+pymysql://root:Root%40123@localhost:3306/artexa_db"
+DB_URL = os.getenv("DATABASE_URL", "mysql+pymysql://root:Root%40123@localhost:3306/artexa_db")
 engine = create_engine(DB_URL)
 
 def test_login():
     email = "admin@example.com"
-    pwd = "admin123"
+    pwd = os.getenv("ADMIN_PASSWORD", "") # Set ADMIN_PASSWORD in env
     
     with engine.connect() as conn:
         result = conn.execute(text("SELECT hashed_password FROM users WHERE email = :email"), {"email": email})

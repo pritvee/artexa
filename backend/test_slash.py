@@ -1,9 +1,9 @@
-
+import os
 import requests
 
 url = "http://localhost:8000/api/v1/auth"
 email = "testuser@example.com"
-password = "testpassword123"
+password = os.getenv("TEST_USER_PASSWORD", "") # Required in env
 
 print("Testing WITHOUT trailing slash...")
 login_data = {"username": email, "password": password}

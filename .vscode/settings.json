@@ -1,11 +1,17 @@
 {
-    "python.testing.unittestArgs": [
-        "-v",
-        "-s",
-        ".",
-        "-p",
-        "*test.py"
-    ],
-    "python.testing.pytestEnabled": false,
-    "python.testing.unittestEnabled": true
+  "python.defaultInterpreterPath": "D:/project/photoframe website/backend/venv/Scripts/python.exe",
+  "python.analysis.extraPaths": [
+    "D:/project/photoframe website/backend"
+  ],
+  "python.analysis.sourceRoots": [
+    "D:/project/photoframe website/backend"
+  ],
+  "python.analysis.typeCheckingMode": "basic",
+  "python.analysis.diagnosticMode": "workspace",
+  "python.venvPath": "D:/project/photoframe website/backend",
+  "python.envFile": "${workspaceFolder}/backend/.env",
+  "redhat.telemetry.enabled": false,
+  "rhdaReport.usePythonVirtualEnvironment": true,
+  "snyk.advanced.organization": "cb6e2270-bea6-47e8-a974-1a9b6f723040",
+  "snyk.advanced.autoSelectOrganization": true
 }

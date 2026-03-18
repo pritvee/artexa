@@ -18,6 +18,7 @@ import { motion } from 'framer-motion';
 import api, { getPublicUrl } from '../api/axios';
 import { useCart } from '../store/CartContext';
 import { useAuth } from '../store/AuthContext';
+import { sanitizeUrl } from '../api/security';
 
 const ProductDetail = () => {
     const { id } = useParams();
@@ -154,11 +155,16 @@ const ProductDetail = () => {
                                 justifyContent: 'center',
                                 position: 'relative'
                             }}>
-                                <img
-                                    src={selectedImageUrl || "https://picsum.photos/seed/product/800/800"}
-                                    alt={product.name}
-                                    style={{ width: '100%', height: '100%', objectFit: 'contain' }}
-                                />
+                                {(() => {
+                                    const safeDetailImg = sanitizeUrl(selectedImageUrl) || "https://picsum.photos/seed/product/800/800";
+                                    return (
+                                        <img
+                                            src={safeDetailImg}
+                                            alt={product.name}
+                                            style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                                        />
+                                    );
+                                })()}
                                 {/* Wishlist */}
                                 <IconButton
                                     onClick={() => setWishlist(!wishlist)}
@@ -195,7 +201,7 @@ const ProductDetail = () => {
                                                 cursor: 'pointer', transition: 'border-color 0.2s'
                                             }}
                                         >
-                                            <img src={getPublicUrl(img)} alt="thumb" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                            <img src={sanitizeUrl(getPublicUrl(img))} alt="thumb" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                         </Box>
                                     ))}
                                 </Box>

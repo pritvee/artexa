@@ -9,6 +9,7 @@ import TuneIcon from '@mui/icons-material/Tune';
 import CompareIcon from '@mui/icons-material/Compare';
 import FlashOnIcon from '@mui/icons-material/FlashOn';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
+import { sanitizeUrl } from '../../../api/security';
 
 /* ─── Defaults ─── */
 const DEFAULT_ADJ = { brightness: 100, contrast: 100, saturation: 100, sharpness: 0, clarity: 0 };
@@ -213,71 +214,131 @@ const ImageEnhancerPanel = ({ originalImageSrc, onEnhancedImage, isUpscaled, onU
     const displaySrc = showBefore ? originalImageSrc : (previewSrc || originalImageSrc);
 
     return (
-        <Box sx={{ mt: 1 }}>
-            <Paper elevation={0} sx={{ bgcolor: 'rgba(102,126,234,0.05)', border: '1px solid rgba(102,126,234,0.15)', borderRadius: 2, p: 1.5 }}>
-                <Stack direction="row" alignItems="center" justifyContent="space-between" mb={1}>
-                    <Stack direction="row" alignItems="center" spacing={1}>
-                        <AutoFixHighIcon sx={{ color: '#667eea', fontSize: 18 }} />
-                        <Typography variant="caption" fontWeight="bold" color="primary">AI Enhancement</Typography>
+        <Box sx={{ mt: 2 }}>
+            <Paper 
+                elevation={0} 
+                sx={{ 
+                    background: 'rgba(255, 255, 255, 0.02)', 
+                    backdropFilter: 'blur(30px)',
+                    border: '1px solid rgba(255, 255, 255, 0.1)', 
+                    borderRadius: '24px', 
+                    p: 2.5,
+                    boxShadow: '0 20px 40px rgba(0,0,0,0.2)'
+                }}
+            >
+                <Stack direction="row" alignItems="center" justifyContent="space-between" mb={2}>
+                    <Stack direction="row" alignItems="center" spacing={1.5}>
+                        <Box sx={{ p: 0.8, borderRadius: '10px', bgcolor: 'rgba(108, 99, 255, 0.1)', display: 'flex' }}>
+                            <AutoFixHighIcon sx={{ color: '#6C63FF', fontSize: 20 }} />
+                        </Box>
+                        <Typography variant="subtitle2" sx={{ fontWeight: 800, color: '#fff', letterSpacing: '0.05em' }}>
+                            AI ENHANCER
+                        </Typography>
                     </Stack>
-                    <Stack direction="row" spacing={0.5} alignItems="center">
+                    <Stack direction="row" spacing={1} alignItems="center">
                         {enhanced && (
                             <Chip
-                                label={upscaledFlag ? '2× HD' : 'Enhanced'}
+                                label={upscaledFlag ? '2× HD ACTIVE' : 'ENHANCED'}
                                 size="small"
-                                sx={{ bgcolor: 'primary.main', color: '#fff', fontSize: '8px', height: 16 }}
+                                sx={{ 
+                                    background: 'linear-gradient(135deg, #6C63FF, #FF4D9D)', 
+                                    color: '#fff', 
+                                    fontSize: '9px', 
+                                    fontWeight: 900,
+                                    height: 20,
+                                    px: 0.5
+                                }}
                             />
                         )}
                         {enhanced && (
-                            <IconButton size="small" onClick={handleReset} sx={{ p: 0.2, '&:hover': { color: 'error.main' } }}>
-                                <RestartAltIcon sx={{ fontSize: 16 }} />
+                            <IconButton 
+                                size="small" 
+                                onClick={handleReset} 
+                                sx={{ 
+                                    color: 'rgba(255,255,255,0.4)',
+                                    '&:hover': { color: '#FF4D4D', bgcolor: 'rgba(255,77,77,0.1)' } 
+                                }}
+                            >
+                                <RestartAltIcon sx={{ fontSize: 18 }} />
                             </IconButton>
                         )}
                     </Stack>
                 </Stack>
 
-                <Stack direction="row" spacing={1.5} alignItems="flex-start">
+                <Stack direction="row" spacing={2.5} alignItems="flex-start">
                     {/* Left Side: Compact Controls */}
-                    <Stack spacing={0.8} sx={{ flex: 1 }}>
+                    <Stack spacing={1.2} sx={{ flex: 1 }}>
                         <Button
-                            variant="contained" size="small" fullWidth
+                            variant="contained" 
+                            size="small" 
+                            fullWidth
                             disabled={processing}
                             onClick={handleAutoEnhance}
-                            sx={{ bgcolor: '#667eea', fontSize: '9px', py: 0.4, minWidth: 0 }}
+                            sx={{ 
+                                bgcolor: 'rgba(255,255,255,0.05)', 
+                                border: '1px solid rgba(255,255,255,0.1)',
+                                color: '#fff',
+                                fontWeight: 700,
+                                fontSize: '10px', 
+                                py: 0.8,
+                                '&:hover': { bgcolor: 'rgba(255,255,255,0.1)', borderColor: 'rgba(255,255,255,0.3)' }
+                            }}
                         >
-                            Auto
+                            Auto Balance
                         </Button>
                         <Button
-                            variant="outlined" size="small" fullWidth
+                            variant="outlined" 
+                            size="small" 
+                            fullWidth
                             disabled={processing}
                             onClick={handleAIUpscale}
-                            sx={{ borderColor: '#667eea', color: '#667eea', fontSize: '9px', py: 0.4, minWidth: 0 }}
+                            sx={{ 
+                                borderColor: 'rgba(108, 99, 255, 0.4)', 
+                                color: '#6C63FF', 
+                                fontWeight: 700,
+                                fontSize: '10px', 
+                                py: 0.8,
+                                '&:hover': { borderColor: '#6C63FF', bgcolor: 'rgba(108, 99, 255, 0.05)' }
+                            }}
                         >
-                            2× HD
+                            2× HD Upscale
                         </Button>
                         <Button
-                            variant="contained" size="small" fullWidth
+                            variant="contained" 
+                            size="small" 
+                            fullWidth
                             disabled={processing}
                             onClick={handleEnhanceAndUpscale}
                             sx={{
-                                background: 'linear-gradient(135deg, #667eea, #764ba2)',
-                                fontSize: '9px', py: 0.8, lineHeight: 1.1, minWidth: 0
+                                background: 'linear-gradient(135deg, #6C63FF, #FF4D9D)',
+                                fontSize: '11px', 
+                                fontWeight: 900,
+                                py: 1.2, 
+                                boxShadow: '0 8px 16px rgba(108, 99, 255, 0.3)',
+                                '&:hover': { 
+                                    background: 'linear-gradient(135deg, #7C74FF, #FF66AD)',
+                                    boxShadow: '0 12px 24px rgba(108, 99, 255, 0.4)',
+                                    transform: 'translateY(-2px)'
+                                }
                             }}
                         >
-                            Best Quality
+                            Best Quality AI
                         </Button>
 
                         <Box 
                             onClick={() => setShowManual(!showManual)}
                             sx={{ 
                                 display: 'flex', alignItems: 'center', justifyContent: 'center', 
-                                cursor: 'pointer', py: 0.5, mt: 0.5, borderRadius: 1, border: '1px solid rgba(0,0,0,0.05)',
-                                '&:hover': { bgcolor: 'action.hover' }
+                                cursor: 'pointer', py: 0.8, mt: 1, borderRadius: '12px', 
+                                border: '1px solid rgba(255,255,255,0.05)',
+                                bgcolor: 'rgba(255,255,255,0.02)',
+                                transition: 'all 0.3s',
+                                '&:hover': { bgcolor: 'rgba(255,255,255,0.05)', borderColor: 'rgba(255,255,255,0.2)' }
                             }}
                         >
-                            <TuneIcon sx={{ fontSize: 10, mr: 0.3, color: 'text.secondary' }} />
-                            <Typography variant="caption" color="textSecondary" sx={{ fontSize: '9px' }}>
-                                {showManual ? 'Hide' : 'Manual'}
+                            <TuneIcon sx={{ fontSize: 14, mr: 0.8, color: 'rgba(255,255,255,0.6)' }} />
+                            <Typography variant="caption" sx={{ fontSize: '10px', fontWeight: 700, color: 'rgba(255,255,255,0.6)' }}>
+                                {showManual ? 'HIDE MANUAL' : 'MANUAL TUNE'}
                             </Typography>
                         </Box>
                     </Stack>
@@ -285,11 +346,13 @@ const ImageEnhancerPanel = ({ originalImageSrc, onEnhancedImage, isUpscaled, onU
                     {/* Right Side: Vertical Image Preview */}
                     <Box sx={{ position: 'relative' }}>
                         <Box sx={{
-                            width: 90, height: 120, borderRadius: 1.2, overflow: 'hidden',
+                            width: 110, height: 140, borderRadius: '16px', overflow: 'hidden',
                             bgcolor: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            border: '1px solid rgba(255,255,255,0.08)',
+                            border: '1px solid rgba(255,255,255,0.1)',
                             cursor: 'pointer',
-                            boxShadow: '0 4px 12px rgba(0,0,0,0.2)'
+                            boxShadow: '0 10px 30px rgba(0,0,0,0.4)',
+                            transition: 'transform 0.3s',
+                            '&:hover': { transform: 'scale(1.02)' }
                         }}
                             onMouseDown={() => setShowBefore(true)}
                             onMouseUp={() => setShowBefore(false)}
@@ -297,19 +360,24 @@ const ImageEnhancerPanel = ({ originalImageSrc, onEnhancedImage, isUpscaled, onU
                             onTouchStart={() => setShowBefore(true)}
                             onTouchEnd={() => setShowBefore(false)}
                         >
-                            <img
-                                src={displaySrc}
-                                alt="preview"
-                                style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', imageRendering: upscaledFlag ? 'crisp-edges' : 'auto' }}
-                            />
+                                {(() => {
+                                    const safeEnhancementPreview = sanitizeUrl(displaySrc);
+                                    return (
+                                        <img
+                                            src={safeEnhancementPreview}
+                                            alt="preview"
+                                            style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', imageRendering: upscaledFlag ? 'crisp-edges' : 'auto' }}
+                                        />
+                                    );
+                                })()}
                             {processing && (
-                                <Box sx={{ position: 'absolute', inset: 0, bgcolor: 'rgba(0,0,0,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                    <CircularProgress size={16} thickness={5} sx={{ color: '#667eea' }} />
+                                <Box sx={{ position: 'absolute', inset: 0, bgcolor: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                    <CircularProgress size={24} thickness={5} sx={{ color: '#6C63FF' }} />
                                 </Box>
                             )}
-                            <Box sx={{ position: 'absolute', bottom: 3, left: '50%', transform: 'translateX(-50%)', width: '100%', textAlign: 'center', pointerEvents: 'none' }}>
-                                <Typography sx={{ fontSize: '7px', fontWeight: 'bold', letterSpacing: 0.5, py: 0.1, bgcolor: 'rgba(0,0,0,0.7)', color: showBefore ? '#ff9800' : '#fff', textTransform: 'uppercase' }}>
-                                    {showBefore ? 'Original' : 'Hold'}
+                            <Box sx={{ position: 'absolute', bottom: 0, left: 0, width: '100%', textAlign: 'center', pointerEvents: 'none' }}>
+                                <Typography sx={{ fontSize: '8px', fontWeight: 900, letterSpacing: '0.05em', py: 0.5, bgcolor: showBefore ? 'rgba(255,152,0,0.9)' : 'rgba(0,0,0,0.7)', color: '#fff', textTransform: 'uppercase' }}>
+                                    {showBefore ? 'ORIGINAL' : 'HOLD TO COMPARE'}
                                 </Typography>
                             </Box>
                         </Box>
@@ -317,8 +385,8 @@ const ImageEnhancerPanel = ({ originalImageSrc, onEnhancedImage, isUpscaled, onU
                 </Stack>
 
                 {showManual && (
-                    <Box sx={{ mt: 1 }}>
-                        <Stack spacing={1}>
+                    <Box sx={{ mt: 3, pt: 2, borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+                        <Stack spacing={2}>
                             {[
                                 { key: 'brightness', label: 'Brightness', min: 50, max: 150 },
                                 { key: 'contrast', label: 'Contrast', min: 50, max: 200 },
@@ -326,28 +394,44 @@ const ImageEnhancerPanel = ({ originalImageSrc, onEnhancedImage, isUpscaled, onU
                                 { key: 'sharpness', label: 'Sharpness', min: 0, max: 100 },
                                 { key: 'clarity', label: 'Clarity', min: 0, max: 100 },
                             ].map(({ key, label, min, max }) => (
-                                <Box key={key} sx={{ mb: 0.5 }}>
-                                    <Stack direction="row" justifyContent="space-between" alignItems="center">
-                                        <Typography variant="caption" color="textSecondary" sx={{ fontSize: '10px' }}>{label}</Typography>
-                                        <Typography variant="caption" color="primary" sx={{ fontSize: '10px', fontWeight: 'bold' }}>{adj[key]}</Typography>
+                                <Box key={key}>
+                                    <Stack direction="row" justifyContent="space-between" alignItems="center" mb={0.5}>
+                                        <Typography variant="caption" sx={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)', fontWeight: 600 }}>{label.toUpperCase()}</Typography>
+                                        <Typography variant="caption" sx={{ fontSize: '10px', color: '#6C63FF', fontWeight: 900 }}>{adj[key]}%</Typography>
                                     </Stack>
                                     <Slider
                                         size="small"
                                         value={adj[key]}
                                         min={min} max={max}
                                         onChange={(_, v) => handleSliderChange(key, v)}
-                                        sx={{ py: 0.2, color: '#667eea' }}
+                                        sx={{ 
+                                            py: 0.5, 
+                                            color: '#6C63FF',
+                                            '& .MuiSlider-thumb': { width: 12, height: 12, border: '2px solid #fff' },
+                                            '& .MuiSlider-rail': { bgcolor: 'rgba(255,255,255,0.1)' }
+                                        }}
                                     />
                                 </Box>
                             ))}
                         </Stack>
                         <Button
-                            variant="outlined" size="small" fullWidth
+                            variant="contained" 
+                            size="small" 
+                            fullWidth
                             disabled={processing}
                             onClick={handleApplyAdjustments}
-                            sx={{ mt: 1, borderColor: '#667eea', color: '#667eea', fontSize: '10px', py: 0.3 }}
+                            sx={{ 
+                                mt: 2, 
+                                bgcolor: 'rgba(108, 99, 255, 0.8)', 
+                                color: '#fff', 
+                                fontWeight: 800,
+                                fontSize: '11px', 
+                                py: 1,
+                                borderRadius: '12px',
+                                '&:hover': { bgcolor: '#6C63FF' }
+                            }}
                         >
-                            Apply
+                            APPLY CUSTOM TUNE
                         </Button>
                     </Box>
                 )}

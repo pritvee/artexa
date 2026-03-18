@@ -1,12 +1,12 @@
 from passlib.context import CryptContext
 from datetime import datetime, timedelta
-from typing import Any, Union
+from typing import Any, Optional, Union
 from jose import jwt
 from app.core.config import settings
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-def create_access_token(subject: Union[str, Any], expires_delta: timedelta = None) -> str:
+def create_access_token(subject: Union[str, Any], expires_delta: Optional[timedelta] = None) -> str:
     if expires_delta:
         expire = datetime.utcnow() + expires_delta
     else:
@@ -33,7 +33,9 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
         try:
             return pwd_context.verify(plain_password, hashed_password)
         except Exception:
-            print(f"DEBUG: Password verification failed for hash starting with {hashed_password[:10]}...")
+            # Avoid potential indexing errors in logging as well
+            preview = hashed_password[:10] if hashed_password else ""
+            print(f"DEBUG: Password verification failed for hash starting with {preview}...")
             return False
 
 def get_password_hash(password: str) -> str:

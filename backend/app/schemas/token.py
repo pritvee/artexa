@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 
 class Token(BaseModel):
     access_token: str
@@ -9,5 +9,5 @@ class Token(BaseModel):
 
 
 class TokenPayload(BaseModel):
-    sub: str = None
-    exp: int = None
+    sub: Optional[str] = None
+    exp: Optional[int] = None

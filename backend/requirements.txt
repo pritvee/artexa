@@ -12,3 +12,5 @@ alembic
 cloudinary
 email-validator
 bcrypt==4.0.1
+requests
+pymysql

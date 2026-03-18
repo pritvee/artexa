@@ -3,6 +3,7 @@ import { Box, Button, Stack, Tooltip, Typography, CircularProgress } from '@mui/
 import DownloadIcon from '@mui/icons-material/Download';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
+import { sanitizeUrl, sanitizeFilename } from '../../../api/security';
 
 /**
  * Universal Image Download Panel for Admin Order Preview
@@ -39,19 +40,24 @@ const ImageDownloadPanel = ({
     };
 
     const triggerDownload = (blob, filename) => {
+        if (!blob) return;
         const blobUrl = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.style.display = 'none';
-        link.href = blobUrl;
-        link.download = filename;
-        document.body.appendChild(link);
-        link.click();
         
-        // Clean up
-        setTimeout(() => {
-            document.body.removeChild(link);
-            window.URL.revokeObjectURL(blobUrl);
-        }, 300);
+        // Use a strictly local check for the blob URL
+        if (blobUrl && blobUrl.startsWith('blob:')) {
+            const link = document.createElement('a');
+            link.style.display = 'none';
+            link.href = blobUrl;
+            link.download = sanitizeFilename(filename);
+            
+            // Programmatically trigger download
+            link.click();
+            
+            // Cleanup
+            setTimeout(() => {
+                window.URL.revokeObjectURL(blobUrl);
+            }, 300);
+        }
     };
 
     const handleDownloadOriginal = async (url, baseName) => {
@@ -70,13 +76,16 @@ const ImageDownloadPanel = ({
             triggerDownload(blob, filename);
         } catch (error) {
             console.warn("Blob fetch failed, falling back to direct link", error);
-            const link = document.createElement('a');
-            link.href = url;
-            link.target = '_blank';
-            link.download = `${baseName || 'product'}-original.jpg`; 
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            const safeUrl = sanitizeUrl(url);
+            if (safeUrl !== 'about:blank') {
+                const link = document.createElement('a');
+                link.href = safeUrl;
+                link.target = '_blank';
+                link.download = `${sanitizeFilename(baseName || 'product')}-original.jpg`; 
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
         }
     };
 
@@ -173,46 +182,87 @@ const ImageDownloadPanel = ({
     const productSlug = slugify(productName);
 
     return (
-        <Box sx={{ mt: 1, p: 1.5, borderRadius: 2, bgcolor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)' }}>
-            <Typography variant="caption" sx={{ display: 'block', mb: 1, opacity: 0.5, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 0.5 }}>
-                {type === 'design' ? 'Production Quality Tools' : 'Customer Asset Tools'}
+        <Box 
+            sx={{ 
+                mt: 2, 
+                p: 2, 
+                borderRadius: '24px', 
+                background: 'rgba(255, 255, 255, 0.02)', 
+                backdropFilter: 'blur(25px)',
+                border: '1px solid rgba(255, 255, 255, 0.05)',
+                boxShadow: '0 10px 30px rgba(0,0,0,0.1)'
+            }}
+        >
+            <Typography 
+                variant="caption" 
+                sx={{ 
+                    display: 'block', 
+                    mb: 1.5, 
+                    color: 'rgba(255,255,255,0.4)', 
+                    fontWeight: 800, 
+                    textTransform: 'uppercase', 
+                    letterSpacing: '0.1em',
+                    fontSize: '0.65rem'
+                }}
+            >
+                {type === 'design' ? 'Production Quality Assets' : 'Customer Raw Assets'}
             </Typography>
-            <Stack direction="row" spacing={1} flexWrap="wrap">
-                <Tooltip title="Intelligent Upscale + Sharpening + AI Enhancements">
+            <Stack direction="row" spacing={1.5} flexWrap="wrap" useFlexGap gap={1}>
+                <Tooltip title="Neural Upscale + Intelligent Sharpness Enhancement">
                     <span>
                         <Button 
-                            size="small" 
+                            size="medium" 
                             variant="contained" 
-                            startIcon={isProcessing ? <CircularProgress size={16} color="inherit" /> : <AutoFixHighIcon />}
+                            startIcon={isProcessing ? <CircularProgress size={16} color="inherit" /> : <AutoFixHighIcon sx={{ fontSize: 18 }} />}
                             disabled={isProcessing}
                             onClick={() => handleAIUpscale(editedImageUrl || imageUrl, productSlug)}
                             sx={{ 
                                 textTransform: 'none', 
-                                fontSize: '0.75rem', 
-                                fontWeight: 700,
-                                bgcolor: isProcessing ? 'rgba(99,102,241,0.5)' : '#6366f1',
-                                '&:hover': { bgcolor: '#4f46e5' }
+                                fontSize: '0.8rem', 
+                                fontWeight: 800,
+                                borderRadius: '12px',
+                                px: 2,
+                                py: 1,
+                                background: 'linear-gradient(135deg, #6C63FF 0%, #FF4D9D 100%)',
+                                boxShadow: '0 8px 16px rgba(108, 99, 255, 0.3)',
+                                '&:hover': { 
+                                    background: 'linear-gradient(135deg, #7C74FF 0%, #FF66AD 100%)',
+                                    boxShadow: '0 12px 24px rgba(108, 99, 255, 0.4)',
+                                    transform: 'translateY(-2px)'
+                                },
+                                '&:active': { transform: 'translateY(0)' },
+                                '&.Mui-disabled': { opacity: 0.6, background: 'rgba(255,255,255,0.1)' }
                             }}
                         >
-                            {isProcessing ? 'Enhancing...' : 'Download HD (PNG AI)'}
+                            {isProcessing ? 'Enhancing...' : 'Download HD (AI Preview)'}
                         </Button>
                     </span>
                 </Tooltip>
 
                 {type === 'upload' && (
-                    <Tooltip title="Download original file without changes">
+                    <Tooltip title="Download original customer-uploaded file">
                         <Button 
-                            size="small" 
+                            size="medium" 
                             variant="outlined" 
-                            startIcon={<CloudDownloadIcon />}
+                            startIcon={<CloudDownloadIcon sx={{ fontSize: 18 }} />}
                             onClick={() => handleDownloadOriginal(imageUrl, productSlug)}
                             sx={{ 
                                 textTransform: 'none', 
-                                fontSize: '0.75rem', 
+                                fontSize: '0.8rem', 
                                 fontWeight: 700,
-                                borderColor: 'rgba(255,255,255,0.3)',
-                                color: '#fff',
-                                '&:hover': { borderColor: '#fff', bgcolor: 'rgba(255,255,255,0.05)' }
+                                borderRadius: '12px',
+                                px: 2,
+                                py: 1,
+                                borderColor: 'rgba(255, 255, 255, 0.1)',
+                                color: 'rgba(255, 255, 255, 0.8)',
+                                backdropFilter: 'blur(10px)',
+                                '&:hover': { 
+                                    borderColor: 'rgba(255, 255, 255, 0.3)', 
+                                    bgcolor: 'rgba(255, 255, 255, 0.05)',
+                                    color: '#fff',
+                                    transform: 'translateY(-2px)'
+                                },
+                                '&:active': { transform: 'translateY(0)' }
                             }}
                         >
                             Original

@@ -1,4 +1,5 @@
 import React, { Suspense, useMemo, useRef, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { Canvas, useThree } from '@react-three/fiber';
 import { OrbitControls, Environment, RoundedBox, useGLTF } from '@react-three/drei';
 import * as THREE from 'three';

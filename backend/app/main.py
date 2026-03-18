@@ -116,11 +116,11 @@ app.include_router(api_router, prefix="/api/v1")
 @app.on_event("startup")
 def on_startup():
     try:
-        # Log protocol without sensitive info
-        db_url = settings.DATABASE_URL
-        protocol = db_url.split("://")[0] if "://" in db_url else "unknown"
-        print(f"DEBUG: Attempting to connect to database using protocol: {protocol}")
+        # 1. Run migrations first
+        from app.db.migrations import ensure_columns
+        ensure_columns()
         
+        # 2. Sync metadata
         Base.metadata.create_all(bind=engine)
         print("DEBUG: Database connection successful and tables verified.")
     except Exception as e:

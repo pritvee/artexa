@@ -9,6 +9,7 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 import api, { getPublicUrl } from '../api/axios';
 import { useAuth } from '../store/AuthContext';
+import { sanitizeUrl } from '../api/security';
 import { useCart } from '../store/CartContext';
 import InstagramSupportButton from '../components/Shared/InstagramSupportButton';
 import CanvasPreview from '../components/Customization/LiveVisualizer/CanvasPreview';
@@ -311,11 +312,16 @@ const ProductCustomizerPage = () => {
                             />
                         ) : (
                             <Box sx={{ textAlign: 'center', p: 3 }}>
-                                <img
-                                    src={getPublicUrl(product.image_url) || 'https://picsum.photos/seed/gift/400/400'}
-                                    alt={product.name}
-                                    style={{ maxWidth: '100%', maxHeight: '400px', borderRadius: '12px' }}
-                                />
+                                {(() => {
+                                    const safeProductImg = sanitizeUrl(getPublicUrl(product.image_url), 'https://picsum.photos/seed/gift/400/400');
+                                    return (
+                                        <img
+                                            src={safeProductImg}
+                                            alt={product.name}
+                                            style={{ maxWidth: '100%', maxHeight: '400px', borderRadius: '12px' }}
+                                        />
+                                    );
+                                })()}
                             </Box>
                         )}
                     </Paper>

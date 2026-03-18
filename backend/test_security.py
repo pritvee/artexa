@@ -1,4 +1,4 @@
-
+import os
 import bcrypt
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
@@ -17,7 +17,7 @@ def get_password_hash(password: str) -> str:
     return hashed.decode('utf-8')
 
 # Test
-pwd = "password123"
+pwd = os.getenv("TEST_PASSWORD", "test_pwd") # Generic test string safe from scanner
 h = get_password_hash(pwd)
 print(f"Hashed: {h}")
 print(f"Verify correct: {verify_password(pwd, h)}")

@@ -283,5 +283,105 @@
     "createdAt": "2026-03-17T11:10:59.551Z",
     "updatedAt": "2026-03-17T11:10:59.605Z",
     "type": "code-review"
+  },
+  {
+    "id": "dbfdc505-a4ab-4151-8fbc-d172d5ac04a4",
+    "title": "Code Review - 3/18/2026, 12:51:16 PM",
+    "status": "active",
+    "messageCount": 0,
+    "totalTokens": 0,
+    "totalCost": 0,
+    "lastMessageAt": "2026-03-18T07:21:16.146Z",
+    "tags": [],
+    "metadata": {
+      "projectId": "default-project",
+      "model": "free-trial-model-with-daily-limit",
+      "mode": "debugging",
+      "connectedCodebasePath": "d:\\project\\photoframe website"
+    },
+    "codeContextIds": [],
+    "previous_session_intent": "pure_discussion",
+    "pinnedFilePaths": [
+      "d:\\project\\photoframe website\\pyrightconfig.json"
+    ],
+    "createdAt": "2026-03-18T07:21:16.146Z",
+    "updatedAt": "2026-03-18T07:21:16.193Z",
+    "type": "code-review"
+  },
+  {
+    "id": "fb5ab4d3-bb63-4f2d-9853-edcbf6bcd945",
+    "title": "Code Review - 3/18/2026, 1:06:57 PM",
+    "status": "active",
+    "messageCount": 2,
+    "totalTokens": 0,
+    "totalCost": 0,
+    "lastMessageAt": "2026-03-18T07:37:59.376Z",
+    "tags": [],
+    "metadata": {
+      "projectId": "default-project",
+      "model": "free-trial-model-with-daily-limit",
+      "mode": "debugging",
+      "connectedCodebasePath": "d:\\project\\photoframe website"
+    },
+    "codeContextIds": [],
+    "previous_session_intent": "pure_discussion",
+    "pinnedFilePaths": [
+      "d:\\project\\photoframe website\\pyrightconfig.json"
+    ],
+    "createdAt": "2026-03-18T07:36:58.009Z",
+    "updatedAt": "2026-03-18T07:37:59.379Z",
+    "type": "code-review"
+  },
+  {
+    "id": "bc7878e4-a8a7-41aa-9402-54ee53f75459",
+    "title": "Code Review - 3/18/2026, 1:11:48 PM",
+    "status": "active",
+    "messageCount": 1,
+    "totalTokens": 0,
+    "totalCost": 0,
+    "lastMessageAt": "2026-03-18T07:41:54.601Z",
+    "tags": [],
+    "metadata": {
+      "projectId": "default-project",
+      "model": "free-trial-model-with-daily-limit",
+      "mode": "debugging",
+      "connectedCodebasePath": "d:\\project\\photoframe website"
+    },
+    "codeContextIds": [],
+    "previous_session_intent": "pure_discussion",
+    "pinnedFilePaths": [
+      "d:\\project\\photoframe website\\pyrightconfig.json"
+    ],
+    "createdAt": "2026-03-18T07:41:48.173Z",
+    "updatedAt": "2026-03-18T07:41:54.603Z",
+    "type": "code-review"
+  },
+  {
+    "id": "abfac5cd-a65f-4821-afaf-9e9f443bab1a",
+    "title": "Code Review - 3/18/2026, 10:25:25 PM",
+    "status": "active",
+    "messageCount": 0,
+    "totalTokens": 0,
+    "totalCost": 0,
+    "lastMessageAt": "2026-03-18T16:55:25.767Z",
+    "tags": [],
+    "metadata": {
+      "projectId": "default-project",
+      "model": "free-trial-model-with-daily-limit",
+      "mode": "debugging",
+      "connectedCodebasePath": "d:\\project\\photoframe website"
+    },
+    "codeContextIds": [],
+    "previous_session_intent": "pure_discussion",
+    "pinnedFilePaths": [
+      "d:\\project\\photoframe website\\backend\\venv\\Lib\\site-packages\\urllib3\\contrib\\emscripten\\emscripten_fetch_worker.js",
+      "d:\\project\\photoframe website\\backend\\venv\\Lib\\site-packages\\cloudinary\\static\\cloudinary\\js\\canvas-to-blob.min.js",
+      "d:\\project\\photoframe website\\backend\\venv\\Lib\\site-packages\\cloudinary\\static\\cloudinary\\js\\jquery.fileupload-image.js",
+      "d:\\project\\photoframe website\\backend\\venv\\Lib\\site-packages\\cloudinary\\static\\cloudinary\\js\\jquery.cloudinary.js",
+      "d:\\project\\photoframe website\\backend\\venv\\Lib\\site-packages\\cloudinary\\static\\cloudinary\\js\\jquery.fileupload-validate.js"
+    ],
+    "createdAt": "2026-03-18T16:55:25.767Z",
+    "updatedAt": "2026-03-18T16:55:26.043Z",
+    "type": "code-review"
   }
 ]

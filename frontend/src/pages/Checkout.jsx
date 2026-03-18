@@ -21,6 +21,7 @@ import { useOrders } from '../store/OrderContext';
 import api from '../api/axios';
 import { getPublicUrl } from '../api/axios';
 import { useAuth } from '../store/AuthContext';
+import { sanitizeUrl } from '../api/security';
 import { motion } from 'framer-motion';
 
 const Checkout = () => {
@@ -380,18 +381,25 @@ const Checkout = () => {
                             <Typography variant="h5" sx={{ fontWeight: 900, mb: 4 }}>Order Details</Typography>
 
                             <Stack spacing={2} sx={{ mb: 4 }}>
-                                {checkoutCart.slice(0, 3).map(item => (
-                                    <Box key={item.id} sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-                                        <Box sx={{ width: 50, height: 50, borderRadius: '12px', bgcolor: 'rgba(0,0,0,0.05)', overflow: 'hidden' }}>
-                                            <img src={getPublicUrl(item.preview_image_url || item.product?.image_url)} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                                        </Box>
-                                        <Box sx={{ flexGrow: 1 }}>
-                                            <Typography variant="body2" sx={{ fontWeight: 700, lineHeight: 1.2 }}>{item.product?.name}</Typography>
-                                            <Typography variant="caption" color="text.secondary">Qty: {item.quantity}</Typography>
-                                        </Box>
-                                        <Typography sx={{ fontWeight: 700 }}>₹{((item.product?.price || 0) * item.quantity).toFixed(0)}</Typography>
-                                    </Box>
-                                ))}
+                                    {checkoutCart.slice(0, 3).map(item => {
+                                        const safeItemImageUrl = sanitizeUrl(getPublicUrl(item.preview_image_url || item.product?.image_url));
+                                        return (
+                                            <Box key={item.id} sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+                                                <Box sx={{ width: 50, height: 50, borderRadius: '12px', bgcolor: 'rgba(0,0,0,0.05)', overflow: 'hidden' }}>
+                                                    <img 
+                                                        src={safeItemImageUrl} 
+                                                        alt={item.product?.name}
+                                                        style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                                                    />
+                                                </Box>
+                                                <Box sx={{ flexGrow: 1 }}>
+                                                    <Typography variant="body2" sx={{ fontWeight: 700, lineHeight: 1.2 }}>{item.product?.name}</Typography>
+                                                    <Typography variant="caption" color="text.secondary">Qty: {item.quantity}</Typography>
+                                                </Box>
+                                                <Typography sx={{ fontWeight: 700 }}>₹{((item.product?.price || 0) * item.quantity).toFixed(0)}</Typography>
+                                            </Box>
+                                        );
+                                    })}
                                 {checkoutCart.length > 3 && (
                                     <Typography variant="caption" color="primary" sx={{ textAlign: 'center', fontWeight: 700 }}>
                                         + {checkoutCart.length - 3} more items

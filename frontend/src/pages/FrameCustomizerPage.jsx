@@ -30,6 +30,7 @@ import BrushIcon from '@mui/icons-material/Brush';
 
 import api, { getPublicUrl } from '../api/axios';
 import { useAuth } from '../store/AuthContext';
+import { sanitizeUrl } from '../api/security';
 import { useCart } from '../store/CartContext';
 import { Reorder } from 'framer-motion';
 
@@ -357,12 +358,19 @@ const FrameCustomizerPage = () => {
                                 </Button>
                                 {design.uploadedFileUrls.length > 0 && (
                                     <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 1 }}>
-                                        {design.uploadedFileUrls.map((url, i) => (
-                                            <Box key={i} sx={{ position: 'relative', pt: '100%', borderRadius: '8px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.1)' }}>
-                                                <img src={url} alt="upload" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
-                                                <IconButton size="small" onClick={() => updateDesign({ uploadedFileUrls: design.uploadedFileUrls.filter((_, idx) => idx !== i) })} sx={{ position: 'absolute', top: 2, right: 2, bgcolor: 'rgba(0,0,0,0.5)' }}><DeleteIcon sx={{ fontSize: 14 }} /></IconButton>
-                                            </Box>
-                                        ))}
+                                        {design.uploadedFileUrls.map((url, i) => {
+                                            const safeFrameUrl = sanitizeUrl(url);
+                                            return (
+                                                <Box key={i} sx={{ position: 'relative', pt: '100%', borderRadius: '8px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.1)' }}>
+                                                    <img 
+                                                        src={safeFrameUrl} 
+                                                        alt="upload" 
+                                                        style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover' }} 
+                                                    />
+                                                    <IconButton size="small" onClick={() => updateDesign({ uploadedFileUrls: design.uploadedFileUrls.filter((_, idx) => idx !== i) })} sx={{ position: 'absolute', top: 2, right: 2, bgcolor: 'rgba(0,0,0,0.5)' }}><DeleteIcon sx={{ fontSize: 14 }} /></IconButton>
+                                                </Box>
+                                            );
+                                        })}
                                     </Box>
                                 )}
                                 <ImageEnhancerPanel 

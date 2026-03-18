@@ -62,20 +62,20 @@ const Navbar = () => {
                     transform: 'translateX(-50%)',
                     width: { xs: 'calc(100% - 32px)', md: isScrolled ? '85%' : '90%' },
                     maxWidth: '1400px',
-                    borderRadius: '20px',
+                    borderRadius: '24px',
                     zIndex: 2000,
                     transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
                     background: isScrolled
-                        ? 'rgba(5, 7, 10, 0.85)'
-                        : 'rgba(12, 14, 20, 0.65)',
-                    backdropFilter: 'blur(16px) saturate(180%)',
-                    border: '1px solid rgba(255,255,255,0.08)',
+                        ? 'rgba(255, 255, 255, 0.03)'
+                        : 'rgba(255, 255, 255, 0.01)',
+                    backdropFilter: 'blur(25px) saturate(200%)',
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
                     boxShadow: isScrolled
-                        ? '0 10px 40px rgba(0,0,0,0.5)'
-                        : '0 8px 32px rgba(0,0,0,0.2)',
+                        ? '0 20px 40px rgba(0,0,0,0.4)'
+                        : '0 8px 32px rgba(0,0,0,0.1)',
                 }}
             >
-                <Toolbar disableGutters sx={{ px: { xs: 2, md: 4 }, minHeight: { xs: '60px !important', md: '70px !important' }, justifyContent: 'space-between' }}>
+                <Toolbar disableGutters sx={{ px: { xs: 2, md: 4 }, minHeight: { xs: '60px !important', md: '75px !important' }, justifyContent: 'space-between' }}>
 
                     {/* Logo */}
                     <Typography
@@ -85,9 +85,9 @@ const Navbar = () => {
                         sx={{
                             textDecoration: 'none',
                             fontWeight: 900,
-                            fontSize: { xs: '1.2rem', md: '1.6rem' },
-                            letterSpacing: '-0.04em',
-                            background: 'linear-gradient(135deg, #FFFFFF 30%, #CEC7FF 100%)',
+                            fontSize: { xs: '1.3rem', md: '1.8rem' },
+                            letterSpacing: '-0.05em',
+                            background: 'linear-gradient(135deg, #FFFFFF 0%, #6C63FF 100%)',
                             WebkitBackgroundClip: 'text',
                             WebkitTextFillColor: 'transparent',
                             display: 'flex',
@@ -100,11 +100,11 @@ const Navbar = () => {
                     {/* Desktop: center nav links */}
                     <Box sx={{ 
                         display: { xs: 'none', md: 'flex' }, 
-                        gap: 1,
-                        bgcolor: 'rgba(255,255,255,0.03)',
-                        px: 1, py: 0.5,
+                        gap: 1.5,
+                        bgcolor: 'rgba(255, 255, 255, 0.03)',
+                        px: 1.5, py: 0.75,
                         borderRadius: '100px',
-                        border: '1px solid rgba(255,255,255,0.05)'
+                        border: '1px solid rgba(255, 255, 255, 0.05)'
                     }}>
                         {NAV_LINKS.map((item) => {
                             const isActive = location.pathname === item.path;
@@ -115,15 +115,15 @@ const Navbar = () => {
                                     to={item.path}
                                     sx={{
                                         color: 'white',
-                                        fontWeight: isActive ? 700 : 500,
-                                        fontSize: '0.9rem',
-                                        px: 2.5,
+                                        fontWeight: isActive ? 800 : 500,
+                                        fontSize: '0.95rem',
+                                        px: 3,
                                         borderRadius: '100px',
-                                        opacity: isActive ? 1 : 0.7,
-                                        bgcolor: isActive ? 'rgba(124, 77, 255, 0.2)' : 'transparent',
+                                        opacity: isActive ? 1 : 0.6,
+                                        bgcolor: isActive ? 'rgba(108, 99, 255, 0.15)' : 'transparent',
                                         textTransform: 'none',
                                         transition: 'all 0.3s',
-                                        '&:hover': { opacity: 1, bgcolor: 'rgba(255,255,255,0.08)' }
+                                        '&:hover': { opacity: 1, bgcolor: 'rgba(255, 255, 255, 0.08)' }
                                     }}
                                 >
                                     {item.name}
@@ -133,64 +133,45 @@ const Navbar = () => {
                     </Box>
 
                     {/* Right: Cart + Menu/Profile */}
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 0.5, md: 1.5 } }}>
-                        {/* Desktop Search or similar can go here */}
-                        
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1, md: 2 } }}>
                         {/* Cart */}
                         <IconButton
                             component={RouterLink}
                             to="/cart"
                             sx={{ 
                                 color: 'white', 
-                                width: 44, height: 44, 
-                                bgcolor: 'rgba(255,255,255,0.05)',
-                                '&:hover': { bgcolor: 'rgba(255,255,255,0.1)', transform: 'scale(1.05)' } 
+                                width: 48, height: 48, 
+                                bgcolor: 'rgba(255, 255, 255, 0.05)',
+                                border: '1px solid rgba(255, 255, 255, 0.1)',
+                                '&:hover': { bgcolor: 'rgba(255, 255, 255, 0.1)', transform: 'scale(1.05)' } 
                             }}
                         >
                             <Badge
                                 badgeContent={cartCount}
                                 sx={{ 
                                     '& .MuiBadge-badge': { 
-                                        background: 'linear-gradient(135deg,#7C4DFF,#F50057)', 
+                                        background: 'linear-gradient(135deg, #6C63FF, #FF4D9D)', 
                                         color: '#fff', 
-                                        fontWeight: 800, 
-                                        fontSize: '10px', 
-                                        minWidth: 18, height: 18, 
+                                        fontWeight: 900, 
+                                        fontSize: '11px', 
+                                        minWidth: 20, height: 20, 
                                         border: '2px solid #05070A',
-                                        boxShadow: '0 0 10px rgba(124, 77, 255, 0.5)'
+                                        boxShadow: '0 0 15px rgba(108, 99, 255, 0.5)'
                                     } 
                                 }}
                             >
-                                <ShoppingCartIcon sx={{ fontSize: 22 }} />
+                                <ShoppingCartIcon sx={{ fontSize: 24 }} />
                             </Badge>
                         </IconButton>
 
-                        {/* Desktop Profile Icon */}
-                        {user && (
-                            <IconButton
-                                component={RouterLink}
-                                to="/profile"
-                                sx={{ 
-                                    display: { xs: 'none', md: 'flex' },
-                                    color: 'white', 
-                                    width: 44, height: 44,
-                                    bgcolor: 'rgba(255,255,255,0.05)',
-                                    '&:hover': { bgcolor: 'rgba(255,255,255,0.1)' }
-                                }}
-                            >
-                                <Avatar sx={{ width: 30, height: 30, bgcolor: 'primary.main', fontSize: '14px', fontWeight: 700 }}>
-                                    {(user.name || 'U')[0].toUpperCase()}
-                                </Avatar>
-                            </IconButton>
-                        )}
-
-                        {/* Hamburger — always visible on mobile, visible on desktop for extra menu */}
+                        {/* Hamburger */}
                         <IconButton
                             onClick={() => setDrawerOpen(true)}
                             sx={{ 
-                                color: 'white', width: 44, height: 44, 
-                                bgcolor: 'rgba(255,255,255,0.05)',
-                                '&:hover': { bgcolor: 'rgba(255,255,255,0.1)' } 
+                                color: 'white', width: 48, height: 48, 
+                                bgcolor: 'rgba(255, 255, 255, 0.05)',
+                                border: '1px solid rgba(255, 255, 255, 0.1)',
+                                '&:hover': { bgcolor: 'rgba(255, 255, 255, 0.1)' } 
                             }}
                             aria-label="Open menu"
                         >
@@ -207,43 +188,48 @@ const Navbar = () => {
                 onClose={() => setDrawerOpen(false)}
                 PaperProps={{
                     sx: {
-                        width: 280,
-                        background: 'linear-gradient(160deg, #05070A 0%, #1A0A26 100%)',
+                        width: { xs: '100%', sm: 320 },
+                        background: 'rgba(5, 7, 13, 0.8)',
+                        backdropFilter: 'blur(30px)',
                         color: 'white',
                         p: 0,
                         border: 'none',
+                        borderLeft: '1px solid rgba(255, 255, 255, 0.1)'
                     }
                 }}
             >
                 {/* Header */}
-                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', p: 2.5 }}>
-                    <Typography sx={{ fontWeight: 900, fontSize: '1.1rem', letterSpacing: '-0.02em', color: 'white' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', p: 3 }}>
+                    <Typography sx={{ fontWeight: 900, fontSize: '1.4rem', letterSpacing: '-0.04em', color: 'white' }}>
                         ARTEXA
                     </Typography>
-                    <IconButton onClick={() => setDrawerOpen(false)} sx={{ color: 'white', width: 36, height: 36 }}>
-                        <CloseIcon fontSize="small" />
+                    <IconButton onClick={() => setDrawerOpen(false)} sx={{ color: 'white', width: 40, height: 40, bgcolor: 'rgba(255, 255, 255, 0.05)' }}>
+                        <CloseIcon />
                     </IconButton>
                 </Box>
-                <Divider sx={{ borderColor: 'rgba(255,255,255,0.06)' }} />
+                <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.1)' }} />
 
                 {/* Profile block */}
-                <Box sx={{ p: 2 }}>
+                <Box sx={{ p: 3 }}>
                     {user ? (
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, p: 1.5, bgcolor: 'rgba(124,77,255,0.12)', borderRadius: '12px', border: '1px solid rgba(124,77,255,0.2)' }}>
-                            <Avatar sx={{ bgcolor: '#7C4DFF', width: 40, height: 40, fontWeight: 700, fontSize: '1rem' }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, p: 2, bgcolor: 'rgba(108, 99, 255, 0.1)', borderRadius: '20px', border: '1px solid rgba(108, 99, 255, 0.2)' }}>
+                            <Avatar sx={{ 
+                                background: 'linear-gradient(135deg, #6C63FF, #FF4D9D)', 
+                                width: 48, height: 48, fontWeight: 900, fontSize: '1.1rem' 
+                            }}>
                                 {(user.name || 'U')[0].toUpperCase()}
                             </Avatar>
                             <Box sx={{ overflow: 'hidden' }}>
-                                <Typography variant="body2" sx={{ fontWeight: 700, color: 'white' }} noWrap>
+                                <Typography variant="body1" sx={{ fontWeight: 800, color: 'white' }} noWrap>
                                     {user.name || 'User'}
                                 </Typography>
                                 <Button
                                     component={RouterLink}
                                     to="/profile"
                                     onClick={() => setDrawerOpen(false)}
-                                    sx={{ p: 0, fontSize: '11px', color: 'rgba(255,255,255,0.5)', minHeight: 0, '&:hover': { color: '#F50057' } }}
+                                    sx={{ p: 0, fontSize: '12px', color: 'rgba(255, 255, 255, 0.5)', minHeight: 0, '&:hover': { color: '#FF4D9D' } }}
                                 >
-                                    View Profile →
+                                    My Account →
                                 </Button>
                             </Box>
                         </Box>
@@ -254,15 +240,19 @@ const Navbar = () => {
                             to="/login"
                             variant="contained"
                             onClick={() => setDrawerOpen(false)}
-                            sx={{ borderRadius: '12px', height: '44px', background: 'linear-gradient(135deg, #7C4DFF 0%, #F50057 100%)', fontWeight: 700 }}
+                            sx={{ 
+                                borderRadius: '16px', height: '56px', 
+                                background: 'linear-gradient(135deg, #6C63FF 0%, #FF4D9D 100%)', 
+                                fontWeight: 800, fontSize: '16px' 
+                            }}
                         >
-                            Login / Join Artexa
+                            Sign In / Register
                         </Button>
                     )}
                 </Box>
 
                 {/* Nav links */}
-                <List sx={{ px: 2, gap: 0.25, display: 'flex', flexDirection: 'column' }}>
+                <List sx={{ px: 2, gap: 1, display: 'flex', flexDirection: 'column' }}>
                     {allLinks.map((item) => {
                         const isActive = location.pathname === item.path;
                         return (
@@ -272,20 +262,20 @@ const Navbar = () => {
                                 to={item.path}
                                 onClick={() => setDrawerOpen(false)}
                                 sx={{
-                                    borderRadius: '12px',
-                                    mb: 0.25,
+                                    borderRadius: '16px',
                                     color: 'white',
-                                    bgcolor: isActive ? 'rgba(124,77,255,0.15)' : 'transparent',
-                                    '&:hover': { bgcolor: 'rgba(255,255,255,0.05)' },
-                                    minHeight: '48px',
+                                    bgcolor: isActive ? 'rgba(255, 255, 255, 0.05)' : 'transparent',
+                                    border: isActive ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid transparent',
+                                    '&:hover': { bgcolor: 'rgba(255, 255, 255, 0.05)', borderColor: 'rgba(255, 255, 255, 0.1)' },
+                                    minHeight: '56px',
                                 }}
                             >
-                                <ListItemIcon sx={{ color: isActive ? 'primary.main' : 'rgba(255,255,255,0.5)', minWidth: 38 }}>
+                                <ListItemIcon sx={{ color: isActive ? '#6C63FF' : 'rgba(255, 255, 255, 0.4)', minWidth: 44 }}>
                                     {item.icon}
                                 </ListItemIcon>
                                 <ListItemText
                                     primary={item.name}
-                                    primaryTypographyProps={{ fontWeight: isActive ? 700 : 500, fontSize: '14px' }}
+                                    primaryTypographyProps={{ fontWeight: isActive ? 800 : 500, fontSize: '16px' }}
                                 />
                             </ListItem>
                         );
@@ -293,18 +283,9 @@ const Navbar = () => {
                 </List>
 
                 {/* Bottom actions */}
-                <Box sx={{ mt: 'auto', p: 2, display: 'flex', flexDirection: 'column', gap: 1.5 }}>
-                    <Divider sx={{ borderColor: 'rgba(255,255,255,0.06)', mb: 0.5 }} />
-                    {/* Theme toggle */}
-                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', px: 1 }}>
-                        <Typography variant="body2" sx={{ fontWeight: 600, color: 'rgba(255,255,255,0.7)' }}>
-                            {mode === 'dark' ? 'Dark Mode' : 'Light Mode'}
-                        </Typography>
-                        <IconButton onClick={toggleTheme} sx={{ color: 'white', width: 40, height: 40, bgcolor: 'rgba(255,255,255,0.07)', borderRadius: '10px' }}>
-                            {mode === 'dark' ? <LightModeIcon fontSize="small" sx={{ color: '#fbbf24' }} /> : <DarkModeIcon fontSize="small" />}
-                        </IconButton>
-                    </Box>
-
+                <Box sx={{ mt: 'auto', p: 3, display: 'flex', flexDirection: 'column', gap: 2 }}>
+                    <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.1)' }} />
+                    
                     {user && (
                         <Button
                             fullWidth
@@ -312,7 +293,7 @@ const Navbar = () => {
                             color="error"
                             onClick={handleLogout}
                             startIcon={<LogoutIcon />}
-                            sx={{ borderRadius: '12px', height: '44px', fontWeight: 600, borderColor: 'rgba(239,68,68,0.4)' }}
+                            sx={{ borderRadius: '16px', height: '52px', fontWeight: 700, borderColor: 'rgba(239, 68, 68, 0.3)' }}
                         >
                             Sign Out
                         </Button>

@@ -25,6 +25,7 @@ import RestoreFromTrashIcon from '@mui/icons-material/RestoreFromTrash';
 import ImageDownloadPanel from './components/ImageDownloadPanel';
 import { useOrders, ORDER_STATUSES } from '../../store/OrderContext';
 import { getPublicUrl } from '../../api/axios';
+import { sanitizeUrl, sanitizeFilename } from '../../api/security';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const Mug3DPreview = lazy(() => import('../../components/Customization/MugBuilder/Mug3DPreview'));
@@ -186,16 +187,23 @@ const ManageOrders = () => {
             if (!response.ok) throw new Error('Fetch failed');
             const blob = await response.blob();
             const blobUrl = window.URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = blobUrl;
-            link.download = filename;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            window.URL.revokeObjectURL(blobUrl);
+            
+            // Only use if explicitly a blob URL to avoid action XSS
+            if (blobUrl && blobUrl.startsWith('blob:')) {
+                const link = document.createElement('a');
+                link.href = blobUrl;
+                link.download = sanitizeFilename(filename);
+                link.click();
+                
+                // Revoke after short delay
+                setTimeout(() => window.URL.revokeObjectURL(blobUrl), 100);
+            }
         } catch (error) {
             console.error("Safe download failed:", error);
-            window.open(url, '_blank');
+            const safeOriginalUrl = sanitizeUrl(url);
+            if (safeOriginalUrl !== 'about:blank') {
+                window.open(safeOriginalUrl, '_blank');
+            }
         }
     };
 

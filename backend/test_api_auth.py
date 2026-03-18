@@ -1,10 +1,10 @@
-
+import os
 import requests
 
 def test_registration_and_login():
     url = "http://localhost:8000/api/v1/auth"
     email = "testuser@example.com"
-    password = "testpassword123"
+    password = os.getenv("TEST_USER_PASSWORD", "") # Set in env
     name = "Test User"
     
     # 1. Register

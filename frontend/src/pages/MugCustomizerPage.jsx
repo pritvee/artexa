@@ -4,7 +4,8 @@ import {
     Container, Grid, Box, Typography, Button, CircularProgress,
     TextField, MenuItem, Select, FormControl, InputLabel,
     Slider, Divider, Paper, Tabs, Tab, Chip, IconButton,
-    Tooltip, Alert, Snackbar, Checkbox, FormControlLabel
+    Tooltip, Alert, Snackbar, Checkbox, FormControlLabel,
+    Stack
 } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import ViewInArIcon from '@mui/icons-material/ViewInAr';
@@ -14,8 +15,11 @@ import TextFieldsIcon from '@mui/icons-material/TextFields';
 import ColorLensIcon from '@mui/icons-material/ColorLens';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
 import api, { getPublicUrl } from '../api/axios';
 import { useAuth } from '../store/AuthContext';
+import { sanitizeUrl } from '../api/security';
 import InstagramSupportButton from '../components/Shared/InstagramSupportButton';
 import MugCanvasEditor from '../components/Customization/MugBuilder/MugCanvasEditor';
 import ImageEnhancerPanel from '../components/Customization/Shared/ImageEnhancerPanel';
@@ -338,14 +342,17 @@ const MugCustomizerPage = () => {
                                 </Button>
                                 {userImageSrc && (
                                     <Box className="glass" sx={{ p: 2, borderRadius: '16px', display: 'flex', alignItems: 'center', gap: 2 }}>
-                                        <Box sx={{ width: 60, height: 60, borderRadius: '8px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.1)' }}>
-                                            <img src={userImageSrc} alt="preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                                        </Box>
-                                        <Box sx={{ flexGrow: 1 }}>
-                                            <Typography variant="caption">Scale: {imageScale}%</Typography>
-                                            <Slider value={imageScale} min={20} max={200} onChange={(_,v) => setImageScale(v)} size="small" />
-                                        </Box>
+                                    <Box sx={{ width: 60, height: 60, borderRadius: '8px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.1)' }}>
+                                        {(() => {
+                                            const safeMugImg = sanitizeUrl(userImageSrc);
+                                            return <img src={safeMugImg} alt="preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />;
+                                        })()}
                                     </Box>
+                                    <Box sx={{ flexGrow: 1 }}>
+                                        <Typography variant="caption">Scale: {imageScale}%</Typography>
+                                        <Slider value={imageScale} min={20} max={200} onChange={(_,v) => setImageScale(v)} size="small" />
+                                    </Box>
+                                </Box>
                                 )}
                                 {userImageSrc && <ImageEnhancerPanel originalImageSrc={userImageSrc} onEnhancedImage={setEnhancedImageSrc} />}
                             </Stack>

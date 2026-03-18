@@ -1,10 +1,11 @@
 import requests
 import json
+import os
 
 base_url = "http://localhost:8000/api/v1"
 
 # Login as admin
-login_data = {"username": "admin@example.com", "password": "admin123"}
+login_data = {"username": "admin@example.com", "password": os.getenv("ADMIN_PASSWORD", "")}
 r = requests.post(f"{base_url}/auth/login", data=login_data)
 if r.status_code != 200:
     print("Login failed:", r.text)
