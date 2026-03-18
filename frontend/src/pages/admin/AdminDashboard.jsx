@@ -17,7 +17,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useOrders, ORDER_STATUSES } from '../../store/OrderContext';
 import { useAuth } from '../../store/AuthContext';
-import api from '../../api/axios';
+import api, { getPublicUrl } from '../../api/axios';
 
 const STATUS_COLOR_MAP = {
     placed: 'info',
