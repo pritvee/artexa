@@ -33,7 +33,9 @@ const PremiumCustomizerLayout = ({
     return (
         <Box sx={{ 
             minHeight: '100vh', 
-            bgcolor: 'transparent', 
+            bgcolor: 'rgba(0, 0, 0, 0.45)',
+            backdropFilter: 'blur(20px)',
+            WebkitBackdropFilter: 'blur(20px)',
             color: '#fff',
             position: 'relative',
             display: 'flex',

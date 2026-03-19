@@ -432,7 +432,7 @@ const GiftBoxCustomizerPage = () => {
                         </Box>
                         <Stack direction="row" spacing={2}>
                             <Button fullWidth onClick={() => { setFaceDesigns({ insideBox: [] }); setSnackbar({ open: true, message: 'Reset done!', severity: 'info' }); }} sx={{ color: 'rgba(255,255,255,0.5)', minWidth: 'auto', px: 2 }}><RestartAltIcon /></Button>
-                            <Button variant="contained" startIcon={<ShoppingCartIcon />} onClick={handleAddToCart} sx={{ borderRadius: '16px', px: 4, fontWeight: 800, whiteSpace: 'nowrap' }}>Add to Cart</Button>
+                            <Button variant="contained" startIcon={<ShoppingCartIcon />} onClick={handleAddToCart} sx={{ height: '56px', borderRadius: '16px', fontSize: '15px', fontWeight: 600, background: 'linear-gradient(135deg, #7C3AED 0%, #EC4899 100%)', boxShadow: '0 8px 24px rgba(236,72,153,0.3)', textTransform: 'none', letterSpacing: '0.5px', px: 4, whiteSpace: 'nowrap' }}>Add to Cart</Button>
                         </Stack>
                     </>
                 }

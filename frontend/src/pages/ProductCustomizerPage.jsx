@@ -262,7 +262,13 @@ const ProductCustomizerPage = () => {
     const [previewTab, setPreviewTab] = React.useState(0);
 
     return (
-        <Box sx={{ bgcolor: 'background.default', minHeight: '100vh' }}>
+        <Box sx={{ 
+            bgcolor: 'rgba(0, 0, 0, 0.5)', 
+            backdropFilter: 'blur(20px)', 
+            minHeight: '100vh',
+            borderTop: '1px solid rgba(255, 255, 255, 0.05)',
+            boxShadow: '0 -10px 40px rgba(0, 0, 0, 0.2)'
+        }}>
             {/* Mobile Title Bar */}
             <Box sx={{ px: 2, pt: 2, pb: 1 }}>
                 <Typography variant="h2" sx={{ fontSize: '18px', fontWeight: 800, mb: 0.5 }}>{product.name}</Typography>
@@ -535,7 +541,16 @@ const ProductCustomizerPage = () => {
                         <Button
                             variant="contained"
                             fullWidth
-                            sx={{ height: '48px', borderRadius: '12px', fontSize: '14px', fontWeight: 700, background: 'linear-gradient(135deg, #6C63FF 0%, #9C4DFF 100%)', boxShadow: '0 4px 16px rgba(108,99,255,0.35)' }}
+                            sx={{ 
+                                height: '56px', 
+                                borderRadius: '16px', 
+                                fontSize: '15px', 
+                                fontWeight: 600, 
+                                background: 'linear-gradient(135deg, #7C3AED 0%, #EC4899 100%)', 
+                                boxShadow: '0 8px 24px rgba(236,72,153,0.3)',
+                                textTransform: 'none',
+                                letterSpacing: '0.5px'
+                            }}
                             onClick={handleAddToCart}
                         >
                             Add to Cart — ₹{totalPrice.toFixed(0)}

@@ -1,4 +1,10 @@
 {
+  "venvPath": "D:/project/photoframe website/backend",
+  "venv": "venv",
+  "pythonVersion": "3.13",
+  "extraPaths": [
+    "D:/project/photoframe website/backend"
+  ],
   "include": [
     "backend",
     "*.py"
@@ -8,11 +14,7 @@
     "**/node_modules",
     "**/__pycache__"
   ],
-  "venvPath": "D:/project/photoframe website/backend",
-  "venv": "venv",
-  "extraPaths": [
-    "backend"
-  ],
   "typeCheckingMode": "basic",
-  "pythonVersion": "3.13"
+  "reportMissingImports": true,
+  "reportMissingTypeStubs": false
 }

@@ -383,5 +383,29 @@
     "createdAt": "2026-03-18T16:55:25.767Z",
     "updatedAt": "2026-03-18T16:55:26.043Z",
     "type": "code-review"
+  },
+  {
+    "id": "6a1cb09c-f34d-416c-9356-213e4ded5737",
+    "title": "Code Review - 3/19/2026, 12:44:29 AM",
+    "status": "active",
+    "messageCount": 0,
+    "totalTokens": 0,
+    "totalCost": 0,
+    "lastMessageAt": "2026-03-18T19:14:30.031Z",
+    "tags": [],
+    "metadata": {
+      "projectId": "default-project",
+      "model": "free-trial-model-with-daily-limit",
+      "mode": "debugging",
+      "connectedCodebasePath": "d:\\project\\photoframe website"
+    },
+    "codeContextIds": [],
+    "previous_session_intent": "pure_discussion",
+    "pinnedFilePaths": [
+      "d:\\project\\photoframe website\\frontend\\src\\components\\Shared\\PageTransition.jsx"
+    ],
+    "createdAt": "2026-03-18T19:14:30.031Z",
+    "updatedAt": "2026-03-18T19:14:30.076Z",
+    "type": "code-review"
   }
 ]

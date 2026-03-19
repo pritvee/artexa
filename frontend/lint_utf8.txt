@@ -1,0 +1,1059 @@
+﻿
+> photoframe-frontend@1.0.0 lint
+> eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0
+
+
+D:\project\photoframe website\frontend\print_glb_meshes.js
+   1:12  error    'require' is not defined                      no-undef
+   2:14  error    'require' is not defined                      no-undef
+   4:29  error    '__dirname' is not defined                    no-undef
+  15:9   warning  'version' is assigned a value but never used  no-unused-vars
+  16:9   warning  'length' is assigned a value but never used   no-unused-vars
+
+D:\project\photoframe website\frontend\src\App.jsx
+   3:15  warning  'IconButton' is defined but never used         no-unused-vars
+  29:23  warning  'ArrowBackIcon' is defined but never used      no-unused-vars
+  53:13  warning  'mode' is assigned a value but never used      no-unused-vars
+  55:11  warning  'navigate' is assigned a value but never used  no-unused-vars
+  63:11  warning  'isHome' is assigned a value but never used    no-unused-vars
+
+D:\project\photoframe website\frontend\src\components\Customization\ChocolateHamper\ChocolateHamper3DPreview.jsx
+    1:36   warning  'useRef' is defined but never used                                                                                                                                                         no-unused-vars
+    1:44   warning  'useEffect' is defined but never used                                                                                                                                                      no-unused-vars
+    3:18   warning  'useThree' is defined but never used                                                                                                                                                       no-unused-vars
+    4:50   warning  'useGLTF' is defined but never used                                                                                                                                                        no-unused-vars
+   45:15   error    Component definition is missing display name                                                                                                                                               react/display-name
+   53:13   error    Unknown property 'position' found                                                                                                                                                          react/no-unknown-property
+   54:13   error    Unknown property 'rotation' found                                                                                                                                                          react/no-unknown-property
+   56:13   error    Unknown property 'geometry' found                                                                                                                                                          react/no-unknown-property
+   57:13   error    Unknown property 'material' found                                                                                                                                                          react/no-unknown-property
+   63:23   error    Component definition is missing display name                                                                                                                                               react/display-name
+   69:16   error    Unknown property 'position' found                                                                                                                                                          react/no-unknown-property
+   70:19   error    Unknown property 'geometry' found                                                                                                                                                          react/no-unknown-property
+   70:39   error    Unknown property 'material' found                                                                                                                                                          react/no-unknown-property
+   79:21   error    Component definition is missing display name                                                                                                                                               react/display-name
+   84:16   error    Unknown property 'position' found                                                                                                                                                          react/no-unknown-property
+   88:35   error    Unknown property 'position' found                                                                                                                                                          react/no-unknown-property
+   88:88   error    Unknown property 'rotation' found                                                                                                                                                          react/no-unknown-property
+   88:112  error    Unknown property 'geometry' found                                                                                                                                                          react/no-unknown-property
+   88:140  error    Unknown property 'material' found                                                                                                                                                          react/no-unknown-property
+   91:19   error    Unknown property 'geometry' found                                                                                                                                                          react/no-unknown-property
+   91:39   error    Unknown property 'material' found                                                                                                                                                          react/no-unknown-property
+   97:22   error    Component definition is missing display name                                                                                                                                               react/display-name
+  102:16   error    Unknown property 'position' found                                                                                                                                                          react/no-unknown-property
+  110:35   error    Unknown property 'position' found                                                                                                                                                          react/no-unknown-property
+  110:92   error    Unknown property 'rotation' found                                                                                                                                                          react/no-unknown-property
+  111:25   error    Unknown property 'geometry' found                                                                                                                                                          react/no-unknown-property
+  111:46   error    Unknown property 'material' found                                                                                                                                                          react/no-unknown-property
+  119:19   error    Component definition is missing display name                                                                                                                                               react/display-name
+  129:19   error    Unknown property 'position' found                                                                                                                                                          react/no-unknown-property
+  130:31   error    Unknown property 'args' found                                                                                                                                                              react/no-unknown-property
+  131:28   error    Unknown property 'object' found                                                                                                                                                            react/no-unknown-property
+  131:42   error    Unknown property 'attach' found                                                                                                                                                            react/no-unknown-property
+  133:20   error    Unknown property 'position' found                                                                                                                                                          react/no-unknown-property
+  135:35   error    Unknown property 'rotation' found                                                                                                                                                          react/no-unknown-property
+  136:41   error    Unknown property 'args' found                                                                                                                                                              react/no-unknown-property
+  137:36   error    Unknown property 'object' found                                                                                                                                                            react/no-unknown-property
+  137:50   error    Unknown property 'attach' found                                                                                                                                                            react/no-unknown-property
+  146:21   error    Component definition is missing display name                                                                                                                                               react/display-name
+  150:16   error    Unknown property 'position' found                                                                                                                                                          react/no-unknown-property
+  151:19   error    Unknown property 'rotation' found                                                                                                                                                          react/no-unknown-property
+  151:50   error    Unknown property 'material' found                                                                                                                                                          react/no-unknown-property
+  152:32   error    Unknown property 'args' found                                                                                                                                                              react/no-unknown-property
+  154:20   error    Unknown property 'position' found                                                                                                                                                          react/no-unknown-property
+  155:23   error    Unknown property 'rotation' found                                                                                                                                                          react/no-unknown-property
+  155:48   error    Unknown property 'position' found                                                                                                                                                          react/no-unknown-property
+  155:74   error    Unknown property 'material' found                                                                                                                                                          react/no-unknown-property
+  156:36   error    Unknown property 'args' found                                                                                                                                                              react/no-unknown-property
+  158:23   error    Unknown property 'rotation' found                                                                                                                                                          react/no-unknown-property
+  158:50   error    Unknown property 'position' found                                                                                                                                                          react/no-unknown-property
+  158:75   error    Unknown property 'material' found                                                                                                                                                          react/no-unknown-property
+  159:36   error    Unknown property 'args' found                                                                                                                                                              react/no-unknown-property
+  161:23   error    Unknown property 'position' found                                                                                                                                                          react/no-unknown-property
+  161:47   error    Unknown property 'material' found                                                                                                                                                          react/no-unknown-property
+  162:37   error    Unknown property 'args' found                                                                                                                                                              react/no-unknown-property
+  170:21   error    Component definition is missing display name                                                                                                                                               react/display-name
+  173:16   error    Unknown property 'position' found                                                                                                                                                          react/no-unknown-property
+  175:31   error    Unknown property 'position' found                                                                                                                                                          react/no-unknown-property
+  176:34   error    Unknown property 'args' found                                                                                                                                                              react/no-unknown-property
+  177:32   error    Unknown property 'object' found                                                                                                                                                            react/no-unknown-property
+  177:45   error    Unknown property 'attach' found                                                                                                                                                            react/no-unknown-property
+  181:31   error    Unknown property 'position' found                                                                                                                                                          react/no-unknown-property
+  182:34   error    Unknown property 'args' found                                                                                                                                                              react/no-unknown-property
+  183:32   error    Unknown property 'object' found                                                                                                                                                            react/no-unknown-property
+  183:45   error    Unknown property 'attach' found                                                                                                                                                            react/no-unknown-property
+  191:25   error    Component definition is missing display name                                                                                                                                               react/display-name
+  197:11   warning  'baseMat' is assigned a value but never used                                                                                                                                               no-unused-vars
+  198:11   warning  'darkMat' is assigned a value but never used                                                                                                                                               no-unused-vars
+  218:20   error    Unknown property 'position' found                                                                                                                                                          react/no-unknown-property
+  219:23   error    Unknown property 'position' found                                                                                                                                                          react/no-unknown-property
+  219:47   error    Unknown property 'receiveShadow' found                                                                                                                                                     react/no-unknown-property
+  219:74   error    Unknown property 'args' found                                                                                                                                                              react/no-unknown-property
+  219:107  error    Unknown property 'object' found                                                                                                                                                            react/no-unknown-property
+  219:124  error    Unknown property 'attach' found                                                                                                                                                            react/no-unknown-property
+  225:35   error    Unknown property 'position' found                                                                                                                                                          react/no-unknown-property
+  225:60   error    Unknown property 'material' found                                                                                                                                                          react/no-unknown-property
+  225:96   error    Unknown property 'args' found                                                                                                                                                              react/no-unknown-property
+  227:23   error    Unknown property 'position' found                                                                                                                                                          react/no-unknown-property
+  227:48   error    Unknown property 'rotation' found                                                                                                                                                          react/no-unknown-property
+  227:79   error    Unknown property 'material' found                                                                                                                                                          react/no-unknown-property
+  228:36   error    Unknown property 'args' found                                                                                                                                                              react/no-unknown-property
+  237:20   error    Unknown property 'position' found                                                                                                                                                          react/no-unknown-property
+  238:23   error    Unknown property 'position' found                                                                                                                                                          react/no-unknown-property
+  238:53   error    Unknown property 'receiveShadow' found                                                                                                                                                     react/no-unknown-property
+  238:80   error    Unknown property 'args' found                                                                                                                                                              react/no-unknown-property
+  238:115  error    Unknown property 'object' found                                                                                                                                                            react/no-unknown-property
+  238:132  error    Unknown property 'attach' found                                                                                                                                                            react/no-unknown-property
+  241:35   error    Unknown property 'position' found                                                                                                                                                          react/no-unknown-property
+  241:52   error    Unknown property 'castShadow' found                                                                                                                                                        react/no-unknown-property
+  241:63   error    Unknown property 'receiveShadow' found                                                                                                                                                     react/no-unknown-property
+  241:90   error    Unknown property 'args' found                                                                                                                                                              react/no-unknown-property
+  241:117  error    Unknown property 'object' found                                                                                                                                                            react/no-unknown-property
+  241:135  error    Unknown property 'attach' found                                                                                                                                                            react/no-unknown-property
+  244:35   error    Unknown property 'position' found                                                                                                                                                          react/no-unknown-property
+  244:58   error    Unknown property 'material' found                                                                                                                                                          react/no-unknown-property
+  244:92   error    Unknown property 'args' found                                                                                                                                                              react/no-unknown-property
+  246:24   error    Unknown property 'position' found                                                                                                                                                          react/no-unknown-property
+  247:27   error    Unknown property 'position' found                                                                                                                                                          react/no-unknown-property
+  247:62   error    Unknown property 'castShadow' found                                                                                                                                                        react/no-unknown-property
+  247:86   error    Unknown property 'args' found                                                                                                                                                              react/no-unknown-property
+  247:123  error    Unknown property 'object' found                                                                                                                                                            react/no-unknown-property
+  247:141  error    Unknown property 'attach' found                                                                                                                                                            react/no-unknown-property
+  248:27   error    Unknown property 'position' found                                                                                                                                                          react/no-unknown-property
+  248:61   error    Unknown property 'castShadow' found                                                                                                                                                        react/no-unknown-property
+  248:85   error    Unknown property 'args' found                                                                                                                                                              react/no-unknown-property
+  248:122  error    Unknown property 'object' found                                                                                                                                                            react/no-unknown-property
+  248:140  error    Unknown property 'attach' found                                                                                                                                                            react/no-unknown-property
+  249:27   error    Unknown property 'position' found                                                                                                                                                          react/no-unknown-property
+  249:50   error    Unknown property 'castShadow' found                                                                                                                                                        react/no-unknown-property
+  249:74   error    Unknown property 'args' found                                                                                                                                                              react/no-unknown-property
+  249:114  error    Unknown property 'object' found                                                                                                                                                            react/no-unknown-property
+  249:132  error    Unknown property 'attach' found                                                                                                                                                            react/no-unknown-property
+  257:20   error    Unknown property 'position' found                                                                                                                                                          react/no-unknown-property
+  258:23   error    Unknown property 'position' found                                                                                                                                                          react/no-unknown-property
+  258:47   error    Unknown property 'rotation' found                                                                                                                                                          react/no-unknown-property
+  258:74   error    Unknown property 'castShadow' found                                                                                                                                                        react/no-unknown-property
+  258:85   error    Unknown property 'receiveShadow' found                                                                                                                                                     react/no-unknown-property
+  259:39   error    Unknown property 'args' found                                                                                                                                                              react/no-unknown-property
+  260:32   error    Unknown property 'object' found                                                                                                                                                            react/no-unknown-property
+  260:51   error    Unknown property 'attach' found                                                                                                                                                            react/no-unknown-property
+  262:23   error    Unknown property 'position' found                                                                                                                                                          react/no-unknown-property
+  262:44   error    Unknown property 'material' found                                                                                                                                                          react/no-unknown-property
+  262:85   error    Unknown property 'args' found                                                                                                                                                              react/no-unknown-property
+  264:35   error    Unknown property 'position' found                                                                                                                                                          react/no-unknown-property
+  264:63   error    Unknown property 'rotation' found                                                                                                                                                          react/no-unknown-property
+  264:94   error    Unknown property 'material' found                                                                                                                                                          react/no-unknown-property
+  265:40   error    Unknown property 'args' found                                                                                                                                                              react/no-unknown-property
+  268:24   error    Unknown property 'position' found                                                                                                                                                          react/no-unknown-property
+  269:27   error    Unknown property 'castShadow' found                                                                                                                                                        react/no-unknown-property
+  269:38   error    Unknown property 'material' found                                                                                                                                                          react/no-unknown-property
+  269:77   error    Unknown property 'args' found                                                                                                                                                              react/no-unknown-property
+  279:24   error    Component definition is missing display name                                                                                                                                               react/display-name
+  286:24   error    Unknown property 'position' found                                                                                                                                                          react/no-unknown-property
+  286:44   error    Unknown property 'rotation' found                                                                                                                                                          react/no-unknown-property
+  287:27   error    Unknown property 'castShadow' found                                                                                                                                                        react/no-unknown-property
+  287:38   error    Unknown property 'material' found                                                                                                                                                          react/no-unknown-property
+  287:53   error    Unknown property 'rotation' found                                                                                                                                                          react/no-unknown-property
+  287:102  error    Unknown property 'args' found                                                                                                                                                              react/no-unknown-property
+  288:27   error    Unknown property 'position' found                                                                                                                                                          react/no-unknown-property
+  288:54   error    Unknown property 'castShadow' found                                                                                                                                                        react/no-unknown-property
+  288:65   error    Unknown property 'material' found                                                                                                                                                          react/no-unknown-property
+  288:80   error    Unknown property 'geometry' found                                                                                                                                                          react/no-unknown-property
+  289:27   error    Unknown property 'position' found                                                                                                                                                          react/no-unknown-property
+  289:53   error    Unknown property 'castShadow' found                                                                                                                                                        react/no-unknown-property
+  289:64   error    Unknown property 'material' found                                                                                                                                                          react/no-unknown-property
+  289:79   error    Unknown property 'geometry' found                                                                                                                                                          react/no-unknown-property
+  293:26   error    Unknown property 'position' found                                                                                                                                                          react/no-unknown-property
+  293:46   error    Unknown property 'rotation' found                                                                                                                                                          react/no-unknown-property
+  293:66   error    Unknown property 'castShadow' found                                                                                                                                                        react/no-unknown-property
+  293:90   error    Unknown property 'material' found                                                                                                                                                          react/no-unknown-property
+  293:129  error    Unknown property 'args' found                                                                                                                                                              react/no-unknown-property
+  295:26   error    Unknown property 'position' found                                                                                                                                                          react/no-unknown-property
+  295:46   error    Unknown property 'rotation' found                                                                                                                                                          react/no-unknown-property
+  295:66   error    Unknown property 'castShadow' found                                                                                                                                                        react/no-unknown-property
+  295:77   error    Unknown property 'material' found                                                                                                                                                          react/no-unknown-property
+  295:105  error    Unknown property 'args' found                                                                                                                                                              react/no-unknown-property
+  310:19   error    Unknown property 'position' found                                                                                                                                                          react/no-unknown-property
+  311:30   error    Unknown property 'args' found                                                                                                                                                              react/no-unknown-property
+  312:28   error    Unknown property 'object' found                                                                                                                                                            react/no-unknown-property
+  312:44   error    Unknown property 'attach' found                                                                                                                                                            react/no-unknown-property
+  316:28   error    Unknown property 'object' found                                                                                                                                                            react/no-unknown-property
+  316:48   error    Unknown property 'attach' found                                                                                                                                                            react/no-unknown-property
+  319:19   error    Unknown property 'position' found                                                                                                                                                          react/no-unknown-property
+  320:30   error    Unknown property 'args' found                                                                                                                                                              react/no-unknown-property
+  321:28   error    Unknown property 'object' found                                                                                                                                                            react/no-unknown-property
+  321:45   error    Unknown property 'attach' found                                                                                                                                                            react/no-unknown-property
+  324:19   error    Unknown property 'position' found                                                                                                                                                          react/no-unknown-property
+  325:30   error    Unknown property 'args' found                                                                                                                                                              react/no-unknown-property
+  326:53   error    Unknown property 'roughness' found                                                                                                                                                         react/no-unknown-property
+  343:19   error    Unknown property 'castShadow' found                                                                                                                                                        react/no-unknown-property
+  344:33   error    Unknown property 'args' found                                                                                                                                                              react/no-unknown-property
+  345:28   error    Unknown property 'object' found                                                                                                                                                            react/no-unknown-property
+  345:45   error    Unknown property 'attach' found                                                                                                                                                            react/no-unknown-property
+  348:19   error    Unknown property 'position' found                                                                                                                                                          react/no-unknown-property
+  348:40   error    Unknown property 'rotation' found                                                                                                                                                          react/no-unknown-property
+  349:32   error    Unknown property 'args' found                                                                                                                                                              react/no-unknown-property
+  350:28   error    Unknown property 'object' found                                                                                                                                                            react/no-unknown-property
+  350:46   error    Unknown property 'attach' found                                                                                                                                                            react/no-unknown-property
+  353:19   error    Unknown property 'position' found                                                                                                                                                          react/no-unknown-property
+  353:44   error    Unknown property 'rotation' found                                                                                                                                                          react/no-unknown-property
+  354:35   error    Unknown property 'args' found                                                                                                                                                              react/no-unknown-property
+  355:28   error    Unknown property 'object' found                                                                                                                                                            react/no-unknown-property
+  355:46   error    Unknown property 'attach' found                                                                                                                                                            react/no-unknown-property
+  368:28   error    Unknown property 'object' found                                                                                                                                                            react/no-unknown-property
+  368:44   error    Unknown property 'attach' found                                                                                                                                                            react/no-unknown-property
+  371:19   error    Unknown property 'position' found                                                                                                                                                          react/no-unknown-property
+  372:30   error    Unknown property 'args' found                                                                                                                                                              react/no-unknown-property
+  373:55   error    Unknown property 'roughness' found                                                                                                                                                         react/no-unknown-property
+  376:19   error    Unknown property 'position' found                                                                                                                                                          react/no-unknown-property
+  377:30   error    Unknown property 'args' found                                                                                                                                                              react/no-unknown-property
+  378:28   error    Unknown property 'object' found                                                                                                                                                            react/no-unknown-property
+  378:46   error    Unknown property 'attach' found                                                                                                                                                            react/no-unknown-property
+  392:28   error    Unknown property 'object' found                                                                                                                                                            react/no-unknown-property
+  392:46   error    Unknown property 'attach' found                                                                                                                                                            react/no-unknown-property
+  395:19   error    Unknown property 'position' found                                                                                                                                                          react/no-unknown-property
+  396:30   error    Unknown property 'args' found                                                                                                                                                              react/no-unknown-property
+  397:28   error    Unknown property 'object' found                                                                                                                                                            react/no-unknown-property
+  397:45   error    Unknown property 'attach' found                                                                                                                                                            react/no-unknown-property
+  400:19   error    Unknown property 'position' found                                                                                                                                                          react/no-unknown-property
+  401:30   error    Unknown property 'args' found                                                                                                                                                              react/no-unknown-property
+  413:16   error    Unknown property 'rotation' found                                                                                                                                                          react/no-unknown-property
+  415:19   error    Unknown property 'rotation' found                                                                                                                                                          react/no-unknown-property
+  415:50   error    Unknown property 'castShadow' found                                                                                                                                                        react/no-unknown-property
+  416:35   error    Unknown property 'args' found                                                                                                                                                              react/no-unknown-property
+  417:28   error    Unknown property 'object' found                                                                                                                                                            react/no-unknown-property
+  417:45   error    Unknown property 'attach' found                                                                                                                                                            react/no-unknown-property
+  420:19   error    Unknown property 'position' found                                                                                                                                                          react/no-unknown-property
+  421:30   error    Unknown property 'args' found                                                                                                                                                              react/no-unknown-property
+  422:28   error    Unknown property 'object' found                                                                                                                                                            react/no-unknown-property
+  422:46   error    Unknown property 'attach' found                                                                                                                                                            react/no-unknown-property
+  435:19   error    Unknown property 'castShadow' found                                                                                                                                                        react/no-unknown-property
+  436:33   error    Unknown property 'args' found                                                                                                                                                              react/no-unknown-property
+  437:28   error    Unknown property 'object' found                                                                                                                                                            react/no-unknown-property
+  437:45   error    Unknown property 'attach' found                                                                                                                                                            react/no-unknown-property
+  440:19   error    Unknown property 'position' found                                                                                                                                                          react/no-unknown-property
+  440:43   error    Unknown property 'rotation' found                                                                                                                                                          react/no-unknown-property
+  441:31   error    Unknown property 'args' found                                                                                                                                                              react/no-unknown-property
+  442:28   error    Unknown property 'object' found                                                                                                                                                            react/no-unknown-property
+  442:45   error    Unknown property 'attach' found                                                                                                                                                            react/no-unknown-property
+  444:19   error    Unknown property 'position' found                                                                                                                                                          react/no-unknown-property
+  444:42   error    Unknown property 'rotation' found                                                                                                                                                          react/no-unknown-property
+  445:31   error    Unknown property 'args' found                                                                                                                                                              react/no-unknown-property
+  446:28   error    Unknown property 'object' found                                                                                                                                                            react/no-unknown-property
+  446:45   error    Unknown property 'attach' found                                                                                                                                                            react/no-unknown-property
+  449:19   error    Unknown property 'position' found                                                                                                                                                          react/no-unknown-property
+  449:43   error    Unknown property 'rotation' found                                                                                                                                                          react/no-unknown-property
+  450:33   error    Unknown property 'args' found                                                                                                                                                              react/no-unknown-property
+  451:28   error    Unknown property 'object' found                                                                                                                                                            react/no-unknown-property
+  451:45   error    Unknown property 'attach' found                                                                                                                                                            react/no-unknown-property
+  458:23   error    Component definition is missing display name                                                                                                                                               react/display-name
+  471:13   error    Unexpected lexical declaration in case block                                                                                                                                               no-case-declarations
+  471:28   error    React Hook "useMemo" is called conditionally. React Hooks must be called in the exact same order in every component render. Did you accidentally call a React Hook after an early return?  react-hooks/rules-of-hooks
+  474:32   error    Unknown property 'object' found                                                                                                                                                            react/no-unknown-property
+  474:48   error    Unknown property 'attach' found                                                                                                                                                            react/no-unknown-property
+  480:16   error    Unknown property 'position' found                                                                                                                                                          react/no-unknown-property
+  480:36   error    Unknown property 'rotation' found                                                                                                                                                          react/no-unknown-property
+  541:35   error    Unknown property 'intensity' found                                                                                                                                                         react/no-unknown-property
+  542:32   error    Unknown property 'position' found                                                                                                                                                          react/no-unknown-property
+  542:54   error    Unknown property 'angle' found                                                                                                                                                             react/no-unknown-property
+  542:66   error    Unknown property 'penumbra' found                                                                                                                                                          react/no-unknown-property
+  542:79   error    Unknown property 'intensity' found                                                                                                                                                         react/no-unknown-property
+  542:93   error    Unknown property 'castShadow' found                                                                                                                                                        react/no-unknown-property
+  544:28   error    Unknown property 'position' found                                                                                                                                                          react/no-unknown-property
+  546:32   error    Unknown property 'position' found                                                                                                                                                          react/no-unknown-property
+
+D:\project\photoframe website\frontend\src\components\Customization\ChocolateHamper\ChocolateHamperCanvasEditor.jsx
+    1:8   warning  'React' is defined but never used        no-unused-vars
+   63:37  warning  'isSelected' is defined but never used   no-unused-vars
+   89:37  warning  'isSelected' is defined but never used   no-unused-vars
+  119:34  warning  'isSelected' is defined but never used   no-unused-vars
+  162:11  warning  'cx' is assigned a value but never used  no-unused-vars
+  162:30  warning  'cy' is assigned a value but never used  no-unused-vars
+  261:34  warning  'size' is defined but never used         no-unused-vars
+
+D:\project\photoframe website\frontend\src\components\Customization\FrameBuilder\Frame3DPreview.jsx
+   37:20  error  Component definition is missing display name  react/display-name
+  110:31  error  Unknown property 'rotation' found             react/no-unknown-property
+  115:27  error  Unknown property 'position' found             react/no-unknown-property
+  115:81  error  Unknown property 'castShadow' found           react/no-unknown-property
+  115:92  error  Unknown property 'receiveShadow' found        react/no-unknown-property
+  116:38  error  Unknown property 'args' found                 react/no-unknown-property
+  120:27  error  Unknown property 'position' found             react/no-unknown-property
+  120:84  error  Unknown property 'castShadow' found           react/no-unknown-property
+  120:95  error  Unknown property 'receiveShadow' found        react/no-unknown-property
+  121:38  error  Unknown property 'args' found                 react/no-unknown-property
+  125:27  error  Unknown property 'position' found             react/no-unknown-property
+  125:84  error  Unknown property 'castShadow' found           react/no-unknown-property
+  125:95  error  Unknown property 'receiveShadow' found        react/no-unknown-property
+  126:38  error  Unknown property 'args' found                 react/no-unknown-property
+  130:27  error  Unknown property 'position' found             react/no-unknown-property
+  130:83  error  Unknown property 'castShadow' found           react/no-unknown-property
+  130:94  error  Unknown property 'receiveShadow' found        react/no-unknown-property
+  131:38  error  Unknown property 'args' found                 react/no-unknown-property
+  137:23  error  Unknown property 'castShadow' found           react/no-unknown-property
+  137:34  error  Unknown property 'receiveShadow' found        react/no-unknown-property
+  138:34  error  Unknown property 'args' found                 react/no-unknown-property
+  140:47  error  Unknown property 'map' found                  react/no-unknown-property
+  140:61  error  Unknown property 'roughness' found            react/no-unknown-property
+  150:27  error  Unknown property 'position' found             react/no-unknown-property
+  150:51  error  Unknown property 'castShadow' found           react/no-unknown-property
+  151:40  error  Unknown property 'args' found                 react/no-unknown-property
+  153:51  error  Unknown property 'map' found                  react/no-unknown-property
+  153:65  error  Unknown property 'roughness' found            react/no-unknown-property
+  153:81  error  Unknown property 'metalness' found            react/no-unknown-property
+  155:64  error  Unknown property 'roughness' found            react/no-unknown-property
+  159:27  error  Unknown property 'position' found             react/no-unknown-property
+  160:40  error  Unknown property 'args' found                 react/no-unknown-property
+  168:23  error  Unknown property 'position' found             react/no-unknown-property
+  169:36  error  Unknown property 'args' found                 react/no-unknown-property
+  171:25  error  Unknown property 'transparent' found          react/no-unknown-property
+  173:25  error  Unknown property 'roughness' found            react/no-unknown-property
+  174:25  error  Unknown property 'transmission' found         react/no-unknown-property
+  175:25  error  Unknown property 'thickness' found            react/no-unknown-property
+  176:25  error  Unknown property 'ior' found                  react/no-unknown-property
+  288:31  error  Unknown property 'intensity' found            react/no-unknown-property
+  289:28  error  Unknown property 'position' found             react/no-unknown-property
+  289:50  error  Unknown property 'angle' found                react/no-unknown-property
+  289:62  error  Unknown property 'penumbra' found             react/no-unknown-property
+  289:75  error  Unknown property 'intensity' found            react/no-unknown-property
+  289:91  error  Unknown property 'castShadow' found           react/no-unknown-property
+  290:29  error  Unknown property 'position' found             react/no-unknown-property
+  290:54  error  Unknown property 'intensity' found            react/no-unknown-property
+  306:27  error  Unknown property 'position' found             react/no-unknown-property
+  306:51  error  Unknown property 'rotation' found             react/no-unknown-property
+  307:40  error  Unknown property 'args' found                 react/no-unknown-property
+  309:29  error  Unknown property 'transparent' found          react/no-unknown-property
+  312:29  error  Unknown property 'roughness' found            react/no-unknown-property
+  325:27  error  Unknown property 'position' found             react/no-unknown-property
+  326:40  error  Unknown property 'args' found                 react/no-unknown-property
+  327:65  error  Unknown property 'roughness' found            react/no-unknown-property
+  327:79  error  Unknown property 'metalness' found            react/no-unknown-property
+
+D:\project\photoframe website\frontend\src\components\Customization\FrameBuilder\Frame3DPreviewAdmin.jsx
+   69:16   error  Unknown property 'rotation' found       react/no-unknown-property
+   73:27   error  Unknown property 'position' found       react/no-unknown-property
+   73:61   error  Unknown property 'castShadow' found     react/no-unknown-property
+   73:72   error  Unknown property 'receiveShadow' found  react/no-unknown-property
+   74:38   error  Unknown property 'args' found           react/no-unknown-property
+   78:27   error  Unknown property 'position' found       react/no-unknown-property
+   78:64   error  Unknown property 'castShadow' found     react/no-unknown-property
+   78:75   error  Unknown property 'receiveShadow' found  react/no-unknown-property
+   79:38   error  Unknown property 'args' found           react/no-unknown-property
+   83:27   error  Unknown property 'position' found       react/no-unknown-property
+   83:64   error  Unknown property 'castShadow' found     react/no-unknown-property
+   83:75   error  Unknown property 'receiveShadow' found  react/no-unknown-property
+   84:38   error  Unknown property 'args' found           react/no-unknown-property
+   88:27   error  Unknown property 'position' found       react/no-unknown-property
+   88:63   error  Unknown property 'castShadow' found     react/no-unknown-property
+   88:74   error  Unknown property 'receiveShadow' found  react/no-unknown-property
+   89:38   error  Unknown property 'args' found           react/no-unknown-property
+   94:27   error  Unknown property 'position' found       react/no-unknown-property
+   94:51   error  Unknown property 'castShadow' found     react/no-unknown-property
+   95:40   error  Unknown property 'args' found           react/no-unknown-property
+   96:47   error  Unknown property 'map' found            react/no-unknown-property
+   96:61   error  Unknown property 'roughness' found      react/no-unknown-property
+   96:77   error  Unknown property 'metalness' found      react/no-unknown-property
+  101:31   error  Unknown property 'position' found       react/no-unknown-property
+  102:44   error  Unknown property 'args' found           react/no-unknown-property
+  103:51   error  Unknown property 'transparent' found    react/no-unknown-property
+  103:78   error  Unknown property 'roughness' found      react/no-unknown-property
+  103:92   error  Unknown property 'transmission' found   react/no-unknown-property
+  103:111  error  Unknown property 'thickness' found      react/no-unknown-property
+  103:128  error  Unknown property 'ior' found            react/no-unknown-property
+  108:23   error  Unknown property 'castShadow' found     react/no-unknown-property
+  108:34   error  Unknown property 'receiveShadow' found  react/no-unknown-property
+  109:34   error  Unknown property 'args' found           react/no-unknown-property
+  110:43   error  Unknown property 'map' found            react/no-unknown-property
+  110:57   error  Unknown property 'roughness' found      react/no-unknown-property
+  116:23   error  Unknown property 'position' found       react/no-unknown-property
+  117:36   error  Unknown property 'args' found           react/no-unknown-property
+  154:16   error  Unknown property 'rotation' found       react/no-unknown-property
+  155:19   error  Unknown property 'castShadow' found     react/no-unknown-property
+  155:30   error  Unknown property 'receiveShadow' found  react/no-unknown-property
+  156:30   error  Unknown property 'args' found           react/no-unknown-property
+  159:19   error  Unknown property 'position' found       react/no-unknown-property
+  159:60   error  Unknown property 'castShadow' found     react/no-unknown-property
+  160:32   error  Unknown property 'args' found           react/no-unknown-property
+  161:55   error  Unknown property 'roughness' found      react/no-unknown-property
+  234:31   error  Unknown property 'intensity' found      react/no-unknown-property
+  235:28   error  Unknown property 'position' found       react/no-unknown-property
+  235:52   error  Unknown property 'angle' found          react/no-unknown-property
+  235:65   error  Unknown property 'penumbra' found       react/no-unknown-property
+  235:78   error  Unknown property 'intensity' found      react/no-unknown-property
+  235:94   error  Unknown property 'castShadow' found     react/no-unknown-property
+  236:29   error  Unknown property 'position' found       react/no-unknown-property
+  236:54   error  Unknown property 'intensity' found      react/no-unknown-property
+  237:29   error  Unknown property 'position' found       react/no-unknown-property
+  237:51   error  Unknown property 'intensity' found      react/no-unknown-property
+  284:31   error  Unknown property 'position' found       react/no-unknown-property
+  284:53   error  Unknown property 'receiveShadow' found  react/no-unknown-property
+  285:44   error  Unknown property 'args' found           react/no-unknown-property
+  286:69   error  Unknown property 'roughness' found      react/no-unknown-property
+
+D:\project\photoframe website\frontend\src\components\Customization\FrameBuilder\FrameCanvasEditor.jsx
+  1:8   warning  'React' is defined but never used                                                                                               no-unused-vars
+  7:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+D:\project\photoframe website\frontend\src\components\Customization\GiftBox\GiftBox3DPreview.jsx
+    1:8    warning  'React' is defined but never used           no-unused-vars
+   42:30   error    Unknown property 'position' found           react/no-unknown-property
+   43:19   error    Unknown property 'position' found           react/no-unknown-property
+   43:46   error    Unknown property 'rotation' found           react/no-unknown-property
+   44:32   error    Unknown property 'args' found               react/no-unknown-property
+   45:53   error    Unknown property 'roughness' found          react/no-unknown-property
+   47:19   error    Unknown property 'position' found           react/no-unknown-property
+   47:45   error    Unknown property 'rotation' found           react/no-unknown-property
+   48:32   error    Unknown property 'args' found               react/no-unknown-property
+   49:53   error    Unknown property 'roughness' found          react/no-unknown-property
+   51:19   error    Unknown property 'position' found           react/no-unknown-property
+   52:33   error    Unknown property 'args' found               react/no-unknown-property
+   53:53   error    Unknown property 'roughness' found          react/no-unknown-property
+   55:19   error    Unknown property 'position' found           react/no-unknown-property
+   55:48   error    Unknown property 'rotation' found           react/no-unknown-property
+   56:30   error    Unknown property 'args' found               react/no-unknown-property
+   59:19   error    Unknown property 'position' found           react/no-unknown-property
+   59:47   error    Unknown property 'rotation' found           react/no-unknown-property
+   60:30   error    Unknown property 'args' found               react/no-unknown-property
+   67:40   warning  'isOpen' is defined but never used          no-unused-vars
+   78:19   error    Unknown property 'position' found           react/no-unknown-property
+   79:30   error    Unknown property 'args' found               react/no-unknown-property
+   80:53   error    Unknown property 'roughness' found          react/no-unknown-property
+   80:69   error    Unknown property 'metalness' found          react/no-unknown-property
+   82:19   error    Unknown property 'position' found           react/no-unknown-property
+   83:30   error    Unknown property 'args' found               react/no-unknown-property
+   84:53   error    Unknown property 'roughness' found          react/no-unknown-property
+   84:69   error    Unknown property 'metalness' found          react/no-unknown-property
+   86:19   error    Unknown property 'position' found           react/no-unknown-property
+   87:30   error    Unknown property 'args' found               react/no-unknown-property
+   88:53   error    Unknown property 'roughness' found          react/no-unknown-property
+   88:69   error    Unknown property 'metalness' found          react/no-unknown-property
+   90:19   error    Unknown property 'position' found           react/no-unknown-property
+   91:30   error    Unknown property 'args' found               react/no-unknown-property
+   92:53   error    Unknown property 'roughness' found          react/no-unknown-property
+   92:69   error    Unknown property 'metalness' found          react/no-unknown-property
+   94:19   error    Unknown property 'position' found           react/no-unknown-property
+   94:40   error    Unknown property 'rotation' found           react/no-unknown-property
+   95:30   error    Unknown property 'args' found               react/no-unknown-property
+   96:53   error    Unknown property 'roughness' found          react/no-unknown-property
+   96:69   error    Unknown property 'metalness' found          react/no-unknown-property
+   98:19   error    Unknown property 'position' found           react/no-unknown-property
+   98:45   error    Unknown property 'rotation' found           react/no-unknown-property
+   99:30   error    Unknown property 'args' found               react/no-unknown-property
+  100:53   error    Unknown property 'roughness' found          react/no-unknown-property
+  100:69   error    Unknown property 'metalness' found          react/no-unknown-property
+  110:19   error    Unknown property 'position' found           react/no-unknown-property
+  111:30   error    Unknown property 'args' found               react/no-unknown-property
+  112:53   error    Unknown property 'roughness' found          react/no-unknown-property
+  112:69   error    Unknown property 'metalness' found          react/no-unknown-property
+  114:19   error    Unknown property 'position' found           react/no-unknown-property
+  115:30   error    Unknown property 'args' found               react/no-unknown-property
+  116:53   error    Unknown property 'roughness' found          react/no-unknown-property
+  116:69   error    Unknown property 'metalness' found          react/no-unknown-property
+  118:19   error    Unknown property 'position' found           react/no-unknown-property
+  119:30   error    Unknown property 'args' found               react/no-unknown-property
+  120:53   error    Unknown property 'roughness' found          react/no-unknown-property
+  120:69   error    Unknown property 'metalness' found          react/no-unknown-property
+  122:19   error    Unknown property 'position' found           react/no-unknown-property
+  123:30   error    Unknown property 'args' found               react/no-unknown-property
+  124:53   error    Unknown property 'roughness' found          react/no-unknown-property
+  124:69   error    Unknown property 'metalness' found          react/no-unknown-property
+  135:20   error    Unknown property 'position' found           react/no-unknown-property
+  137:27   error    Unknown property 'rotation' found           react/no-unknown-property
+  137:59   error    Unknown property 'position' found           react/no-unknown-property
+  138:38   error    Unknown property 'args' found               react/no-unknown-property
+  139:61   error    Unknown property 'roughness' found          react/no-unknown-property
+  139:77   error    Unknown property 'metalness' found          react/no-unknown-property
+  143:27   error    Unknown property 'rotation' found           react/no-unknown-property
+  143:59   error    Unknown property 'position' found           react/no-unknown-property
+  144:38   error    Unknown property 'args' found               react/no-unknown-property
+  145:61   error    Unknown property 'roughness' found          react/no-unknown-property
+  145:77   error    Unknown property 'metalness' found          react/no-unknown-property
+  149:28   error    Unknown property 'position' found           react/no-unknown-property
+  158:16   error    Unknown property 'position' found           react/no-unknown-property
+  168:31   warning  'cfg' is defined but never used             no-unused-vars
+  174:16   error    Unknown property 'rotation' found           react/no-unknown-property
+  174:46   error    Unknown property 'position' found           react/no-unknown-property
+  175:19   error    Unknown property 'castShadow' found         react/no-unknown-property
+  175:30   error    Unknown property 'position' found           react/no-unknown-property
+  176:30   error    Unknown property 'args' found               react/no-unknown-property
+  177:55   error    Unknown property 'roughness' found          react/no-unknown-property
+  179:19   error    Unknown property 'position' found           react/no-unknown-property
+  180:32   error    Unknown property 'args' found               react/no-unknown-property
+  181:36   error    Unknown property 'map' found                react/no-unknown-property
+  187:27   warning  'cfg' is defined but never used             no-unused-vars
+  188:12   error    Unknown property 'rotation' found           react/no-unknown-property
+  188:42   error    Unknown property 'position' found           react/no-unknown-property
+  189:15   error    Unknown property 'castShadow' found         react/no-unknown-property
+  189:26   error    Unknown property 'position' found           react/no-unknown-property
+  190:26   error    Unknown property 'args' found               react/no-unknown-property
+  191:51   error    Unknown property 'roughness' found          react/no-unknown-property
+  193:15   error    Unknown property 'position' found           react/no-unknown-property
+  194:28   error    Unknown property 'args' found               react/no-unknown-property
+  202:12   error    Unknown property 'position' found           react/no-unknown-property
+  205:51   error    Unknown property 'roughness' found          react/no-unknown-property
+  205:67   error    Unknown property 'metalness' found          react/no-unknown-property
+  208:15   error    Unknown property 'position' found           react/no-unknown-property
+  209:26   error    Unknown property 'args' found               react/no-unknown-property
+  210:51   error    Unknown property 'metalness' found          react/no-unknown-property
+  210:67   error    Unknown property 'roughness' found          react/no-unknown-property
+  213:15   error    Unknown property 'position' found           react/no-unknown-property
+  214:26   error    Unknown property 'args' found               react/no-unknown-property
+  215:51   error    Unknown property 'roughness' found          react/no-unknown-property
+  219:27   error    Unknown property 'position' found           react/no-unknown-property
+  219:69   error    Unknown property 'castShadow' found         react/no-unknown-property
+  220:30   error    Unknown property 'args' found               react/no-unknown-property
+  221:55   error    Unknown property 'roughness' found          react/no-unknown-property
+  229:12   error    Unknown property 'position' found           react/no-unknown-property
+  231:15   error    Unknown property 'castShadow' found         react/no-unknown-property
+  232:29   error    Unknown property 'args' found               react/no-unknown-property
+  233:51   error    Unknown property 'metalness' found          react/no-unknown-property
+  233:68   error    Unknown property 'roughness' found          react/no-unknown-property
+  237:29   error    Unknown property 'args' found               react/no-unknown-property
+  238:51   error    Unknown property 'metalness' found          react/no-unknown-property
+  238:67   error    Unknown property 'roughness' found          react/no-unknown-property
+  238:84   error    Unknown property 'wireframe' found          react/no-unknown-property
+  241:15   error    Unknown property 'position' found           react/no-unknown-property
+  241:46   error    Unknown property 'rotation' found           react/no-unknown-property
+  242:29   error    Unknown property 'args' found               react/no-unknown-property
+  243:51   error    Unknown property 'roughness' found          react/no-unknown-property
+  246:15   error    Unknown property 'position' found           react/no-unknown-property
+  247:31   error    Unknown property 'args' found               react/no-unknown-property
+  248:51   error    Unknown property 'roughness' found          react/no-unknown-property
+  251:15   error    Unknown property 'position' found           react/no-unknown-property
+  251:47   error    Unknown property 'rotation' found           react/no-unknown-property
+  252:29   error    Unknown property 'args' found               react/no-unknown-property
+  253:51   error    Unknown property 'roughness' found          react/no-unknown-property
+  260:12   error    Unknown property 'position' found           react/no-unknown-property
+  262:15   error    Unknown property 'position' found           react/no-unknown-property
+  262:48   error    Unknown property 'castShadow' found         react/no-unknown-property
+  263:29   error    Unknown property 'args' found               react/no-unknown-property
+  264:51   error    Unknown property 'roughness' found          react/no-unknown-property
+  267:15   error    Unknown property 'position' found           react/no-unknown-property
+  268:29   error    Unknown property 'args' found               react/no-unknown-property
+  269:51   error    Unknown property 'roughness' found          react/no-unknown-property
+  272:15   error    Unknown property 'position' found           react/no-unknown-property
+  272:47   error    Unknown property 'castShadow' found         react/no-unknown-property
+  273:29   error    Unknown property 'args' found               react/no-unknown-property
+  274:51   error    Unknown property 'roughness' found          react/no-unknown-property
+  277:15   error    Unknown property 'position' found           react/no-unknown-property
+  278:29   error    Unknown property 'args' found               react/no-unknown-property
+  279:51   error    Unknown property 'roughness' found          react/no-unknown-property
+  282:15   error    Unknown property 'position' found           react/no-unknown-property
+  283:29   error    Unknown property 'args' found               react/no-unknown-property
+  284:51   error    Unknown property 'roughness' found          react/no-unknown-property
+  288:27   error    Unknown property 'position' found           react/no-unknown-property
+  289:33   error    Unknown property 'args' found               react/no-unknown-property
+  290:55   error    Unknown property 'roughness' found          react/no-unknown-property
+  290:71   error    Unknown property 'metalness' found          react/no-unknown-property
+  296:23   error    Unknown property 'position' found           react/no-unknown-property
+  296:73   error    Unknown property 'castShadow' found         react/no-unknown-property
+  297:37   error    Unknown property 'args' found               react/no-unknown-property
+  298:59   error    Unknown property 'roughness' found          react/no-unknown-property
+  300:23   error    Unknown property 'position' found           react/no-unknown-property
+  301:37   error    Unknown property 'args' found               react/no-unknown-property
+  302:59   error    Unknown property 'roughness' found          react/no-unknown-property
+  308:36   error    Unknown property 'position' found           react/no-unknown-property
+  308:96   error    Unknown property 'rotation' found           react/no-unknown-property
+  308:137  error    Unknown property 'castShadow' found         react/no-unknown-property
+  309:34   error    Unknown property 'args' found               react/no-unknown-property
+  310:55   error    Unknown property 'roughness' found          react/no-unknown-property
+  315:36   error    Unknown property 'position' found           react/no-unknown-property
+  315:97   error    Unknown property 'rotation' found           react/no-unknown-property
+  315:120  error    Unknown property 'castShadow' found         react/no-unknown-property
+  316:34   error    Unknown property 'args' found               react/no-unknown-property
+  317:55   error    Unknown property 'roughness' found          react/no-unknown-property
+  321:15   error    Unknown property 'position' found           react/no-unknown-property
+  321:57   error    Unknown property 'rotation' found           react/no-unknown-property
+  322:28   error    Unknown property 'args' found               react/no-unknown-property
+  323:51   error    Unknown property 'roughness' found          react/no-unknown-property
+  325:15   error    Unknown property 'position' found           react/no-unknown-property
+  325:58   error    Unknown property 'rotation' found           react/no-unknown-property
+  326:29   error    Unknown property 'args' found               react/no-unknown-property
+  327:51   error    Unknown property 'roughness' found          react/no-unknown-property
+  334:12   error    Unknown property 'position' found           react/no-unknown-property
+  336:15   error    Unknown property 'castShadow' found         react/no-unknown-property
+  336:26   error    Unknown property 'position' found           react/no-unknown-property
+  337:31   error    Unknown property 'args' found               react/no-unknown-property
+  340:17   error    Unknown property 'transmission' found       react/no-unknown-property
+  341:17   error    Unknown property 'thickness' found          react/no-unknown-property
+  342:17   error    Unknown property 'roughness' found          react/no-unknown-property
+  343:17   error    Unknown property 'metalness' found          react/no-unknown-property
+  344:17   error    Unknown property 'transparent' found        react/no-unknown-property
+  349:15   error    Unknown property 'position' found           react/no-unknown-property
+  350:31   error    Unknown property 'args' found               react/no-unknown-property
+  351:51   error    Unknown property 'roughness' found          react/no-unknown-property
+  351:67   error    Unknown property 'transparent' found        react/no-unknown-property
+  354:15   error    Unknown property 'position' found           react/no-unknown-property
+  355:31   error    Unknown property 'args' found               react/no-unknown-property
+  358:17   error    Unknown property 'transmission' found       react/no-unknown-property
+  359:17   error    Unknown property 'roughness' found          react/no-unknown-property
+  360:17   error    Unknown property 'transparent' found        react/no-unknown-property
+  365:15   error    Unknown property 'position' found           react/no-unknown-property
+  365:47   error    Unknown property 'castShadow' found         react/no-unknown-property
+  366:31   error    Unknown property 'args' found               react/no-unknown-property
+  367:51   error    Unknown property 'metalness' found          react/no-unknown-property
+  367:67   error    Unknown property 'roughness' found          react/no-unknown-property
+  370:15   error    Unknown property 'position' found           react/no-unknown-property
+  371:29   error    Unknown property 'args' found               react/no-unknown-property
+  372:51   error    Unknown property 'metalness' found          react/no-unknown-property
+  372:68   error    Unknown property 'roughness' found          react/no-unknown-property
+  375:15   error    Unknown property 'position' found           react/no-unknown-property
+  376:26   error    Unknown property 'args' found               react/no-unknown-property
+  377:51   error    Unknown property 'roughness' found          react/no-unknown-property
+  384:12   error    Unknown property 'position' found           react/no-unknown-property
+  387:51   error    Unknown property 'roughness' found          react/no-unknown-property
+  397:28   error    Unknown property 'position' found           react/no-unknown-property
+  399:27   error    Unknown property 'castShadow' found         react/no-unknown-property
+  400:41   error    Unknown property 'args' found               react/no-unknown-property
+  401:66   error    Unknown property 'roughness' found          react/no-unknown-property
+  401:82   error    Unknown property 'metalness' found          react/no-unknown-property
+  405:66   error    Unknown property 'roughness' found          react/no-unknown-property
+  415:12   error    Unknown property 'position' found           react/no-unknown-property
+  416:15   error    Unknown property 'castShadow' found         react/no-unknown-property
+  417:26   error    Unknown property 'args' found               react/no-unknown-property
+  420:17   error    Unknown property 'transmission' found       react/no-unknown-property
+  421:17   error    Unknown property 'thickness' found          react/no-unknown-property
+  422:17   error    Unknown property 'roughness' found          react/no-unknown-property
+  423:17   error    Unknown property 'metalness' found          react/no-unknown-property
+  424:17   error    Unknown property 'transparent' found        react/no-unknown-property
+  430:26   error    Unknown property 'args' found               react/no-unknown-property
+  431:48   error    Unknown property 'wireframe' found          react/no-unknown-property
+  431:73   error    Unknown property 'transparent' found        react/no-unknown-property
+  434:15   error    Unknown property 'position' found           react/no-unknown-property
+  435:26   error    Unknown property 'args' found               react/no-unknown-property
+  436:51   error    Unknown property 'roughness' found          react/no-unknown-property
+  460:24   error    Unknown property 'position' found           react/no-unknown-property
+  461:27   error    Unknown property 'castShadow' found         react/no-unknown-property
+  462:41   error    Unknown property 'args' found               react/no-unknown-property
+  463:65   error    Unknown property 'metalness' found          react/no-unknown-property
+  463:81   error    Unknown property 'roughness' found          react/no-unknown-property
+  463:97   error    Unknown property 'emissive' found           react/no-unknown-property
+  463:118  error    Unknown property 'emissiveIntensity' found  react/no-unknown-property
+  474:20   error    Unknown property 'position' found           react/no-unknown-property
+  493:19   error    Unknown property 'position' found           react/no-unknown-property
+  493:52   error    Unknown property 'receiveShadow' found      react/no-unknown-property
+  494:30   error    Unknown property 'args' found               react/no-unknown-property
+  495:57   error    Unknown property 'roughness' found          react/no-unknown-property
+  533:16   error    Unknown property 'position' found           react/no-unknown-property
+  535:20   error    Unknown property 'position' found           react/no-unknown-property
+  555:27   error    Unknown property 'position' found           react/no-unknown-property
+  567:33   error    Unknown property 'position' found           react/no-unknown-property
+  568:24   error    Unknown property 'position' found           react/no-unknown-property
+  573:28   error    Unknown property 'position' found           react/no-unknown-property
+  600:27   error    Unknown property 'intensity' found          react/no-unknown-property
+  601:24   error    Unknown property 'position' found           react/no-unknown-property
+  601:46   error    Unknown property 'angle' found              react/no-unknown-property
+  601:59   error    Unknown property 'penumbra' found           react/no-unknown-property
+  601:72   error    Unknown property 'intensity' found          react/no-unknown-property
+  601:88   error    Unknown property 'castShadow' found         react/no-unknown-property
+  602:25   error    Unknown property 'position' found           react/no-unknown-property
+  602:48   error    Unknown property 'intensity' found          react/no-unknown-property
+  604:19   error    Unknown property 'rotation' found           react/no-unknown-property
+  604:51   error    Unknown property 'position' found           react/no-unknown-property
+  604:85   error    Unknown property 'receiveShadow' found      react/no-unknown-property
+  605:32   error    Unknown property 'args' found               react/no-unknown-property
+  606:55   error    Unknown property 'transparent' found        react/no-unknown-property
+  606:81   error    Unknown property 'roughness' found          react/no-unknown-property
+  646:36   error    'useCallback' is not defined                no-undef
+
+D:\project\photoframe website\frontend\src\components\Customization\GiftBox\GiftBoxCanvasEditor.jsx
+  1:8  warning  'React' is defined but never used  no-unused-vars
+
+D:\project\photoframe website\frontend\src\components\Customization\LiveVisualizer\CanvasPreview.jsx
+   1:8   warning  'React' is defined but never used              no-unused-vars
+   2:51  warning  'Transformer' is defined but never used        no-unused-vars
+   9:11  warning  'shapeRef' is assigned a value but never used  no-unused-vars
+  10:11  warning  'trRef' is assigned a value but never used     no-unused-vars
+
+D:\project\photoframe website\frontend\src\components\Customization\MugBuilder\Mug3DPreview.jsx
+  1:8  warning  'React' is defined but never used  no-unused-vars
+
+D:\project\photoframe website\frontend\src\components\Customization\MugBuilder\MugCanvasEditor.jsx
+   1:8   warning  'React' is defined but never used                                                                                                                                                                                                                                                      no-unused-vars
+   1:36  warning  'useState' is defined but never used                                                                                                                                                                                                                                                   no-unused-vars
+  45:8   warning  React Hook useEffect has missing dependencies: 'onImageScaleChange', 'setImgProps', and 'setIsImageLoaded'. Either include them or remove the dependency array. If 'setImgProps' changes too often, find the parent component that defines it and wrap that definition in useCallback  react-hooks/exhaustive-deps
+
+D:\project\photoframe website\frontend\src\components\Customization\Shared\CustomizerStepManager.jsx
+   1:8   warning  'React' is defined but never used           no-unused-vars
+   2:15  warning  'Typography' is defined but never used      no-unused-vars
+   2:27  warning  'Stack' is defined but never used           no-unused-vars
+   2:48  warning  'IconButton' is defined but never used      no-unused-vars
+  19:11  warning  'theme' is assigned a value but never used  no-unused-vars
+
+D:\project\photoframe website\frontend\src\components\Customization\Shared\ImageEnhancerPanel.jsx
+    1:8   warning  'React' is defined but never used              no-unused-vars
+    3:45  warning  'Divider' is defined but never used            no-unused-vars
+    4:29  warning  'Tooltip' is defined but never used            no-unused-vars
+    5:5   warning  'ToggleButtonGroup' is defined but never used  no-unused-vars
+    5:24  warning  'ToggleButton' is defined but never used       no-unused-vars
+    9:8   warning  'CompareIcon' is defined but never used        no-unused-vars
+   10:8   warning  'FlashOnIcon' is defined but never used        no-unused-vars
+  139:66  warning  'isUpscaled' is defined but never used         no-unused-vars
+  147:11  warning  'imgRef' is assigned a value but never used    no-unused-vars
+
+D:\project\photoframe website\frontend\src\components\Customization\Shared\PremiumCustomizerLayout.jsx
+  1:8   warning  'React' is defined but never used            no-unused-vars
+  3:18  warning  'AnimatePresence' is defined but never used  no-unused-vars
+
+D:\project\photoframe website\frontend\src\components\Customization\Shared\VisualOptionCard.jsx
+   1:8   warning  'React' is defined but never used           no-unused-vars
+   2:27  warning  'Paper' is defined but never used           no-unused-vars
+  19:11  warning  'theme' is assigned a value but never used  no-unused-vars
+
+D:\project\photoframe website\frontend\src\components\Footer.jsx
+  1:8  warning  'React' is defined but never used  no-unused-vars
+
+D:\project\photoframe website\frontend\src\components\Navbar.jsx
+   3:42  warning  'Container' is defined but never used             no-unused-vars
+   5:33  warning  'Stack' is defined but never used                 no-unused-vars
+  13:8   warning  'AccountCircleIcon' is defined but never used     no-unused-vars
+  15:8   warning  'DarkModeIcon' is defined but never used          no-unused-vars
+  16:8   warning  'LightModeIcon' is defined but never used         no-unused-vars
+  32:13  warning  'mode' is assigned a value but never used         no-unused-vars
+  32:19  warning  'toggleTheme' is assigned a value but never used  no-unused-vars
+
+D:\project\photoframe website\frontend\src\components\ProductCard.jsx
+   1:8   warning  'React' is defined but never used               no-unused-vars
+   2:16  warning  'CardContent' is defined but never used         no-unused-vars
+   3:98  warning  'CartIcon' is defined but never used            no-unused-vars
+   5:31  warning  'RouterLink' is defined but never used          no-unused-vars
+   8:8   warning  'ThreeDButton' is defined but never used        no-unused-vars
+  12:13  warning  'addToCart' is assigned a value but never used  no-unused-vars
+
+D:\project\photoframe website\frontend\src\components\Shared\ChatWidget.jsx
+   1:8   warning  'React' is defined but never used                                                                                                         no-unused-vars
+   5:12  warning  'List' is defined but never used                                                                                                          no-unused-vars
+   5:18  warning  'ListItem' is defined but never used                                                                                                      no-unused-vars
+   5:28  warning  'ListItemText' is defined but never used                                                                                                  no-unused-vars
+   5:42  warning  'Divider' is defined but never used                                                                                                       no-unused-vars
+  11:8   warning  'AttachmentIcon' is defined but never used                                                                                                no-unused-vars
+  12:8   warning  'PhotoCameraIcon' is defined but never used                                                                                               no-unused-vars
+  16:15  warning  'BASE_URL' is defined but never used                                                                                                      no-unused-vars
+  29:11  warning  'chatWindowRef' is assigned a value but never used                                                                                        no-unused-vars
+  74:8   warning  React Hook useEffect has missing dependencies: 'connectWebSocket' and 'fetchHistory'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+D:\project\photoframe website\frontend\src\components\Shared\ErrorBoundary.jsx
+  70:60  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+D:\project\photoframe website\frontend\src\components\Shared\ErrorState.jsx
+  1:8  warning  'React' is defined but never used  no-unused-vars
+
+D:\project\photoframe website\frontend\src\components\Shared\FloatingSupport.jsx
+  1:8  warning  'React' is defined but never used  no-unused-vars
+
+D:\project\photoframe website\frontend\src\components\Shared\InstagramSupportButton.jsx
+  1:8  warning  'React' is defined but never used  no-unused-vars
+
+D:\project\photoframe website\frontend\src\components\Shared\LoadingState.jsx
+  1:8  warning  'React' is defined but never used  no-unused-vars
+
+D:\project\photoframe website\frontend\src\components\Shared\PageTransition.jsx
+  1:8  warning  'React' is defined but never used  no-unused-vars
+
+D:\project\photoframe website\frontend\src\components\Shared\PremiumBackground.jsx
+  1:8  warning  'React' is defined but never used  no-unused-vars
+
+D:\project\photoframe website\frontend\src\components\Shared\ThreeBackground.jsx
+    1:8   warning  'React' is defined but never used                   no-unused-vars
+    2:28  warning  'useThree' is defined but never used                no-unused-vars
+    4:13  warning  'THREE' is defined but never used                   no-unused-vars
+    6:40  warning  'Typography' is defined but never used              no-unused-vars
+   61:24  error    Unknown property 'object' found                     react/no-unknown-property
+   66:7   warning  'ModelFallback' is assigned a value but never used  no-unused-vars
+   68:25  error    Unknown property 'args' found                       react/no-unknown-property
+   69:47  error    Unknown property 'wireframe' found                  react/no-unknown-property
+  174:31  error    Unknown property 'intensity' found                  react/no-unknown-property
+  175:28  error    Unknown property 'position' found                   react/no-unknown-property
+  175:52  error    Unknown property 'angle' found                      react/no-unknown-property
+  175:64  error    Unknown property 'penumbra' found                   react/no-unknown-property
+  175:77  error    Unknown property 'intensity' found                  react/no-unknown-property
+  175:91  error    Unknown property 'castShadow' found                 react/no-unknown-property
+  176:29  error    Unknown property 'position' found                   react/no-unknown-property
+  176:56  error    Unknown property 'intensity' found                  react/no-unknown-property
+  177:29  error    Unknown property 'position' found                   react/no-unknown-property
+  177:53  error    Unknown property 'intensity' found                  react/no-unknown-property
+
+D:\project\photoframe website\frontend\src\components\Shared\ThreeDButton.jsx
+  1:8  warning  'React' is defined but never used  no-unused-vars
+
+D:\project\photoframe website\frontend\src\components\Shared\TiltCard.jsx
+  1:8   warning  'React' is defined but never used  no-unused-vars
+  2:10  warning  'Box' is defined but never used    no-unused-vars
+
+D:\project\photoframe website\frontend\src\pages\Cart.jsx
+   1:8  warning  'React' is defined but never used             no-unused-vars
+  11:8  warning  'ShoppingCartIcon' is defined but never used  no-unused-vars
+
+D:\project\photoframe website\frontend\src\pages\Checkout.jsx
+    1:8   warning  'React' is defined but never used                                no-unused-vars
+    4:14  warning  'MenuItem' is defined but never used                             no-unused-vars
+    4:24  warning  'Checkbox' is defined but never used                             no-unused-vars
+    4:34  warning  'FormControlLabel' is defined but never used                     no-unused-vars
+    5:12  warning  'FormControl' is defined but never used                          no-unused-vars
+    5:25  warning  'FormLabel' is defined but never used                            no-unused-vars
+    5:43  warning  'Chip' is defined but never used                                 no-unused-vars
+    5:49  warning  'IconButton' is defined but never used                           no-unused-vars
+    6:5   warning  'Alert' is defined but never used                                no-unused-vars
+    6:12  warning  'Zoom' is defined but never used                                 no-unused-vars
+    9:21  warning  'HomeIcon' is defined but never used                             no-unused-vars
+   31:30  warning  'clearCart' is assigned a value but never used                   no-unused-vars
+  365:74  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+D:\project\photoframe website\frontend\src\pages\ChocolateHamperPage.jsx
+   1:8   warning  'React' is defined but never used                   no-unused-vars
+   1:27  warning  'useCallback' is defined but never used             no-unused-vars
+   3:10  warning  'motion' is defined but never used                  no-unused-vars
+   3:18  warning  'AnimatePresence' is defined but never used         no-unused-vars
+   5:5   warning  'Container' is defined but never used               no-unused-vars
+   5:16  warning  'Grid' is defined but never used                    no-unused-vars
+   5:47  warning  'Paper' is defined but never used                   no-unused-vars
+   5:54  warning  'Tabs' is defined but never used                    no-unused-vars
+   5:60  warning  'Tab' is defined but never used                     no-unused-vars
+   6:18  warning  'Divider' is defined but never used                 no-unused-vars
+   6:27  warning  'TextField' is defined but never used               no-unused-vars
+   6:38  warning  'Select' is defined but never used                  no-unused-vars
+   6:46  warning  'MenuItem' is defined but never used                no-unused-vars
+   6:56  warning  'FormControl' is defined but never used             no-unused-vars
+   7:5   warning  'InputLabel' is defined but never used              no-unused-vars
+   7:29  warning  'Tooltip' is defined but never used                 no-unused-vars
+   7:55  warning  'Badge' is defined but never used                   no-unused-vars
+   8:23  warning  'Slider' is defined but never used                  no-unused-vars
+  11:8   warning  'EditIcon' is defined but never used                no-unused-vars
+  20:8   warning  'CakeIcon' is defined but never used                no-unused-vars
+  32:8   warning  'InstagramSupportButton' is defined but never used  no-unused-vars
+  34:8   warning  'ImageEnhancerPanel' is defined but never used      no-unused-vars
+  79:11  warning  'location' is assigned a value but never used       no-unused-vars
+
+D:\project\photoframe website\frontend\src\pages\FrameCustomizerPage.jsx
+    1:8   warning  'React' is defined but never used                   no-unused-vars
+    1:51  warning  'useMemo' is defined but never used                 no-unused-vars
+    1:84  warning  'useReducer' is defined but never used              no-unused-vars
+    4:5   warning  'Container' is defined but never used               no-unused-vars
+    4:16  warning  'Grid' is defined but never used                    no-unused-vars
+    5:16  warning  'MenuItem' is defined but never used                no-unused-vars
+    5:26  warning  'Select' is defined but never used                  no-unused-vars
+    5:34  warning  'FormControl' is defined but never used             no-unused-vars
+    5:47  warning  'InputLabel' is defined but never used              no-unused-vars
+    6:22  warning  'Paper' is defined but never used                   no-unused-vars
+    6:29  warning  'Tabs' is defined but never used                    no-unused-vars
+    6:35  warning  'Tab' is defined but never used                     no-unused-vars
+    7:5   warning  'Tooltip' is defined but never used                 no-unused-vars
+    7:66  warning  'Skeleton' is defined but never used                no-unused-vars
+    9:10  warning  'motion' is defined but never used                  no-unused-vars
+    9:18  warning  'AnimatePresence' is defined but never used         no-unused-vars
+   12:8   warning  'EditIcon' is defined but never used                no-unused-vars
+   13:8   warning  'FileUploadIcon' is defined but never used          no-unused-vars
+   17:8   warning  'AddCircleIcon' is defined but never used           no-unused-vars
+   18:8   warning  'FavoriteIcon' is defined but never used            no-unused-vars
+   20:8   warning  'FormatAlignLeftIcon' is defined but never used     no-unused-vars
+   21:8   warning  'FormatAlignCenterIcon' is defined but never used   no-unused-vars
+   22:8   warning  'FormatAlignRightIcon' is defined but never used    no-unused-vars
+   24:8   warning  'VisibilityIcon' is defined but never used          no-unused-vars
+   25:8   warning  'VisibilityOffIcon' is defined but never used       no-unused-vars
+   42:8   warning  'InstagramSupportButton' is defined but never used  no-unused-vars
+   71:7   warning  'FONTS' is assigned a value but never used          no-unused-vars
+   77:7   warning  'STICKER_PACKS' is assigned a value but never used  no-unused-vars
+  128:11  warning  'location' is assigned a value but never used       no-unused-vars
+
+D:\project\photoframe website\frontend\src\pages\GiftBoxCustomizerPage.jsx
+    1:8   warning  'React' is defined but never used                       no-unused-vars
+    1:27  warning  'useCallback' is defined but never used                 no-unused-vars
+    4:5   warning  'Container' is defined but never used                   no-unused-vars
+    4:16  warning  'Grid' is defined but never used                        no-unused-vars
+    4:47  warning  'Paper' is defined but never used                       no-unused-vars
+    4:54  warning  'Tabs' is defined but never used                        no-unused-vars
+    4:60  warning  'Tab' is defined but never used                         no-unused-vars
+    5:5   warning  'Chip' is defined but never used                        no-unused-vars
+    5:18  warning  'Divider' is defined but never used                     no-unused-vars
+    5:27  warning  'TextField' is defined but never used                   no-unused-vars
+    5:38  warning  'Select' is defined but never used                      no-unused-vars
+    5:46  warning  'MenuItem' is defined but never used                    no-unused-vars
+    5:56  warning  'FormControl' is defined but never used                 no-unused-vars
+    6:5   warning  'InputLabel' is defined but never used                  no-unused-vars
+    6:29  warning  'Tooltip' is defined but never used                     no-unused-vars
+    6:73  warning  'Slider' is defined but never used                      no-unused-vars
+    9:8   warning  'EditIcon' is defined but never used                    no-unused-vars
+   14:8   warning  'InstagramIcon' is defined but never used               no-unused-vars
+   15:8   warning  'VisibilityIcon' is defined but never used              no-unused-vars
+   16:8   warning  'VisibilityOffIcon' is defined but never used           no-unused-vars
+   18:8   warning  'CloudUploadIcon' is defined but never used             no-unused-vars
+   32:8   warning  'InstagramSupportButton' is defined but never used      no-unused-vars
+   86:11  warning  'location' is assigned a value but never used           no-unused-vars
+   94:24  warning  'setActiveFace' is assigned a value but never used      no-unused-vars
+  106:12  warning  'isUploading' is assigned a value but never used        no-unused-vars
+  188:11  warning  'handlePhotoUpload' is assigned a value but never used  no-unused-vars
+  251:49  error    'ColorLensIcon' is not defined                          react/jsx-no-undef
+
+D:\project\photoframe website\frontend\src\pages\Home.jsx
+    1:8    warning  'React' is defined but never used                                                                                 no-unused-vars
+    1:28   warning  'useState' is defined but never used                                                                              no-unused-vars
+    4:11   warning  'CardMedia' is defined but never used                                                                             no-unused-vars
+    5:21   warning  'Divider' is defined but never used                                                                               no-unused-vars
+    5:30   warning  'TextField' is defined but never used                                                                             no-unused-vars
+    5:41   warning  'IconButton' is defined but never used                                                                            no-unused-vars
+    6:10   warning  'Zoom' is defined but never used                                                                                  no-unused-vars
+    8:18   warning  'AnimatePresence' is defined but never used                                                                       no-unused-vars
+   12:8    warning  'FavoriteBorderIcon' is defined but never used                                                                    no-unused-vars
+   13:8    warning  'FavoriteIcon' is defined but never used                                                                          no-unused-vars
+   14:8    warning  'CheckCircleIcon' is defined but never used                                                                       no-unused-vars
+   49:8    warning  React Hook useEffect has a missing dependency: 'fetchProducts'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  111:66   error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`                                                   react/no-unescaped-entities
+  362:77   error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`                                                   react/no-unescaped-entities
+  421:191  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`                                                   react/no-unescaped-entities
+  457:44   warning  'i' is defined but never used                                                                                     no-unused-vars
+  466:183  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                   react/no-unescaped-entities
+  466:194  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                   react/no-unescaped-entities
+
+D:\project\photoframe website\frontend\src\pages\Login.jsx
+    1:8   warning  'React' is defined but never used                                                                        no-unused-vars
+   33:8   warning  React Hook useEffect has a missing dependency: 'from'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  123:28  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`                                          react/no-unescaped-entities
+
+D:\project\photoframe website\frontend\src\pages\MugCustomizerPage.jsx
+    1:8    warning  'React' is defined but never used                                no-unused-vars
+    1:38   warning  'useCallback' is defined but never used                          no-unused-vars
+    4:5    warning  'Container' is defined but never used                            no-unused-vars
+    4:16   warning  'Grid' is defined but never used                                 no-unused-vars
+    6:13   warning  'Divider' is defined but never used                              no-unused-vars
+    6:22   warning  'Paper' is defined but never used                                no-unused-vars
+    6:29   warning  'Tabs' is defined but never used                                 no-unused-vars
+    6:35   warning  'Tab' is defined but never used                                  no-unused-vars
+    6:40   warning  'Chip' is defined but never used                                 no-unused-vars
+    7:5    warning  'Tooltip' is defined but never used                              no-unused-vars
+    7:31   warning  'Checkbox' is defined but never used                             no-unused-vars
+    7:41   warning  'FormControlLabel' is defined but never used                     no-unused-vars
+   13:8    warning  'RotateLeftIcon' is defined but never used                       no-unused-vars
+   23:8    warning  'InstagramSupportButton' is defined but never used               no-unused-vars
+  394:132  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  394:149  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+
+D:\project\photoframe website\frontend\src\pages\MyOrders.jsx
+    1:8    warning  'React' is defined but never used                                                                                 no-unused-vars
+    1:28   warning  'useState' is defined but never used                                                                              no-unused-vars
+    3:42   warning  'CircularProgress' is defined but never used                                                                      no-unused-vars
+    4:46   warning  'IconButton' is defined but never used                                                                            no-unused-vars
+    5:5    warning  'Tooltip' is defined but never used                                                                               no-unused-vars
+   14:8    warning  'InfoIcon' is defined but never used                                                                              no-unused-vars
+   29:8    warning  React Hook useEffect has a missing dependency: 'fetchMyOrders'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+   66:54   error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`                                                   react/no-unescaped-entities
+  242:151  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                   react/no-unescaped-entities
+  242:169  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                   react/no-unescaped-entities
+
+D:\project\photoframe website\frontend\src\pages\OrderTracking.jsx
+   1:8   warning  'React' is defined but never used      no-unused-vars
+  15:10  warning  'useParams' is defined but never used  no-unused-vars
+
+D:\project\photoframe website\frontend\src\pages\ProductCustomizerPage.jsx
+    6:5   warning  'Divider' is defined but never used                                                                                                                                                               no-unused-vars
+    9:8   warning  'AutoFixHighIcon' is defined but never used                                                                                                                                                       no-unused-vars
+  252:88  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`                                                                                                                                   react/no-unescaped-entities
+  262:41  error    React Hook "React.useState" is called conditionally. React Hooks must be called in the exact same order in every component render. Did you accidentally call a React Hook after an early return?  react-hooks/rules-of-hooks
+
+D:\project\photoframe website\frontend\src\pages\ProductDetail.jsx
+    1:8   warning  'React' is defined but never used                                no-unused-vars
+    5:13  warning  'Tabs' is defined but never used                                 no-unused-vars
+    5:19  warning  'Tab' is defined but never used                                  no-unused-vars
+   12:8   warning  'ShareIcon' is defined but never used                            no-unused-vars
+   96:29  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+  111:26  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+D:\project\photoframe website\frontend\src\pages\Profile.jsx
+    1:8   warning  'React' is defined but never used              no-unused-vars
+    2:78  warning  'Divider' is defined but never used            no-unused-vars
+   14:19  warning  'setEmail' is assigned a value but never used  no-unused-vars
+   61:24  error    'ErrorState' is not defined                    react/jsx-no-undef
+   61:95  error    'navigate' is not defined                      no-undef
+  140:30  error    'AnimatePresence' is not defined               react/jsx-no-undef
+  142:38  error    'motion' is not defined                        react/jsx-no-undef
+
+D:\project\photoframe website\frontend\src\pages\Register.jsx
+   1:8   warning  'React' is defined but never used             no-unused-vars
+  11:12  warning  'loading' is assigned a value but never used  no-unused-vars
+
+D:\project\photoframe website\frontend\src\pages\Shop.jsx
+   1:8   warning  'React' is defined but never used                                                                                                     no-unused-vars
+   4:40  warning  'Skeleton' is defined but never used                                                                                                  no-unused-vars
+   5:29  warning  'IconButton' is defined but never used                                                                                                no-unused-vars
+   5:41  warning  'Fab' is defined but never used                                                                                                       no-unused-vars
+   8:8   warning  'FilterListIcon' is defined but never used                                                                                            no-unused-vars
+   9:8   warning  'TuneIcon' is defined but never used                                                                                                  no-unused-vars
+  41:8   warning  React Hook useEffect has missing dependencies: 'categoryMap' and 'fetchProducts'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+D:\project\photoframe website\frontend\src\pages\admin\AdminChat.jsx
+    1:8   warning  'React' is defined but never used                                                                                    no-unused-vars
+    5:5   warning  'Divider' is defined but never used                                                                                  no-unused-vars
+    5:37  warning  'Chip' is defined but never used                                                                                     no-unused-vars
+    6:5   warning  'Tooltip' is defined but never used                                                                                  no-unused-vars
+   11:8   warning  'NotificationsActiveIcon' is defined but never used                                                                  no-unused-vars
+   15:15  warning  'BASE_URL' is defined but never used                                                                                 no-unused-vars
+   18:19  warning  'token' is assigned a value but never used                                                                           no-unused-vars
+   51:8   warning  React Hook useEffect has a missing dependency: 'connectWebSocket'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  115:29  error    Empty block statement                                                                                                no-empty
+  325:38  error    'PeopleIcon' is not defined                                                                                          react/jsx-no-undef
+  328:38  error    'AssessmentIcon' is not defined                                                                                      react/jsx-no-undef
+  400:82  error    'ViewInArIcon' is not defined                                                                                        react/jsx-no-undef
+
+D:\project\photoframe website\frontend\src\pages\admin\AdminDashboard.jsx
+   63:8    warning  React Hook useEffect has a missing dependency: 'fetchAllOrders'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  119:29   error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`                                                    react/no-unescaped-entities
+  255:70   error    'getPublicUrl' is not defined                                                                                      no-undef
+  342:90   error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                    react/no-unescaped-entities
+  342:110  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                    react/no-unescaped-entities
+
+D:\project\photoframe website\frontend\src\pages\admin\ManageOrders.jsx
+    1:8    warning  'React' is defined but never used                                                                              no-unused-vars
+    6:30   warning  'Alert' is defined but never used                                                                              no-unused-vars
+   11:8    warning  'LocalShippingIcon' is defined but never used                                                                  no-unused-vars
+   13:8    warning  'CheckCircleIcon' is defined but never used                                                                    no-unused-vars
+  141:77   error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                react/no-unescaped-entities
+  141:92   error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                react/no-unescaped-entities
+  146:80   error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                react/no-unescaped-entities
+  146:98   error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                react/no-unescaped-entities
+  246:41   warning  React Hook useEffect has a missing dependency: 'loadOrders'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  503:138  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                react/no-unescaped-entities
+  503:164  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                react/no-unescaped-entities
+  603:73   error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                react/no-unescaped-entities
+  603:107  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                react/no-unescaped-entities
+
+D:\project\photoframe website\frontend\src\pages\admin\ManageProducts.jsx
+    1:8   warning  'React' is defined but never used                   no-unused-vars
+  124:65  warning  'fetchProducts' is assigned a value but never used  no-unused-vars
+
+D:\project\photoframe website\frontend\src\pages\admin\components\ImageDownloadPanel.jsx
+   3:8  warning  'DownloadIcon' is defined but never used      no-unused-vars
+  16:5  warning  'orderId' is assigned a value but never used  no-unused-vars
+
+D:\project\photoframe website\frontend\src\store\AuthContext.jsx
+   1:8   warning  'React' is defined but never used                                                                                               no-unused-vars
+  60:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+D:\project\photoframe website\frontend\src\store\CartContext.jsx
+   1:8   warning  'React' is defined but never used                                                                                               no-unused-vars
+  32:8   warning  React Hook useEffect has a missing dependency: 'fetchCart'. Either include it or remove the dependency array                    react-hooks/exhaustive-deps
+  96:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+D:\project\photoframe website\frontend\src\store\OrderContext.jsx
+    1:8   warning  'React' is defined but never used                                                                                                             no-unused-vars
+    5:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components                react-refresh/only-export-components
+  140:8   warning  React Hook useEffect has missing dependencies: 'fetchDashboardStats' and 'fetchMyOrders'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+  163:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components                react-refresh/only-export-components
+
+D:\project\photoframe website\frontend\src\store\ProductContext.jsx
+    1:8   warning  'React' is defined but never used                                                                                                         no-unused-vars
+   86:8   warning  React Hook useEffect has missing dependencies: 'fetchCategories' and 'fetchProducts'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+  151:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components            react-refresh/only-export-components
+
+D:\project\photoframe website\frontend\src\store\ThemeContext.jsx
+    1:8   warning  'React' is defined but never used                                                                                               no-unused-vars
+   10:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+   12:26  warning  'mode' is defined but never used                                                                                                no-unused-vars
+   84:26  warning  'theme' is defined but never used                                                                                               no-unused-vars
+  122:30  warning  'theme' is defined but never used                                                                                               no-unused-vars
+  212:11  warning  'stored' is assigned a value but never used                                                                                     no-unused-vars
+  213:18  warning  'setMode' is assigned a value but never used                                                                                    no-unused-vars
+
+D:\project\photoframe website\frontend\test_enhancer.js
+  2:8  warning  'path' is defined but never used  no-unused-vars
+
+✖ 940 problems (662 errors, 278 warnings)
+

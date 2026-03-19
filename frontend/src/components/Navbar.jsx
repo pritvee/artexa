@@ -16,6 +16,7 @@ import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import CloseIcon from '@mui/icons-material/Close';
 import { useLocation, Link as RouterLink, useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { useAuth } from '../store/AuthContext';
 import { useThemeMode } from '../store/ThemeContext';
 import { useCart } from '../store/CartContext';
@@ -78,24 +79,29 @@ const Navbar = () => {
                 <Toolbar disableGutters sx={{ px: { xs: 2, md: 4 }, minHeight: { xs: '60px !important', md: '75px !important' }, justifyContent: 'space-between' }}>
 
                     {/* Logo */}
-                    <Typography
-                        variant="h6"
+                    <motion.div
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        animate={{ opacity: [0.9, 1, 0.9] }}
+                        transition={{ duration: 3, repeat: Infinity }}
+                        style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}
                         component={RouterLink}
                         to="/"
-                        sx={{
-                            textDecoration: 'none',
-                            fontWeight: 900,
-                            fontSize: { xs: '1.3rem', md: '1.8rem' },
-                            letterSpacing: '-0.05em',
-                            background: 'linear-gradient(135deg, #FFFFFF 0%, #6C63FF 100%)',
-                            WebkitBackgroundClip: 'text',
-                            WebkitTextFillColor: 'transparent',
-                            display: 'flex',
-                            alignItems: 'center'
-                        }}
                     >
-                        ARTEXA
-                    </Typography>
+                        <Typography
+                            variant="h6"
+                            sx={{
+                                fontWeight: 900,
+                                fontSize: { xs: '1.3rem', md: '1.8rem' },
+                                letterSpacing: '-0.05em',
+                                background: 'linear-gradient(135deg, #FFFFFF 0%, #6C63FF 100%)',
+                                WebkitBackgroundClip: 'text',
+                                WebkitTextFillColor: 'transparent',
+                            }}
+                        >
+                            ARTEXA
+                        </Typography>
+                    </motion.div>
 
                     {/* Desktop: center nav links */}
                     <Box sx={{ 
@@ -109,25 +115,31 @@ const Navbar = () => {
                         {NAV_LINKS.map((item) => {
                             const isActive = location.pathname === item.path;
                             return (
-                                <Button
+                                <motion.div
                                     key={item.name}
-                                    component={RouterLink}
-                                    to={item.path}
-                                    sx={{
-                                        color: 'white',
-                                        fontWeight: isActive ? 800 : 500,
-                                        fontSize: '0.95rem',
-                                        px: 3,
-                                        borderRadius: '100px',
-                                        opacity: isActive ? 1 : 0.6,
-                                        bgcolor: isActive ? 'rgba(108, 99, 255, 0.15)' : 'transparent',
-                                        textTransform: 'none',
-                                        transition: 'all 0.3s',
-                                        '&:hover': { opacity: 1, bgcolor: 'rgba(255, 255, 255, 0.08)' }
-                                    }}
+                                    whileHover={{ y: -3, scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    transition={{ type: "spring", stiffness: 400, damping: 17 }}
                                 >
-                                    {item.name}
-                                </Button>
+                                    <Button
+                                        component={RouterLink}
+                                        to={item.path}
+                                        sx={{
+                                            color: 'white',
+                                            fontWeight: isActive ? 800 : 500,
+                                            fontSize: '0.92rem',
+                                            px: 3,
+                                            borderRadius: '100px',
+                                            opacity: isActive ? 1 : 0.65,
+                                            bgcolor: isActive ? 'rgba(255, 255, 255, 0.08)' : 'transparent',
+                                            textTransform: 'none',
+                                            transition: 'background 0.3s, opacity 0.3s',
+                                            '&:hover': { opacity: 1, bgcolor: 'rgba(255, 255, 255, 0.12)' }
+                                        }}
+                                    >
+                                        {item.name}
+                                    </Button>
+                                </motion.div>
                             );
                         })}
                     </Box>

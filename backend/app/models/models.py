@@ -1,6 +1,5 @@
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, Float, DateTime, JSON
 from sqlalchemy.orm import relationship
-from sqlalchemy.dialects.postgresql import JSONB
 from datetime import datetime
 from app.db.base_class import Base
 
@@ -47,9 +46,9 @@ class Product(Base):
     category_id = Column(Integer, ForeignKey("categories.id"))
     customization_type = Column(String(50)) # Frame, Mug, Hamper, etc.
     has_customization = Column(Boolean, default=False)
-    customization_schema = Column(JSONB, nullable=True)
+    customization_schema = Column(JSON, nullable=True)
     image_url = Column(String(255), nullable=True)
-    secondary_images = Column(JSONB, nullable=True, default=[])
+    secondary_images = Column(JSON, nullable=True, default=[])
     is_on_home = Column(Boolean, default=False)
     is_on_shop = Column(Boolean, default=True)
     category = relationship("Category", back_populates="products")
@@ -78,7 +77,7 @@ class CartItem(Base):
     cart_id = Column(Integer, ForeignKey("carts.id"))
     product_id = Column(Integer, ForeignKey("products.id"))
     quantity = Column(Integer, default=1)
-    customization_details = Column(JSONB, nullable=True)
+    customization_details = Column(JSON, nullable=True)
     preview_image_url = Column(String(500), nullable=True)
     uploaded_photo_id = Column(Integer, ForeignKey("uploaded_photos.id"), nullable=True)
     cart = relationship("Cart", back_populates="items")
@@ -131,7 +130,7 @@ class OrderItem(Base):
     product_id = Column(Integer, ForeignKey("products.id"))
     quantity = Column(Integer)
     price = Column(Float)
-    customization_details = Column(JSONB, nullable=True)
+    customization_details = Column(JSON, nullable=True)
     preview_image_url = Column(String(255), nullable=True)
     uploaded_photo_id = Column(Integer, ForeignKey("uploaded_photos.id"), nullable=True)
     order = relationship("Order", back_populates="items")
@@ -165,4 +164,3 @@ class Message(Base):
     timestamp = Column(DateTime, default=datetime.utcnow)
     is_read = Column(Boolean, default=False)
     user = relationship("User", back_populates="messages")
-

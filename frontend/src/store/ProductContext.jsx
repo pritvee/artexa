@@ -15,10 +15,12 @@ export const ProductProvider = ({ children }) => {
         page: 1,
         limit: 10
     });
+    const [categoryMap, setCategoryMap] = useState({
+        'frames': 1, 'mugs': 2, 'hampers': 3, 'gifts': 4
+    });
     const [categories, setCategories] = useState([]);
 
     // Track latest pagination in a ref to keep context functions stable
-    // without using pagination.page in their dependency arrays.
     const paginationRef = useRef(pagination);
     useEffect(() => {
         paginationRef.current = pagination;
@@ -27,7 +29,18 @@ export const ProductProvider = ({ children }) => {
     const fetchCategories = useCallback(async () => {
         try {
             const response = await api.get('/products/categories');
-            setCategories(response.data);
+            setCategories(response.data || []);
+            
+            // Build a dynamic slug-to-ID map for cleaner filtering logic
+            if (Array.isArray(response.data)) {
+                const newMap = {};
+                response.data.forEach(cat => {
+                    newMap[cat.name.toLowerCase()] = cat.id;
+                    // Handle common variations
+                    if(cat.name.toLowerCase() === 'frames') newMap['frame'] = cat.id;
+                });
+                setCategoryMap(prev => ({ ...prev, ...newMap }));
+            }
         } catch (error) {
             console.error("Error fetching categories:", error);
         }

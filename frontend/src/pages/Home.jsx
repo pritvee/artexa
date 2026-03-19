@@ -377,78 +377,8 @@ const Home = () => {
                     </motion.div>
                 </Box>
 
-                {/* AI SHOPPING SECTION */}
-                <Box sx={{ py: { xs: 8, md: 10 } }}>
-                    <Grid container spacing={6} alignItems="center">
-                        <Grid item xs={12} md={5}>
-                             <Typography variant="h2" sx={{ 
-                                mb: 3, fontSize: { xs: '32px', md: '48px' }, 
-                                fontWeight: 900, color: '#fff' 
-                            }}>
-                                Need Help <br/>
-                                <Box component="span" sx={{ 
-                                    background: 'linear-gradient(135deg, #FF7A59 0%, #6C63FF 100%)',
-                                    WebkitBackgroundClip: 'text',
-                                    WebkitTextFillColor: 'transparent'
-                                }}>Deciding?</Box>
-                            </Typography>
-                            <Typography variant="body1" sx={{ mb: 4, color: 'rgba(255, 255, 255, 0.6)' }}>
-                                Our AI Gift Matchmaker analyzes your preferences to find the perfect gift for any occasion.
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={12} md={7}>
-                            <Paper sx={{ 
-                                p: 4, borderRadius: '32px', 
-                                bgcolor: 'rgba(255, 255, 255, 0.02)', 
-                                backdropFilter: 'blur(20px)',
-                                border: '1px solid rgba(255, 255, 255, 0.08)' 
-                            }}>
-                                <Stack spacing={3}>
-                                    <Box>
-                                        <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.5)', fontWeight: 800, mb: 1.5, letterSpacing: '0.1em', textTransform: 'uppercase' }}>Who is it for?</Typography>
-                                        <Box sx={{ display: 'flex', gap: 1.5, overflowX: 'auto', pb: 1, '&::-webkit-scrollbar': { display: 'none' } }}>
-                                            {['For Partner', 'For Parents', 'For Friends', 'For Self'].map(filter => (
-                                                <Chip key={filter} label={filter} sx={{ 
-                                                    py: 2.5, px: 1, borderRadius: '12px',
-                                                    bgcolor: 'rgba(255,255,255,0.03)', fontWeight: 700, color: 'white', 
-                                                    border: '1px solid rgba(255,255,255,0.1)', cursor: 'pointer',
-                                                    '&:hover': { bgcolor: 'rgba(108, 99, 255, 0.15)', borderColor: '#6C63FF' }
-                                                }} />
-                                            ))}
-                                        </Box>
-                                    </Box>
-                                    <Box>
-                                        <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.5)', fontWeight: 800, mb: 1.5, letterSpacing: '0.1em', textTransform: 'uppercase' }}>What's the Occasion?</Typography>
-                                        <Box sx={{ display: 'flex', gap: 1.5, overflowX: 'auto', pb: 1, '&::-webkit-scrollbar': { display: 'none' } }}>
-                                            {['Anniversary', 'Birthday', 'Wedding', 'Graduation'].map(filter => (
-                                                <Chip key={filter} label={filter} sx={{ 
-                                                    py: 2.5, px: 1, borderRadius: '12px',
-                                                    bgcolor: 'rgba(255,255,255,0.03)', fontWeight: 700, color: 'white', 
-                                                    border: '1px solid rgba(255,255,255,0.1)', cursor: 'pointer',
-                                                    '&:hover': { bgcolor: 'rgba(255, 77, 157, 0.15)', borderColor: '#FF4D9D' }
-                                                }} />
-                                            ))}
-                                        </Box>
-                                    </Box>
-                                    <Button 
-                                        variant="contained" 
-                                        fullWidth 
-                                        sx={{ 
-                                            borderRadius: '16px', 
-                                            height: '60px',
-                                            background: 'linear-gradient(90deg, #6C63FF 0%, #FF4D9D 100%)',
-                                            fontWeight: 800,
-                                            fontSize: '18px',
-                                            mt: 2
-                                        }}
-                                    >
-                                        Generate AI Suggestions
-                                    </Button>
-                                </Stack>
-                            </Paper>
-                        </Grid>
-                    </Grid>
-                </Box>
+
+
 
                 {/* CUSTOMER REVIEWS - Glassy Carousel */}
                 <Box sx={{ py: { xs: 8, md: 10 } }}>

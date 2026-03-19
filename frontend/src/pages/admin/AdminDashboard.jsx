@@ -92,105 +92,139 @@ const AdminDashboard = () => {
     );
 
     return (
-        <Container maxWidth="xl" sx={{ pb: 8 }}>
-            {/* Welcome Banner */}
+        <Container maxWidth="xl" sx={{ pb: 8, position: 'relative' }}>
+            {/* 3D Floating Elements (Decorative) */}
+            <Box sx={{
+                position: 'fixed', top: '10%', right: '2%', width: '300px', height: '300px',
+                background: 'radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%)',
+                filter: 'blur(80px)', pointerEvents: 'none', zIndex: -1
+            }} />
+
+            {/* Welcome Banner — Premium Gradient & Glass */}
             <motion.div
-                initial={{ opacity: 0, scale: 0.8, filter: 'blur(10px)' }}
-                animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-                transition={{ 
-                    duration: 0.7, 
-                    ease: [0.34, 1.56, 0.64, 1] // Satisfying liquid zoom
-                }}
+                initial={{ opacity: 0, y: -20, filter: 'blur(10px)' }}
+                animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                transition={{ duration: 0.8 }}
             >
                 <Paper sx={{ 
-                    p: 2, 
-                    mb: 3, 
-                    borderRadius: '16px', 
-                    display: 'flex', 
-                    flexDirection: 'column',
-                    background: 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)',
+                    p: { xs: 3, md: 5 }, 
+                    mb: 5, 
+                    borderRadius: '32px', 
+                    background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.8) 100%)',
+                    backdropFilter: 'blur(20px)',
                     color: 'white',
-                    border: '1px solid rgba(255,255,255,0.05)'
+                    border: '1px solid rgba(255,255,255,0.08)',
+                    boxShadow: '0 20px 50px rgba(0,0,0,0.3)',
+                    position: 'relative',
+                    overflow: 'hidden'
                 }}>
-                    <Typography variant="h3" sx={{ fontWeight: 800, mb: 0.5, fontSize: '1.2rem' }}>
-                        Welcome back, {user?.name || 'Admin'}!
-                    </Typography>
-                    <Typography variant="body2" sx={{ opacity: 0.8, mb: 2 }}>
-                        Here's your store overview.
-                    </Typography>
-                    
-                    <Grid container spacing={1}>
-                        <Grid item xs={6}>
-                            <Button 
-                                fullWidth
-                                variant="contained" 
-                                startIcon={<AddCircleOutlineIcon fontSize="small" />}
-                                onClick={() => navigate('/admin/products')}
-                                sx={{ 
-                                    bgcolor: 'rgba(255,255,255,0.1)', 
-                                    height: '40px',
-                                    borderRadius: '12px',
-                                    fontSize: '12px'
-                                }}
-                            >
-                                Add Product
-                            </Button>
+                    <Box sx={{ position: 'relative', zIndex: 1 }}>
+                        <Typography variant="h1" sx={{ 
+                            fontWeight: 900, 
+                            mb: 1, 
+                            fontSize: { xs: '2rem', md: '3.5rem' },
+                            background: 'linear-gradient(to right, #fff, #94a3b8)',
+                            WebkitBackgroundClip: 'text',
+                            WebkitTextFillColor: 'transparent',
+                            letterSpacing: '-2px'
+                        }}>
+                            Dashboard Overview
+                        </Typography>
+                        <Typography variant="h5" sx={{ opacity: 0.7, mb: 4, fontWeight: 500, maxWidth: '600px' }}>
+                            Welcome back, {user?.name || 'Admin'}. Here is what's happening in your store today.
+                        </Typography>
+                        
+                        <Grid container spacing={2}>
+                            <Grid item xs={12} sm={auto}>
+                                <Button 
+                                    variant="contained" 
+                                    startIcon={<AddCircleOutlineIcon />}
+                                    onClick={() => navigate('/admin/products')}
+                                    sx={{ 
+                                        bgcolor: '#6366f1', 
+                                        '&:hover': { bgcolor: '#4f46e5' },
+                                        px: 4, py: 1.5,
+                                        borderRadius: '16px',
+                                        textTransform: 'none',
+                                        fontWeight: 700,
+                                        boxShadow: '0 10px 20px rgba(99, 102, 241, 0.3)'
+                                    }}
+                                >
+                                    New Product
+                                </Button>
+                            </Grid>
+                            <Grid item xs={12} sm={auto}>
+                                <Button 
+                                    variant="outlined" 
+                                    startIcon={<ShoppingBasketIcon />}
+                                    onClick={() => navigate('/admin/orders')}
+                                    sx={{ 
+                                        color: 'white',
+                                        borderColor: 'rgba(255,255,255,0.2)',
+                                        '&:hover': { borderColor: 'white', bgcolor: 'rgba(255,255,255,0.05)' },
+                                        px: 4, py: 1.5,
+                                        borderRadius: '16px',
+                                        textTransform: 'none',
+                                        fontWeight: 700
+                                    }}
+                                >
+                                    Recent Orders
+                                </Button>
+                            </Grid>
                         </Grid>
-                        <Grid item xs={6}>
-                            <Button 
-                                fullWidth
-                                variant="contained" 
-                                startIcon={<ShoppingBasketIcon fontSize="small" />}
-                                sx={{ 
-                                    bgcolor: '#6C63FF', 
-                                    height: '40px',
-                                    borderRadius: '12px',
-                                    fontSize: '12px'
-                                }}
-                                onClick={() => navigate('/admin/orders')}
-                            >
-                                Orders
-                            </Button>
-                        </Grid>
-                    </Grid>
+                    </Box>
+                    {/* Decorative Blob */}
+                    <Box sx={{
+                        position: 'absolute', top: '-10%', right: '-10%', width: '400px', height: '400px',
+                        background: 'radial-gradient(circle, rgba(99, 102, 241, 0.2) 0%, transparent 70%)',
+                        filter: 'blur(60px)', zIndex: 0
+                    }} />
                 </Paper>
             </motion.div>
 
-            {/* Stats Grid */}
-            <Grid container spacing={1.5} sx={{ mb: 4 }}>
+            {/* Stats Grid — 3D Tilt Cards */}
+            <Grid container spacing={3} sx={{ mb: 6 }}>
                 {stats.map((stat, i) => (
-                    <Grid item xs={6} md={3} key={stat.label}>
+                    <Grid item xs={12} sm={6} md={3} key={stat.label}>
                         <motion.div
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: 1 }}
+                            whileHover={{ y: -8, scale: 1.02 }}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: i * 0.1 }}
+                            style={{ height: '100%' }}
                         >
                             <Card sx={{ 
-                                borderRadius: '12px', 
-                                bgcolor: 'rgba(18, 26, 47, 0.6)',
+                                height: '100%',
+                                borderRadius: '24px', 
+                                background: 'rgba(255, 255, 255, 0.03)',
+                                backdropFilter: 'blur(10px)',
                                 border: '1px solid rgba(255,255,255,0.05)',
-                                overflow: 'hidden'
+                                overflow: 'hidden',
+                                transition: 'all 0.3s ease',
+                                '&:hover': {
+                                    border: `1px solid ${stat.color}40`,
+                                    boxShadow: `0 20px 40px ${stat.color}15`
+                                }
                             }}>
-                                <CardContent sx={{ p: '12px !important' }}>
-                                    <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', mb: 1 }}>
-                                        <Box sx={{ 
-                                            p: 1, 
-                                            borderRadius: '8px', 
-                                            bgcolor: `${stat.color}15`, 
-                                            color: stat.color,
-                                            display: 'flex'
-                                        }}>
-                                            {React.cloneElement(stat.icon, { sx: { fontSize: 20 } })}
-                                        </Box>
-                                        <Typography variant="h3" sx={{ fontWeight: 800, fontSize: '1.2rem' }}>
-                                            {stat.value}
-                                        </Typography>
+                                <CardContent sx={{ p: 4 }}>
+                                    <Box sx={{ 
+                                        p: 1.5, 
+                                        width: 'fit-content',
+                                        borderRadius: '16px', 
+                                        background: stat.gradient,
+                                        color: 'white',
+                                        mb: 3,
+                                        boxShadow: `0 8px 16px ${stat.color}30`
+                                    }}>
+                                        {stat.icon}
                                     </Box>
-                                    <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 600, display: 'block' }}>
+                                    <Typography variant="h3" sx={{ fontWeight: 800, mb: 1, fontSize: '2rem', color: 'white' }}>
+                                        {stat.value}
+                                    </Typography>
+                                    <Typography variant="subtitle1" sx={{ color: 'text.secondary', fontWeight: 600 }}>
                                         {stat.label}
                                     </Typography>
                                 </CardContent>
-                                <Box sx={{ height: 3, bgcolor: stat.color, opacity: 0.8 }} />
                             </Card>
                         </motion.div>
                     </Grid>
@@ -198,162 +232,146 @@ const AdminDashboard = () => {
             </Grid>
 
             <Grid container spacing={4}>
-                {/* Recent Orders Section */}
+                {/* Recent Orders Section — Premium Table */}
                 <Grid item xs={12} lg={8}>
                     <Box sx={{ mb: 3, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <Typography variant="h5" sx={{ fontWeight: 800, display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                            <ShoppingBasketIcon color="primary" /> Recent Orders
+                        <Typography variant="h4" sx={{ fontWeight: 800, color: 'white' }}>
+                            Recent Transactions
                         </Typography>
-                        <Button 
-                            endIcon={<ArrowForwardIcon />} 
-                            onClick={() => navigate('/admin/orders')}
-                            sx={{ fontWeight: 600 }}
-                        >
-                            View All Orders
-                        </Button>
                     </Box>
-                    <TableContainer component={Paper} sx={{ borderRadius: 2, boxShadow: '0 4px 25px rgba(0,0,0,0.05)', overflowX: 'auto' }}>
-                        <Table sx={{ minWidth: { xs: 600, md: '100%'} }}>
+                    <TableContainer component={Paper} sx={{ 
+                        borderRadius: '24px', 
+                        background: 'rgba(15, 23, 42, 0.4)',
+                        backdropFilter: 'blur(10px)',
+                        border: '1px solid rgba(255,255,255,0.05)',
+                        boxShadow: 'none',
+                        overflow: 'hidden'
+                    }}>
+                        <Table>
                             <TableHead>
-                                <TableRow sx={{ bgcolor: 'action.hover' }}>
-                                    <TableCell sx={{ fontWeight: 700 }}>Order</TableCell>
-                                    <TableCell sx={{ fontWeight: 700 }}>Customer</TableCell>
-                                    <TableCell sx={{ fontWeight: 700 }}>Items</TableCell>
-                                    <TableCell sx={{ fontWeight: 700 }}>Amount</TableCell>
-                                    <TableCell sx={{ fontWeight: 700 }}>Status</TableCell>
-                                    <TableCell align="right" sx={{ fontWeight: 700 }}>Action</TableCell>
+                                <TableRow sx={{ bgcolor: 'rgba(255,255,255,0.02)' }}>
+                                    <TableCell sx={{ color: 'text.secondary', fontWeight: 700, borderBottom: '1px solid rgba(255,255,255,0.05)' }}>Order ID</TableCell>
+                                    <TableCell sx={{ color: 'text.secondary', fontWeight: 700, borderBottom: '1px solid rgba(255,255,255,0.05)' }}>Customer</TableCell>
+                                    <TableCell sx={{ color: 'text.secondary', fontWeight: 700, borderBottom: '1px solid rgba(255,255,255,0.05)' }}>Date</TableCell>
+                                    <TableCell sx={{ color: 'text.secondary', fontWeight: 700, borderBottom: '1px solid rgba(255,255,255,0.05)' }}>Amount</TableCell>
+                                    <TableCell sx={{ color: 'text.secondary', fontWeight: 700, borderBottom: '1px solid rgba(255,255,255,0.05)' }}>Status</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
                                 {recentOrders.map((order) => {
                                     const statusObj = ORDER_STATUSES.find(s => s.key === order.status) || { label: order.status };
                                     return (
-                                        <TableRow key={order.id} hover sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                                            <TableCell sx={{ fontWeight: 700 }}>
-                                                <Typography variant="body2" color="primary.main" sx={{ fontWeight: 800 }}>
-                                                    #{order.id.toString().slice(-6)}
-                                                </Typography>
-                                                <Typography variant="caption" color="text.secondary">
-                                                    {new Date(order.created_at).toLocaleDateString()}
+                                        <TableRow key={order.id} hover sx={{ 
+                                            transition: 'background 0.2s',
+                                            '&:hover': { bgcolor: 'rgba(255,255,255,0.03)' },
+                                            '& td': { borderBottom: '1px solid rgba(255,255,255,0.03)' }
+                                        }}>
+                                            <TableCell>
+                                                <Typography variant="body2" sx={{ fontWeight: 800, color: '#6366f1' }}>
+                                                    #{order.id.toString().slice(-6).toUpperCase()}
                                                 </Typography>
                                             </TableCell>
                                             <TableCell>
                                                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                                                    <Avatar sx={{ width: 32, height: 32, fontSize: '0.8rem', bgcolor: 'primary.light' }}>
+                                                    <Avatar sx={{ width: 32, height: 32, fontSize: '0.8rem', bgcolor: '#4f46e5' }}>
                                                         {order.user?.name?.charAt(0) || 'G'}
                                                     </Avatar>
-                                                    <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                                                    <Typography variant="body2" sx={{ fontWeight: 600, color: 'white' }}>
                                                         {order.user?.name || 'Guest'}
                                                     </Typography>
                                                 </Box>
                                             </TableCell>
-                                            <TableCell>
-                                                <Box sx={{ display: 'flex', gap: 0.5 }}>
-                                                    {order.items?.slice(0, 3).map((item, i) => (
-                                                        <Tooltip key={i} title={item.product?.name}>
-                                                            <Avatar 
-                                                                src={getPublicUrl(item.product?.image_url)} 
-                                                                variant="rounded" 
-                                                                sx={{ width: 32, height: 32, border: '1px solid #eee' }} 
-                                                            />
-                                                        </Tooltip>
-                                                    ))}
-                                                    {order.items?.length > 3 && (
-                                                        <Avatar sx={{ width: 32, height: 32, fontSize: '0.7rem', bgcolor: 'action.selected' }}>
-                                                            +{order.items.length - 3}
-                                                        </Avatar>
-                                                    )}
-                                                </Box>
+                                            <TableCell sx={{ color: 'text.secondary' }}>
+                                                {new Date(order.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
                                             </TableCell>
-                                            <TableCell sx={{ fontWeight: 700 }}>
+                                            <TableCell sx={{ fontWeight: 800, color: 'white' }}>
                                                 ₹{parseFloat(order.total_price).toLocaleString()}
                                             </TableCell>
                                             <TableCell>
                                                 <Chip
                                                     label={statusObj.label}
-                                                    color={statusObj.color || STATUS_COLOR_MAP[order.status] || 'default'}
-                                                    size="small"
                                                     sx={{ 
-                                                        fontWeight: 700, 
-                                                        borderRadius: 2,
-                                                        textTransform: 'capitalize'
+                                                        fontWeight: 800, 
+                                                        borderRadius: '8px',
+                                                        fontSize: '0.7rem',
+                                                        textTransform: 'uppercase',
+                                                        letterSpacing: '0.5px',
+                                                        bgcolor: `${STATUS_COLOR_MAP[order.status] === 'success' ? '#10b98120' : '#6366f120'}`,
+                                                        color: STATUS_COLOR_MAP[order.status] === 'success' ? '#10b981' : '#818cf8',
+                                                        border: `1px solid ${STATUS_COLOR_MAP[order.status] === 'success' ? '#10b98140' : '#818cf840'}`
                                                     }}
                                                 />
-                                            </TableCell>
-                                            <TableCell align="right">
-                                                <IconButton 
-                                                    size="small" 
-                                                    color="primary"
-                                                    onClick={() => navigate('/admin/orders')}
-                                                    sx={{ bgcolor: 'primary.main', color: 'white', '&:hover': { bgcolor: 'primary.dark' } }}
-                                                >
-                                                    <ArrowForwardIcon fontSize="small" />
-                                                </IconButton>
                                             </TableCell>
                                         </TableRow>
                                     );
                                 })}
-                                {recentOrders.length === 0 && (
-                                    <TableRow>
-                                        <TableCell colSpan={6} align="center" sx={{ py: 4 }}>
-                                            <Typography color="text.secondary">No recent orders found</Typography>
-                                        </TableCell>
-                                    </TableRow>
-                                )}
                             </TableBody>
                         </Table>
                     </TableContainer>
                 </Grid>
 
-                {/* Quick Actions & Tips */}
+                {/* Quick Actions & Insights */}
                 <Grid item xs={12} lg={4}>
-                    <Box sx={{ mb: 4 }}>
-                        <Typography variant="h3" sx={{ mb: 2 }}>Quick Actions</Typography>
-                        <Grid container spacing={1.5}>
-                            {quickActions.map((action, i) => (
-                                <Grid item xs={6} key={i}>
+                    <Typography variant="h4" sx={{ mb: 3, fontWeight: 800, color: 'white' }}>Quick Actions</Typography>
+                    <Grid container spacing={2} sx={{ mb: 4 }}>
+                        {quickActions.map((action, i) => (
+                            <Grid item xs={6} key={i}>
+                                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                                     <Button
                                         fullWidth
                                         variant="outlined"
-                                        color={action.color}
                                         onClick={action.onClick}
                                         sx={{
-                                            py: 1.5,
-                                            borderRadius: '12px',
+                                            py: 2.5,
+                                            borderRadius: '20px',
                                             flexDirection: 'column',
-                                            gap: 0.5,
-                                            borderWidth: 1,
-                                            bgcolor: 'rgba(18, 26, 47, 0.4)',
-                                            '&:hover': { borderWidth: 1, bgcolor: `${action.color}.main`, color: 'white' },
-                                            '.MuiButton-startIcon': { display: 'none' } // Hide default startIcon
+                                            gap: 1.5,
+                                            border: '1px solid rgba(255,255,255,0.08)',
+                                            background: 'rgba(255,255,255,0.02)',
+                                            color: 'white',
+                                            '&:hover': { 
+                                                border: '1px solid rgba(255,255,255,0.2)',
+                                                background: 'rgba(255,255,255,0.05)'
+                                            }
                                         }}
                                     >
-                                        {React.cloneElement(action.icon, { sx: { fontSize: 24, mb: 0.5 } })}
-                                        <Typography variant="caption" sx={{ fontWeight: 600, lineHeight: 1.2 }}>{action.label}</Typography>
+                                        {React.cloneElement(action.icon, { sx: { fontSize: 32, color: '#6366f1' } })}
+                                        <Typography variant="body2" sx={{ fontWeight: 700 }}>{action.label}</Typography>
                                     </Button>
-                                </Grid>
-                            ))}
-                        </Grid>
-                    </Box>
+                                </motion.div>
+                            </Grid>
+                        ))}
+                    </Grid>
 
-                    <Paper sx={{ p: 4, borderRadius: 2, bgcolor: 'primary.main', color: 'white' }}>
-                        <Typography variant="h6" sx={{ fontWeight: 800, mb: 2 }}>Store Insights</Typography>
-                        <Typography variant="body2" sx={{ opacity: 0.9, mb: 3 }}>
-                            Your store traffic is up 15% this week. Consider adding more "Custom Photo Frames" to capitalize on the trend.
-                        </Typography>
-                        <Button 
-                            variant="contained" 
-                            fullWidth
-                            sx={{ 
-                                bgcolor: 'white', 
-                                color: 'primary.main',
-                                fontWeight: 700,
-                                borderRadius: 3,
-                                '&:hover': { bgcolor: 'rgba(255,255,255,0.9)' }
-                            }}
-                        >
-                            View All Analytics
-                        </Button>
+                    <Paper sx={{ 
+                        p: 4, 
+                        borderRadius: '24px', 
+                        background: 'linear-gradient(135deg, #6366f1 0%, #a855f7 100%)',
+                        color: 'white',
+                        boxShadow: '0 20px 40px rgba(99, 102, 241, 0.4)',
+                        position: 'relative',
+                        overflow: 'hidden'
+                    }}>
+                        <Box sx={{ position: 'relative', zIndex: 1 }}>
+                            <Typography variant="h5" sx={{ fontWeight: 800, mb: 1 }}>Store Intelligence</Typography>
+                            <Typography variant="body2" sx={{ opacity: 0.9, mb: 3 }}>
+                                Your store traffic is up 15% this week. Consider adding more "Custom Photo Frames" to capitalize on the trend.
+                            </Typography>
+                            <Button 
+                                variant="contained" 
+                                fullWidth
+                                sx={{ 
+                                    bgcolor: 'rgba(255,255,255,0.2)', 
+                                    color: 'white',
+                                    fontWeight: 700,
+                                    borderRadius: '12px',
+                                    backdropFilter: 'blur(10px)',
+                                    '&:hover': { bgcolor: 'rgba(255,255,255,0.3)' }
+                                }}
+                            >
+                                View Analytics
+                            </Button>
+                        </Box>
                     </Paper>
                 </Grid>
             </Grid>
