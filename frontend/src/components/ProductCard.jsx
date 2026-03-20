@@ -49,24 +49,32 @@ const ProductCard = ({ product }) => {
             <Card 
                 sx={{ 
                     height: '100%', 
-                    borderRadius: '32px', 
+                    borderRadius: '35px', 
                     p: 2.5, 
                     display: 'flex',
                     flexDirection: 'column',
                     position: 'relative',
                     overflow: 'hidden',
                     cursor: 'pointer',
-                    background: 'rgba(255, 255, 255, 0.02)',
-                    backdropFilter: 'blur(20px)',
-                    border: '1px solid rgba(255, 255, 255, 0.08)',
-                    transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+                    background: 'rgba(255, 255, 255, 0.03)',
+                    backdropFilter: 'blur(10px)',
+                    border: '1.2px solid rgba(255, 255, 255, 0.1)',
+                    transition: 'all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1)',
                     transformStyle: "preserve-3d",
+                    transform: 'translate3d(0,0,0)',
+                    boxShadow: '0 20px 40px rgba(0,0,0,0.3)',
                     '&:hover': {
-                        borderColor: 'rgba(108, 99, 255, 0.5)',
-                        background: 'rgba(255, 255, 255, 0.05)',
-                        boxShadow: '0 20px 40px rgba(0,0,0,0.4), 0 0 20px rgba(108, 99, 255, 0.1)',
-                        '& .product-image-container': { transform: 'translateZ(30px) scale(1.05)' },
+                        borderColor: 'rgba(108, 99, 255, 0.6)',
+                        background: 'rgba(255, 255, 255, 0.08)',
+                        boxShadow: '0 50px 100px rgba(0,0,0,0.8), 0 0 40px rgba(108, 99, 255, 0.2)',
+                        '& .product-image-container': { transform: 'translateZ(50px) scale(1.04)' },
                         '& .glow-effect': { opacity: 1 }
+                    },
+                    '&::before': { // Top edge highlight
+                        content: '""',
+                        position: 'absolute', top: 0, left: '20%', right: '20%', height: '1.5px',
+                        background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent)',
+                        opacity: 0.6, zIndex: 5
                     }
                 }}
                 onClick={() => navigate(`/product/${product.id}`)}

@@ -19,6 +19,7 @@ import api, { getPublicUrl } from '../api/axios';
 import { useCart } from '../store/CartContext';
 import { useAuth } from '../store/AuthContext';
 import { sanitizeUrl } from '../api/security';
+import UiverseCartButton from '../components/Shared/UiverseCartButton';
 
 const ProductDetail = () => {
     const { id } = useParams();
@@ -264,7 +265,7 @@ const ProductDetail = () => {
                             </Box>
 
                             {/* Action Buttons */}
-                            <Stack spacing={1.5} sx={{ mb: 3 }}>
+                            <Stack spacing={2} sx={{ mb: 4 }}>
                                 {isCustomizable && (
                                     <Button
                                         fullWidth
@@ -273,30 +274,22 @@ const ProductDetail = () => {
                                         component={RouterLink}
                                         to={customizePath}
                                         sx={{
-                                            borderRadius: '12px', height: '48px', fontSize: '14px', fontWeight: 700,
-                                            background: 'linear-gradient(135deg, #6C63FF 0%, #9C4DFF 100%)',
-                                            boxShadow: '0 4px 16px rgba(108,99,255,0.35)'
+                                            borderRadius: '16px', height: '52px', fontSize: '15px', fontWeight: 900,
+                                            background: 'linear-gradient(135deg, #6C63FF 0%, #FF4D9D 100%)',
+                                            boxShadow: '0 10px 30px rgba(108,99,255,0.4)',
+                                            transition: '0.4s cubic-bezier(0.19, 1, 0.22, 1)',
+                                            '&:hover': { transform: 'translateY(-3px)', boxShadow: '0 15px 40px rgba(108,99,255,0.5)' },
+                                            '&:active': { transform: 'scale(0.97)' }
                                         }}
                                     >
                                         Customize &amp; Order
                                     </Button>
                                 )}
-                                <Button
-                                    fullWidth
-                                    variant={isCustomizable ? 'outlined' : 'contained'}
-                                    startIcon={<ShoppingCartIcon />}
-                                    onClick={handleAddToCart}
-                                    sx={{
-                                        borderRadius: '12px', height: '48px', fontSize: '14px', fontWeight: 700,
-                                        borderColor: 'rgba(255,255,255,0.2)', color: 'white',
-                                        ...(isCustomizable ? {} : {
-                                            background: 'linear-gradient(135deg, #6C63FF 0%, #9C4DFF 100%)',
-                                            border: 'none'
-                                        })
-                                    }}
-                                >
-                                    Add to Cart
-                                </Button>
+                                <UiverseCartButton 
+                                    onClick={handleAddToCart} 
+                                    fullWidth 
+                                    text="Add to Cart"
+                                />
                             </Stack>
 
                             {/* Trust Badges */}

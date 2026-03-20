@@ -42,6 +42,7 @@ import VisualOptionCard from '../components/Customization/Shared/VisualOptionCar
 import InstagramSupportButton from '../components/Shared/InstagramSupportButton';
 import LoadingState from '../components/Shared/LoadingState';
 import ErrorState from '../components/Shared/ErrorState';
+import UiverseCartButton from '../components/Shared/UiverseCartButton';
 
 const Frame3DPreview = lazy(() => import('../components/Customization/FrameBuilder/Frame3DPreview'));
 
@@ -562,9 +563,12 @@ const FrameCustomizerPage = () => {
                                 <Typography sx={{ color: '#fff', fontSize: '24px', fontWeight: 800 }}>₹{totalPrice.toFixed(0)}</Typography>
                             </Box>
                         </Box>
-                        <Stack direction="row" spacing={2}>
-                            <Button fullWidth onClick={() => { setDesign(INITIAL_DESIGN); setHistory([INITIAL_DESIGN]); setHistoryIndex(0); }} sx={{ color: 'rgba(255,255,255,0.5)', minWidth: 'auto', px: 2 }}><RestartAltIcon /></Button>
-                            <Button variant="contained" startIcon={<ShoppingCartIcon />} onClick={handleAddToCart} sx={{ height: '56px', borderRadius: '16px', fontSize: '15px', fontWeight: 600, background: 'linear-gradient(135deg, #7C3AED 0%, #EC4899 100%)', boxShadow: '0 8px 24px rgba(236,72,153,0.3)', textTransform: 'none', letterSpacing: '0.5px', px: 4, whiteSpace: 'nowrap' }}>Add to Cart</Button>
+                        <Stack direction="row" spacing={2} alignItems="center">
+                            <Button onClick={() => { setDesign(INITIAL_DESIGN); setHistory([INITIAL_DESIGN]); setHistoryIndex(0); }} sx={{ color: 'rgba(255,255,255,0.4)', minWidth: '48px', height: '48px', borderRadius: '14px', '&:hover': { background: 'rgba(255,255,255,0.05)' } }}><RestartAltIcon /></Button>
+                            <UiverseCartButton 
+                                onClick={handleAddToCart} 
+                                text={cartItemId ? "Update Cart" : "Add to Cart"}
+                            />
                         </Stack>
                     </>
                 }
