@@ -2,13 +2,12 @@ import React, { useState, useEffect } from 'react';
 import {
     Container, Typography, Grid, Paper, Box, Button, Chip,
     Table, TableBody, TableCell, TableHead, TableRow, Avatar, TableContainer,
-    IconButton, Tooltip, Card, CardContent
+    Card, CardContent
 } from '@mui/material';
 import PeopleIcon from '@mui/icons-material/People';
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import PendingActionsIcon from '@mui/icons-material/PendingActions';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import InventoryIcon from '@mui/icons-material/Inventory';
@@ -17,7 +16,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useOrders, ORDER_STATUSES } from '../../store/OrderContext';
 import { useAuth } from '../../store/AuthContext';
-import api, { getPublicUrl } from '../../api/axios';
+import api from '../../api/axios';
 
 const STATUS_COLOR_MAP = {
     placed: 'info',
@@ -60,7 +59,7 @@ const AdminDashboard = () => {
             }
         };
         loadDashboard();
-    }, []);
+    }, [fetchAllOrders]);
 
     useEffect(() => {
         if (!loading && user && user.role !== 'admin') {
@@ -131,11 +130,11 @@ const AdminDashboard = () => {
                             Dashboard Overview
                         </Typography>
                         <Typography variant="h5" sx={{ opacity: 0.7, mb: 4, fontWeight: 500, maxWidth: '600px' }}>
-                            Welcome back, {user?.name || 'Admin'}. Here is what's happening in your store today.
+                            Welcome back, {user?.name || 'Admin'}. Here is what&apos;s happening in your store today.
                         </Typography>
                         
                         <Grid container spacing={2}>
-                            <Grid item xs={12} sm={auto}>
+                            <Grid item xs={12} sm="auto">
                                 <Button 
                                     variant="contained" 
                                     startIcon={<AddCircleOutlineIcon />}
@@ -153,7 +152,7 @@ const AdminDashboard = () => {
                                     New Product
                                 </Button>
                             </Grid>
-                            <Grid item xs={12} sm={auto}>
+                            <Grid item xs={12} sm="auto">
                                 <Button 
                                     variant="outlined" 
                                     startIcon={<ShoppingBasketIcon />}
@@ -355,7 +354,7 @@ const AdminDashboard = () => {
                         <Box sx={{ position: 'relative', zIndex: 1 }}>
                             <Typography variant="h5" sx={{ fontWeight: 800, mb: 1 }}>Store Intelligence</Typography>
                             <Typography variant="body2" sx={{ opacity: 0.9, mb: 3 }}>
-                                Your store traffic is up 15% this week. Consider adding more "Custom Photo Frames" to capitalize on the trend.
+                                Your store traffic is up 15% this week. Consider adding more &quot;Custom Photo Frames&quot; to capitalize on the trend.
                             </Typography>
                             <Button 
                                 variant="contained" 
