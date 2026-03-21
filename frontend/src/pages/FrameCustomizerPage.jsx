@@ -124,6 +124,60 @@ const FrameCustomizerPage = () => {
     const [fitRevision, setFitRevision] = useState(0);
     const [lastUploadedLength, setLastUploadedLength] = useState(0);
 
+    const saveHistory = useCallback((newDesign) => {
+        const newHistory = history.slice(0, historyIndex + 1);
+        if (newHistory.length > 50) newHistory.shift();
+        newHistory.push(newDesign);
+        setHistory(newHistory);
+        setHistoryIndex(newHistory.length - 1);
+        setDesign(newDesign);
+    }, [history, historyIndex]);
+
+    const updateDesign = useCallback((updates) => {
+        const hasChange = Object.keys(updates).some(key => updates[key] !== design[key]);
+        if (hasChange) {
+            saveHistory({ ...design, ...updates });
+        }
+    }, [design, saveHistory]);
+
+    const setTextLayers = (val) => {
+        const newVal = typeof val === 'function' ? val(design.textLayers) : val;
+        updateDesign({ textLayers: newVal });
+    };
+
+    const setStickers = (val) => {
+        const newVal = typeof val === 'function' ? val(design.stickers) : val;
+        updateDesign({ stickers: newVal });
+    };
+
+    const setImgProps = (val) => {
+        const newVal = typeof val === 'function' ? val(design.imgProps) : val;
+        updateDesign({ imgProps: newVal });
+    };
+
+    const handleUndo = () => historyIndex > 0 && (setHistoryIndex(historyIndex - 1), setDesign(history[historyIndex - 1]));
+    const handleRedo = () => historyIndex < history.length - 1 && (setHistoryIndex(historyIndex + 1), setDesign(history[historyIndex + 1]));
+
+    const handleImageUpload = async (e) => {
+        if (!user) { navigate('/login'); return; }
+        const file = e.target.files[0];
+        if (!file) return;
+        setIsUploading(true);
+        const formData = new FormData();
+        formData.append('file', file);
+        try {
+            const res = await api.post('/products/upload-customization', formData);
+            const url = res.data.image_url || res.data.url;
+            const absoluteUrl = getPublicUrl(url);
+            updateDesign({ 
+                uploadedFileUrls: [...design.uploadedFileUrls, absoluteUrl], 
+                originalPaths: [...(design.originalPaths || []), url] 
+            });
+            setSelectedImageIdx(design.uploadedFileUrls.length); // Point to the newly uploaded image
+            setSnackbar({ open: true, message: 'Image uploaded!', severity: 'success' });
+        } catch (err) { setSnackbar({ open: true, message: 'Upload failed', severity: 'error' }); } finally { setIsUploading(false); }
+    };
+
     useEffect(() => {
         // Automatically fill empty slots when images are uploaded
         if (design.uploadedFileUrls.length > lastUploadedLength) {
@@ -183,60 +237,6 @@ const FrameCustomizerPage = () => {
         };
         fetchProductAndCartItem();
     }, [id, cartItemId]);
-
-    const saveHistory = useCallback((newDesign) => {
-        const newHistory = history.slice(0, historyIndex + 1);
-        if (newHistory.length > 50) newHistory.shift();
-        newHistory.push(newDesign);
-        setHistory(newHistory);
-        setHistoryIndex(newHistory.length - 1);
-        setDesign(newDesign);
-    }, [history, historyIndex]);
-
-    const handleUndo = () => historyIndex > 0 && (setHistoryIndex(historyIndex - 1), setDesign(history[historyIndex - 1]));
-    const handleRedo = () => historyIndex < history.length - 1 && (setHistoryIndex(historyIndex + 1), setDesign(history[historyIndex + 1]));
-
-    const updateDesign = useCallback((updates) => {
-        const hasChange = Object.keys(updates).some(key => updates[key] !== design[key]);
-        if (hasChange) {
-            saveHistory({ ...design, ...updates });
-        }
-    }, [design, saveHistory]);
-
-    const handleImageUpload = async (e) => {
-        if (!user) { navigate('/login'); return; }
-        const file = e.target.files[0];
-        if (!file) return;
-        setIsUploading(true);
-        const formData = new FormData();
-        formData.append('file', file);
-        try {
-            const res = await api.post('/products/upload-customization', formData);
-            const url = res.data.image_url || res.data.url;
-            const absoluteUrl = getPublicUrl(url);
-            updateDesign({ 
-                uploadedFileUrls: [...design.uploadedFileUrls, absoluteUrl], 
-                originalPaths: [...(design.originalPaths || []), url] 
-            });
-            setSelectedImageIdx(design.uploadedFileUrls.length); // Point to the newly uploaded image
-            setSnackbar({ open: true, message: 'Image uploaded!', severity: 'success' });
-        } catch (err) { setSnackbar({ open: true, message: 'Upload failed', severity: 'error' }); } finally { setIsUploading(false); }
-    };
-
-    const setTextLayers = (val) => {
-        const newVal = typeof val === 'function' ? val(design.textLayers) : val;
-        updateDesign({ textLayers: newVal });
-    };
-
-    const setStickers = (val) => {
-        const newVal = typeof val === 'function' ? val(design.stickers) : val;
-        updateDesign({ stickers: newVal });
-    };
-
-    const setImgProps = (val) => {
-        const newVal = typeof val === 'function' ? val(design.imgProps) : val;
-        updateDesign({ imgProps: newVal });
-    };
 
     const handleAddToCart = async () => {
         if (!user) { navigate('/login'); return; }
