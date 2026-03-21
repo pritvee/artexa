@@ -54,7 +54,9 @@ const LAYOUTS = [
     { label: 'Single', value: 'single', slots: 1 },
     { label: 'Two-Photo', value: 'two-photo', slots: 2 },
     { label: 'Collage (3)', value: 'collage-3', slots: 3 },
-    { label: 'Grid (4)', value: 'grid-4', slots: 4 }
+    { label: 'Grid (4)', value: 'grid-4', slots: 4 },
+    { label: 'Grid (6)', value: 'grid-6', slots: 6 },
+    { label: 'Grid (9)', value: 'grid-9', slots: 9 }
 ];
 
 const FONTS = [
@@ -94,7 +96,7 @@ const INITIAL_DESIGN = {
     uploadedFileUrls: [],
     textLayers: [],
     stickers: [],
-    layerOrder: [],
+    layerOrder: ['img-0'],
     enhancedImages: [],
     imgProps: [],
     hiddenLayers: new Set(),
@@ -158,7 +160,7 @@ const FrameCustomizerPage = () => {
                                 textLayers: details.textLayers || [],
                                 stickers: details.stickers || [],
                                 hiddenLayers: new Set(details.hiddenLayers || []),
-                                layerOrder: details.layerOrder || []
+                                layerOrder: details.layerOrder || (details.layout === 'single' ? ['img-0'] : [])
                             };
                         }
                     } catch (e) { console.error(e); }
