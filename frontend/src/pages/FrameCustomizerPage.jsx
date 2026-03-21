@@ -133,6 +133,7 @@ const FrameCustomizerPage = () => {
     const [historyIndex, setHistoryIndex] = useState(0);
     const [selectedId, setSelectedId] = useState(null);
     const [textureCanvas, setTextureCanvas] = useState(null);
+    const [fitRevision, setFitRevision] = useState(0);
 
     useEffect(() => {
         const fetchProductAndCartItem = async () => {
@@ -261,6 +262,7 @@ const FrameCustomizerPage = () => {
     const steps = [
         { id: 'type', label: 'Setup', icon: <InventoryIcon /> },
         { id: 'photo', label: 'Photos', icon: <PhotoLibraryIcon /> },
+        { id: 'layers', label: 'Layers', icon: <LayersIcon /> },
         { id: 'text', label: 'Decorate', icon: <TextFieldsIcon /> },
         { id: 'style', label: 'Finish', icon: <BrushIcon /> },
         { id: 'review', label: 'Order', icon: <ViewInArIcon /> }
@@ -293,6 +295,7 @@ const FrameCustomizerPage = () => {
                                     setSelectedId={setSelectedId}
                                     onStageReady={s => stageRef.current = s}
                                     onTextureUpdate={setTextureCanvas}
+                                    fitRevision={fitRevision}
                                 />
                             </Box>
                             <Box sx={{ display: previewTab === 1 ? 'block' : 'none', width: '100%', height: '100%' }}>
@@ -434,77 +437,24 @@ const FrameCustomizerPage = () => {
                                         />
                                     </Box>
                                 )}
+                                <Button fullWidth variant="contained" onClick={() => setCurrentStep(2)} sx={{ mt: 2, borderRadius: '12px', py: 1.5 }}>Continue to Layers</Button>
                             </Stack>
                         )}
                         {currentStep === 2 && (
                             <Stack spacing={3}>
-                                <Typography variant="h3">Messages & Elements</Typography>
-                                <Box sx={{ display: 'flex', gap: 1.5 }}>
-                                    <Button fullWidth variant="outlined" startIcon={<TextFieldsIcon />} onClick={() => {
-                                        const id = `text-${Date.now()}`;
-                                        updateDesign({ 
-                                            textLayers: [...design.textLayers, { id, text: 'Your Message', fontFamily: 'Poppins', fontSize: 40, color: '#000000', x: 200, y: 200, rotation: 0 }],
-                                            layerOrder: [...design.layerOrder, id]
-                                        });
-                                    }} sx={{ py: 1.5, borderRadius: '12px', borderStyle: 'dashed' }}>Add Text</Button>
-                                    <Button fullWidth variant="outlined" startIcon={<AutoFixHighIcon />} onClick={() => setPreviewTab(0)} sx={{ py: 1.5, borderRadius: '12px', borderStyle: 'dashed' }}>Stickers</Button>
-                                </Box>
-                                
                                 <Box>
-                                    <Typography variant="caption" sx={{ mb: 1, display: 'block' }}>Quick Emojis</Typography>
-                                    <Box sx={{ display: 'flex', gap: 1, overflowX: 'auto', pb: 1 }}>
-                                        {Object.entries(STICKER_ICONS).map(([key, emoji]) => (
-                                            <IconButton key={key} onClick={() => {
-                                                const id = `sticker-${Date.now()}`;
-                                                updateDesign({ 
-                                                    stickers: [...design.stickers, { id, type: key, x: 150, y: 150, size: 80, rot: 0, opacity: 1 }],
-                                                    layerOrder: [...design.layerOrder, id]
-                                                });
-                                            }} sx={{ border: '1px solid rgba(255,255,255,0.05)', borderRadius: '12px', minWidth: '48px', height: '48px', bgcolor: 'rgba(255,255,255,0.02)' }}>
-                                                {emoji}
-                                            </IconButton>
-                                        ))}
-                                    </Box>
-                                </Box>
-
-                                <Box>
-                                    <Typography variant="caption" sx={{ mb: 1.5, display: 'block' }}>Decorative Sticker Packs</Typography>
-                                    {STICKER_PACKS.map(pack => (
-                                        <Box key={pack.name} sx={{ mb: 2 }}>
-                                            <Typography variant="subtitle2" sx={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '1px', opacity: 0.6, mb: 1 }}>{pack.name}</Typography>
-                                            <Box sx={{ display: 'flex', gap: 1.5, overflowX: 'auto', pb: 1 }}>
-                                                {pack.pack.map((s, idx) => (
-                                                    <Box 
-                                                        key={idx} 
-                                                        onClick={() => {
-                                                            const id = `sticker-${Date.now()}`;
-                                                            updateDesign({ 
-                                                                stickers: [...design.stickers, { id, url: getPublicUrl(s.url), type: 'url', x: 200, y: 200, size: 100, rot: 0, opacity: 1 }],
-                                                                layerOrder: [...design.layerOrder, id]
-                                                            });
-                                                        }}
-                                                        sx={{ 
-                                                            minWidth: 60, height: 60, borderRadius: '12px', 
-                                                            bgcolor: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)',
-                                                            display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                                            cursor: 'pointer', '&:hover': { bgcolor: 'rgba(255,255,255,0.08)' }
-                                                        }}
-                                                    >
-                                                        <img src={s.url} alt={s.label} style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
-                                                    </Box>
-                                                ))}
-                                            </Box>
-                                        </Box>
-                                    ))}
-                                </Box>
-
-                                <Box sx={{ mt: 2 }}>
-                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
+                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
                                         <LayersIcon sx={{ fontSize: 18, color: '#7B61FF' }} />
-                                        <Typography variant="subtitle2">Manage Layers</Typography>
+                                        <Typography variant="h3">Object Layers</Typography>
                                     </Box>
+                                    <Typography variant="caption" sx={{ opacity: 0.6, display: 'block', mb: 3 }}>
+                                        Manage your photos and decorations. Drag to reorder.
+                                    </Typography>
+                                </Box>
+
+                                <Box sx={{ mt: 1 }}>
                                     <Reorder.Group axis="y" values={design.layerOrder} onReorder={(newOrder) => updateDesign({ layerOrder: newOrder })}>
-                                        <Stack spacing={1}>
+                                        <Stack spacing={1.5}>
                                             {design.layerOrder.map(layerId => {
                                                 const isText = layerId.startsWith('text-');
                                                 const isSticker = layerId.startsWith('sticker-');
@@ -519,7 +469,7 @@ const FrameCustomizerPage = () => {
                                                     icon = <TextFieldsIcon />;
                                                 } else if (isSticker) {
                                                     const s = design.stickers.find(l => l.id === layerId);
-                                                    label = `Sticker: ${STICKER_ICONS[s?.type] || s?.type}`;
+                                                    label = `Sticker: ${STICKER_ICONS[s?.type] || (s?.type === 'url' ? 'Image' : s?.type) || 'Decor'}`;
                                                     icon = <AutoFixHighIcon />;
                                                 } else if (isImg) {
                                                     const idx = parseInt(layerId.split('-')[1]);
@@ -527,14 +477,19 @@ const FrameCustomizerPage = () => {
                                                     icon = <PhotoLibraryIcon />;
                                                 }
 
+                                                const isHidden = design.hiddenLayers.has(layerId);
+
                                                 return (
                                                     <Reorder.Item key={layerId} value={layerId}>
                                                         <Box className="glass" sx={{ 
                                                             px: 2, py: 1.5, borderRadius: '16px', 
                                                             display: 'flex', alignItems: 'center', gap: 2,
                                                             cursor: 'grab', '&:active': { cursor: 'grabbing' },
-                                                            border: '1px solid rgba(255,255,255,0.08)'
-                                                        }}>
+                                                            border: '1px solid rgba(255,255,255,0.08)',
+                                                            opacity: isHidden ? 0.5 : 1,
+                                                            bgcolor: selectedId === layerId ? 'rgba(123, 97, 255, 0.1)' : 'transparent',
+                                                            borderColor: selectedId === layerId ? '#7B61FF' : 'rgba(255,255,255,0.08)'
+                                                        }} onClick={() => setSelectedId(layerId)}>
                                                             <Box sx={{ color: 'rgba(255,255,255,0.4)' }}>{icon}</Box>
                                                             <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', gap: 0.5 }}>
                                                                 {isText ? (
@@ -576,26 +531,54 @@ const FrameCustomizerPage = () => {
                                                                     <Typography sx={{ fontSize: '13px', fontWeight: 600 }}>{label}</Typography>
                                                                 )}
                                                             </Box>
-                                                            <IconButton 
-                                                                size="small" 
-                                                                onClick={() => {
-                                                                    const hidden = new Set(design.hiddenLayers);
-                                                                    if (hidden.has(layerId)) hidden.delete(layerId);
-                                                                    else hidden.add(layerId);
-                                                                    updateDesign({ hiddenLayers: hidden });
-                                                                }}
-                                                            >
-                                                                {design.hiddenLayers.has(layerId) ? <VisibilityOffIcon sx={{ fontSize: 18 }} /> : <VisibilityIcon sx={{ fontSize: 18 }} />}
-                                                            </IconButton>
-                                                            {!isImg && (
-                                                                <IconButton size="small" color="error" onClick={() => {
-                                                                    updateDesign({ 
-                                                                        textLayers: design.textLayers.filter(l => l.id !== layerId), 
-                                                                        stickers: design.stickers.filter(s => s.id !== layerId),
-                                                                        layerOrder: design.layerOrder.filter(id => id !== layerId)
-                                                                    });
-                                                                }}><DeleteIcon sx={{ fontSize: 18 }} /></IconButton>
-                                                            )}
+
+                                                            <Stack direction="row" spacing={0.5}>
+                                                                {isImg && (
+                                                                    <IconButton 
+                                                                        size="small" 
+                                                                        title="Auto Fit"
+                                                                        onClick={(e) => {
+                                                                            e.stopPropagation();
+                                                                            const idx = parseInt(layerId.split('-')[1]);
+                                                                            const newProps = [...design.imgProps];
+                                                                            newProps[idx] = null; // Clear props to trigger auto-fit
+                                                                            updateDesign({ imgProps: newProps });
+                                                                            setFitRevision(v => v + 1);
+                                                                            setSnackbar({ open: true, message: 'Auto-adjusting image...', severity: 'info' });
+                                                                        }}
+                                                                    >
+                                                                        <AutoFixHighIcon sx={{ fontSize: 18, color: '#7B61FF' }} />
+                                                                    </IconButton>
+                                                                )}
+                                                                <IconButton 
+                                                                    size="small" 
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation();
+                                                                        const hidden = new Set(design.hiddenLayers);
+                                                                        if (hidden.has(layerId)) hidden.delete(layerId);
+                                                                        else hidden.add(layerId);
+                                                                        updateDesign({ hiddenLayers: hidden });
+                                                                    }}
+                                                                >
+                                                                    {isHidden ? <VisibilityOffIcon sx={{ fontSize: 18 }} /> : <VisibilityIcon sx={{ fontSize: 18 }} />}
+                                                                </IconButton>
+                                                                {!isImg && (
+                                                                    <IconButton 
+                                                                        size="small" 
+                                                                        color="error" 
+                                                                        onClick={(e) => {
+                                                                            e.stopPropagation();
+                                                                            updateDesign({ 
+                                                                                textLayers: design.textLayers.filter(l => l.id !== layerId), 
+                                                                                stickers: design.stickers.filter(s => s.id !== layerId),
+                                                                                layerOrder: design.layerOrder.filter(id => id !== layerId)
+                                                                            });
+                                                                        }}
+                                                                    >
+                                                                        <DeleteIcon sx={{ fontSize: 18 }} />
+                                                                    </IconButton>
+                                                                )}
+                                                            </Stack>
                                                         </Box>
                                                     </Reorder.Item>
                                                 );
@@ -603,9 +586,83 @@ const FrameCustomizerPage = () => {
                                         </Stack>
                                     </Reorder.Group>
                                 </Box>
+                                {design.layerOrder.length === 0 && (
+                                    <Box sx={{ py: 6, textAlign: 'center', opacity: 0.5 }}>
+                                        <LayersIcon sx={{ fontSize: 48, mb: 1 }} />
+                                        <Typography>No layers yet. Add photos or text!</Typography>
+                                    </Box>
+                                )}
+                                <Button fullWidth variant="contained" onClick={() => setCurrentStep(3)} sx={{ mt: 2, borderRadius: '12px' }}>Add More Elements</Button>
                             </Stack>
                         )}
                         {currentStep === 3 && (
+                            <Stack spacing={3}>
+                                <Typography variant="h3">Messages & Elements</Typography>
+                                <Box sx={{ display: 'flex', gap: 1.5 }}>
+                                    <Button fullWidth variant="outlined" startIcon={<TextFieldsIcon />} onClick={() => {
+                                        const id = `text-${Date.now()}`;
+                                        updateDesign({ 
+                                            textLayers: [...design.textLayers, { id, text: 'Your Message', fontFamily: 'Poppins', fontSize: 40, color: '#000000', x: 200, y: 200, rotation: 0 }],
+                                            layerOrder: [...design.layerOrder, id]
+                                        });
+                                        setCurrentStep(2); // Jump to layers
+                                    }} sx={{ py: 1.5, borderRadius: '12px', borderStyle: 'dashed' }}>Add Text</Button>
+                                    <Button fullWidth variant="outlined" startIcon={<AutoFixHighIcon />} onClick={() => setPreviewTab(0)} sx={{ py: 1.5, borderRadius: '12px', borderStyle: 'dashed' }}>Stickers</Button>
+                                </Box>
+                                
+                                <Box>
+                                    <Typography variant="caption" sx={{ mb: 1, display: 'block' }}>Quick Emojis</Typography>
+                                    <Box sx={{ display: 'flex', gap: 1, overflowX: 'auto', pb: 1 }}>
+                                        {Object.entries(STICKER_ICONS).map(([key, emoji]) => (
+                                            <IconButton key={key} onClick={() => {
+                                                const id = `sticker-${Date.now()}`;
+                                                updateDesign({ 
+                                                    stickers: [...design.stickers, { id, type: key, x: 150, y: 150, size: 80, rot: 0, opacity: 1 }],
+                                                    layerOrder: [...design.layerOrder, id]
+                                                });
+                                                setCurrentStep(2); // Jump to layers
+                                            }} sx={{ border: '1px solid rgba(255,255,255,0.05)', borderRadius: '12px', minWidth: '48px', height: '48px', bgcolor: 'rgba(255,255,255,0.02)' }}>
+                                                {emoji}
+                                            </IconButton>
+                                        ))}
+                                    </Box>
+                                </Box>
+
+                                <Box>
+                                    <Typography variant="caption" sx={{ mb: 1.5, display: 'block' }}>Decorative Sticker Packs</Typography>
+                                    {STICKER_PACKS.map(pack => (
+                                        <Box key={pack.name} sx={{ mb: 2 }}>
+                                            <Typography variant="subtitle2" sx={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '1px', opacity: 0.6, mb: 1 }}>{pack.name}</Typography>
+                                            <Box sx={{ display: 'flex', gap: 1.5, overflowX: 'auto', pb: 1 }}>
+                                                {pack.pack.map((s, idx) => (
+                                                    <Box 
+                                                        key={idx} 
+                                                        onClick={() => {
+                                                            const id = `sticker-${Date.now()}`;
+                                                            updateDesign({ 
+                                                                stickers: [...design.stickers, { id, url: getPublicUrl(s.url), type: 'url', x: 200, y: 200, size: 100, rot: 0, opacity: 1 }],
+                                                                layerOrder: [...design.layerOrder, id]
+                                                            });
+                                                            setCurrentStep(2); // Jump to layers
+                                                        }}
+                                                        sx={{ 
+                                                            minWidth: 60, height: 60, borderRadius: '12px', 
+                                                            bgcolor: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)',
+                                                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                                            cursor: 'pointer', '&:hover': { bgcolor: 'rgba(255,255,255,0.08)' }
+                                                        }}
+                                                    >
+                                                        <img src={s.url} alt={s.label} style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
+                                                    </Box>
+                                                ))}
+                                            </Box>
+                                        </Box>
+                                    ))}
+                                </Box>
+                                <Button fullWidth variant="contained" onClick={() => setCurrentStep(4)} sx={{ mt: 2, borderRadius: '12px' }}>Next: Style Frame</Button>
+                            </Stack>
+                        )}
+                        {currentStep === 4 && (
                             <Stack spacing={4}>
                                 <Typography variant="h3">Advanced Styling</Typography>
                                 
@@ -670,7 +727,7 @@ const FrameCustomizerPage = () => {
                                 </Box>
                             </Stack>
                         )}
-                        {currentStep === 4 && (
+                        {currentStep === 5 && (
                             <Stack spacing={3}>
                                 <Typography variant="h3">Preview Ready</Typography>
                                 <Box className="glass" sx={{ p: 3, borderRadius: '24px', border: '1px solid rgba(255,255,255,0.1)' }}>

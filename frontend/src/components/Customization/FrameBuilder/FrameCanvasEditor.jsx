@@ -73,7 +73,7 @@ const DraggableImage = ({
     onSelect, onDragEnd, onTransformEnd,
     filter = 'none', matThickness = 0, matColor = '#fff',
     innerBorderColor = '#ffffff',
-    onAutoAdjust, onImageLoaded
+    onAutoAdjust, onImageLoaded, fitRevision = 0
 }) => {
     const [img] = useImage(src, 'anonymous');
     const imgRef = useRef();
@@ -94,7 +94,7 @@ const DraggableImage = ({
             if (onImageLoaded) onImageLoaded();
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [img, clipRect.width, clipRect.height]);
+    }, [img, clipRect.width, clipRect.height, fitRevision]);
 
     const getFilters = () => {
         if (filter === 'bw') return [Konva.Filters.Grayscale];
@@ -202,6 +202,7 @@ const FrameCanvasEditor = ({
     innerSpacing = 20,
     outerPadding = 40,
     innerBorderColor = '#ffffff',
+    fitRevision = 0,
 }) => {
     const stageRef = useRef();
     const trRef = useRef();
@@ -514,6 +515,7 @@ const FrameCanvasEditor = ({
                                     onSelect={() => setSelectedId(id)}
                                     onAutoAdjust={(img) => performAutoAdjust(idx, img)}
                                     onImageLoaded={() => setImageLoadTick(t => t + 1)}
+                                    fitRevision={fitRevision + imageLoadTick}
                                     onDragEnd={(e) => {
                                         const newProps = [...imgProps];
                                         if (!newProps[idx]) newProps[idx] = {};
