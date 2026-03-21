@@ -338,26 +338,26 @@ const FrameCanvasEditor = ({
         const nw = img.width, nh = img.height;
         const targetRatio = rect.width / rect.height;
         const imageRatio  = nw / nh;
-        let w, h, x, y;
+        let fitW = 0, fitH = 0, fitX = 0, fitY = 0;
         if (imageRatio > targetRatio) {
-            h = rect.height; w = h * imageRatio;
-            y = rect.y;      x = rect.x - (w - rect.width) / 2;
+            fitH = rect.height; fitW = fitH * imageRatio;
+            fitY = rect.y;      fitX = rect.x - (fitW - rect.width) / 2;
         } else {
-            w = rect.width;  h = w / imageRatio;
-            x = rect.x;     y = rect.y - (h - rect.height) / 2;
+            fitW = rect.width;  fitH = fitW / imageRatio;
+            fitX = rect.x;     fitY = rect.y - (fitH - rect.height) / 2;
         }
         setImgProps(prev => {
             const current = prev[idx];
             // Check if we actually need to update. Use a small epsilon for float comparison.
             if (current && 
-                Math.abs(current.x - x) < 0.1 && 
-                Math.abs(current.y - y) < 0.1 && 
-                Math.abs(current.w - w) < 0.1 && 
-                Math.abs(current.h - h) < 0.1) {
+                Math.abs(current.x - fitX) < 0.1 && 
+                Math.abs(current.y - fitY) < 0.1 && 
+                Math.abs(current.w - fitW) < 0.1 && 
+                Math.abs(current.h - fitH) < 0.1) {
                 return prev;
             }
             const newArr = [...prev];
-            newArr[idx] = { ...current, x, y, w, h, rot: 0 };
+            newArr[idx] = { ...current, x: fitX, y: fitY, w: fitW, h: fitH, rot: 0 };
             return newArr;
         });
     }, [imageRects, setImgProps]);
