@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, Suspense, lazy, useRef } from 'react';
+import { useState, useEffect, useCallback, Suspense, lazy, useRef, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
     Box, Typography, Button, CircularProgress,
@@ -156,7 +156,7 @@ const FrameCustomizerPage = () => {
             }
             setLastUploadedLength(design.uploadedFileUrls.length);
         }
-    }, [design.uploadedFileUrls, design.layerOrder, lastUploadedLength]);
+    }, [design.uploadedFileUrls, design.layerOrder, lastUploadedLength, design.imgProps, updateDesign]);
 
     useEffect(() => {
         const fetchProductAndCartItem = async () => {
@@ -208,7 +208,12 @@ const FrameCustomizerPage = () => {
     const handleUndo = () => historyIndex > 0 && (setHistoryIndex(historyIndex - 1), setDesign(history[historyIndex - 1]));
     const handleRedo = () => historyIndex < history.length - 1 && (setHistoryIndex(historyIndex + 1), setDesign(history[historyIndex + 1]));
 
-    const updateDesign = (updates) => saveHistory({ ...design, ...updates });
+    const updateDesign = useCallback((updates) => {
+        const hasChange = Object.keys(updates).some(key => updates[key] !== design[key]);
+        if (hasChange) {
+            saveHistory({ ...design, ...updates });
+        }
+    }, [design, saveHistory]);
 
     const handleImageUpload = async (e) => {
         if (!user) { navigate('/login'); return; }
@@ -279,6 +284,15 @@ const FrameCustomizerPage = () => {
         } catch (err) { setSnackbar({ open: true, message: 'Failed to add to cart', severity: 'error' }); }
     };
 
+    const memoizedUserImages = useMemo(() => {
+        return design.uploadedFileUrls.map(url => {
+            const base = getPublicUrl(url);
+            // Add a cache-buster to prevent browser from using the non-CORS 
+            // cached thumbnail for the CORS-required canvas image.
+            return base.includes('?') ? `${base}&t=canvas` : `${base}?t=canvas`;
+        });
+    }, [design.uploadedFileUrls]);
+
     if (loading) return <LoadingState type="customizer" />;
     if (!product) return <ErrorState message="Product not found" onRetry={() => navigate('/shop')} />;
 
@@ -311,12 +325,7 @@ const FrameCustomizerPage = () => {
                                 <FrameCanvasEditor
                                     {...design}
                                     frameSize={currentSize}
-                                    userImages={design.uploadedFileUrls.map(url => {
-                                        const base = getPublicUrl(url);
-                                        // Add a cache-buster to prevent browser from using the non-CORS 
-                                        // cached thumbnail for the CORS-required canvas image.
-                                        return base.includes('?') ? `${base}&t=canvas` : `${base}?t=canvas`;
-                                    })}
+                                    userImages={memoizedUserImages}
                                     setTextLayers={setTextLayers}
                                     setStickers={setStickers}
                                     setImgProps={setImgProps}

@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react';
+import { useRef, useEffect, useState, useCallback, useMemo } from 'react';
 import { Stage, Layer, Image as KonvaImage, Text, Transformer, Rect, Group } from 'react-konva';
 import useImage from 'use-image';
 import Konva from 'konva';
@@ -73,7 +73,7 @@ const DraggableImage = ({
     onSelect, onDragEnd, onTransformEnd,
     filter = 'none', matThickness = 0, matColor = '#fff',
     innerBorderColor = '#ffffff',
-    onAutoAdjust, onImageLoaded, fitRevision = 0
+    onAutoAdjust, onImageLoaded, fitRevision = 0, idx
 }) => {
     const [img] = useImage(src, 'anonymous');
     const imgRef = useRef();
@@ -92,13 +92,13 @@ const DraggableImage = ({
         if (img && onImageLoaded) {
             onImageLoaded();
         }
-    }, [img]); // Only call on load
+    }, [img, onImageLoaded]); // Only call on load
 
     useEffect(() => {
         if (img && onAutoAdjust) {
-            onAutoAdjust(img);
+            onAutoAdjust(idx, img);
         }
-    }, [img, clipRect.width, clipRect.height, fitRevision]); // Call on load, resize, or manual trigger
+    }, [img, clipRect.width, clipRect.height, fitRevision, onAutoAdjust, idx]); // Call on load, resize, or manual trigger
 
     const getFilters = () => {
         if (filter === 'bw') return [Konva.Filters.Grayscale];
@@ -227,14 +227,7 @@ const FrameCanvasEditor = ({
         return { CANVAS_W: base.h, CANVAS_H: base.w };
     }, [frameSize, orientation]);
 
-    const BORDER_THICKNESS = useMemo(() => {
-        if (borderDesign === 'vintage')         return 46;
-        if (borderDesign === 'floral')          return 45;
-        if (borderDesign === 'modern geometric') return 30;
-        const style = frameStyle?.toLowerCase() || 'wooden';
-        if (style === 'canvas' || style === 'canvas frame') return 10;
-        return 30;
-    }, [borderDesign, frameStyle]);
+    /* BORDER_THICKNESS calculation removed as it was unused */
 
     // Base padding and thickness
     const sw = 30; // Border thickness
@@ -360,9 +353,16 @@ const FrameCanvasEditor = ({
         }
         setImgProps(prev => {
             const current = prev[idx];
-            if (current && (Math.abs(current.x - rect.x) > 2 || Math.abs(current.w - rect.width) > 2)) return prev;
+            // Check if we actually need to update. Use a small epsilon for float comparison.
+            if (current && 
+                Math.abs(current.x - x) < 0.1 && 
+                Math.abs(current.y - y) < 0.1 && 
+                Math.abs(current.w - w) < 0.1 && 
+                Math.abs(current.h - h) < 0.1) {
+                return prev;
+            }
             const newArr = [...prev];
-            newArr[idx] = { x, y, w, h, rot: 0 };
+            newArr[idx] = { ...current, x, y, w, h, rot: 0 };
             return newArr;
         });
     }, [imageRects, setImgProps]);
@@ -445,6 +445,10 @@ const FrameCanvasEditor = ({
         );
     };
 
+    const handleImageLoaded = useCallback(() => {
+        setImageLoadTick(t => t + 1);
+    }, []);
+
     const scale = Math.min((dimensions.width - 40) / CANVAS_W, (dimensions.height - 40) / CANVAS_H);
 
     return (
@@ -492,8 +496,9 @@ const FrameCanvasEditor = ({
                                     innerBorderColor={innerBorderColor}
                                     filter={photoFilter}
                                     onSelect={() => setSelectedId(id)}
-                                    onAutoAdjust={(img) => performAutoAdjust(idx, img)}
-                                    onImageLoaded={() => setImageLoadTick(t => t + 1)}
+                                    onAutoAdjust={performAutoAdjust}
+                                    onImageLoaded={handleImageLoaded}
+                                    idx={idx}
                                     fitRevision={fitRevision + imageLoadTick}
                                     onDragEnd={(e) => {
                                         const newProps = [...imgProps];
