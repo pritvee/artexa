@@ -2,12 +2,7 @@ import { useRef, useEffect, useState, useCallback, useMemo } from 'react';
 import { Stage, Layer, Image as KonvaImage, Text, Transformer, Rect, Group } from 'react-konva';
 import useImage from 'use-image';
 import Konva from 'konva';
-
-/* ─── Sticker emoji map ─── */
-export const STICKER_ICONS = {
-    heart: '❤️', star: '⭐', floral: '🌸', birthday: '🎂', congrats: '🎉',
-    butterfly: '🦋', gift: '🎁', balloon: '🎈', sparkle: '✨', fire: '🔥'
-};
+import { STICKER_ICONS } from '../Shared/CustomizerConstants';
 
 /* ─── DraggableSticker sub-component ─── */
 const DraggableSticker = ({ 

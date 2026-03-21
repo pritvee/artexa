@@ -23,7 +23,8 @@ import { useAuth } from '../store/AuthContext';
 import { useCart } from '../store/CartContext';
 import { Reorder } from 'framer-motion';
 
-import FrameCanvasEditor, { STICKER_ICONS } from '../components/Customization/FrameBuilder/FrameCanvasEditor';
+import FrameCanvasEditor from '../components/Customization/FrameBuilder/FrameCanvasEditor';
+import { STICKER_ICONS, FONTS, LAYOUTS } from '../components/Customization/Shared/CustomizerConstants';
 import ImageEnhancerPanel from '../components/Customization/Shared/ImageEnhancerPanel';
 import PremiumCustomizerLayout from '../components/Customization/Shared/PremiumCustomizerLayout';
 import CustomizerStepManager from '../components/Customization/Shared/CustomizerStepManager';
@@ -50,20 +51,7 @@ const DEFAULT_FRAME_STYLES = [
     { label: "Normal Frame", type: "normal", value: "normal", description: "Glass front, plastic/metal" }
 ];
 
-const LAYOUTS = [
-    { label: 'Single', value: 'single', slots: 1 },
-    { label: 'Two-Photo', value: 'two-photo', slots: 2 },
-    { label: 'Collage (3)', value: 'collage-3', slots: 3 },
-    { label: 'Grid (4)', value: 'grid-4', slots: 4 },
-    { label: 'Grid (6)', value: 'grid-6', slots: 6 },
-    { label: 'Grid (9)', value: 'grid-9', slots: 9 }
-];
-
-const FONTS = [
-    'Poppins', 'Inter', 'Outfit', 
-    'Pacifico', 'Dancing Script', 'Great Vibes', 'Sacramento',
-    'Playfair Display', 'Cormorant Garamond', 'Impact'
-];
+/* ─── Shared constants (LAYOUTS, FONTS, STICKER_ICONS) now imported ─── */
 
 const STICKER_PACKS = [
     {
