@@ -134,6 +134,29 @@ const FrameCustomizerPage = () => {
     const [selectedId, setSelectedId] = useState(null);
     const [textureCanvas, setTextureCanvas] = useState(null);
     const [fitRevision, setFitRevision] = useState(0);
+    const [lastUploadedLength, setLastUploadedLength] = useState(0);
+
+    useEffect(() => {
+        // Automatically fill empty slots when images are uploaded
+        if (design.uploadedFileUrls.length > lastUploadedLength) {
+            const slotsCount = design.layerOrder.filter(id => id.startsWith('img-')).length;
+            const newImgProps = [...design.imgProps];
+            let changed = false;
+            
+            for (let i = 0; i < slotsCount; i++) {
+                if (i < design.uploadedFileUrls.length && !newImgProps[i]) {
+                    newImgProps[i] = { imageIdx: i }; 
+                    changed = true;
+                }
+            }
+            
+            if (changed) {
+                updateDesign({ imgProps: newImgProps });
+                setFitRevision(v => v + 1);
+            }
+            setLastUploadedLength(design.uploadedFileUrls.length);
+        }
+    }, [design.uploadedFileUrls, design.layerOrder, lastUploadedLength]);
 
     useEffect(() => {
         const fetchProductAndCartItem = async () => {
@@ -279,11 +302,12 @@ const FrameCustomizerPage = () => {
                 previewContent={
                     <>
                         <Box sx={{ position: 'absolute', top: 16, right: 16, zIndex: 10, display: 'flex', gap: 1 }}>
+                            <Button variant="outlined" size="small" onClick={() => setFitRevision(v => v + 1)} sx={{ borderRadius: '12px', borderStyle: 'dashed' }} startIcon={<RestartAltIcon />}>Refresh</Button>
                             <Button variant={previewTab === 0 ? "contained" : "outlined"} size="small" onClick={() => setPreviewTab(0)} sx={{ borderRadius: '12px' }}>2D Designer</Button>
                             <Button variant={previewTab === 1 ? "contained" : "outlined"} size="small" onClick={() => setPreviewTab(1)} sx={{ borderRadius: '12px' }}>3D Preview</Button>
                         </Box>
-                        <Box sx={{ width: '100%', height: '100%' }}>
-                            <Box sx={{ display: previewTab === 0 ? 'block' : 'none', p: 4, height: '100%' }}>
+                        <Box sx={{ width: '100%', height: '100%', position: 'relative' }}>
+                            <Box sx={{ display: previewTab === 0 ? 'flex' : 'none', p: 4, height: '100%', alignItems: 'center', justifyContent: 'center' }}>
                                 <FrameCanvasEditor
                                     {...design}
                                     frameSize={currentSize}
@@ -752,7 +776,12 @@ const FrameCustomizerPage = () => {
                         {currentStep === 5 && (
                             <Stack spacing={3}>
                                 <Typography variant="h3">Preview Ready</Typography>
-                                <Box className="glass" sx={{ p: 3, borderRadius: '24px', border: '1px solid rgba(255,255,255,0.1)' }}>
+                                <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
+                                    <Button size="small" variant="outlined" startIcon={<RestartAltIcon />} onClick={() => setFitRevision(v => v + 1)} sx={{ borderRadius: '10px', fontSize: '11px' }}>Refresh Display</Button>
+                                    <Button size="small" variant="outlined" startIcon={<LayersIcon />} onClick={() => setCurrentStep(2)} sx={{ borderRadius: '10px', fontSize: '11px' }}>Manage Layers</Button>
+                                </Box>
+                                
+                                <Box sx={{ flexGrow: 1, position: 'relative', overflow: 'hidden', borderRadius: '24px', background: 'rgba(0,0,0,0.4)', border: '1px solid rgba(255,255,255,0.05)' }}>
                                     <Typography variant="subtitle2" sx={{ mb: 2, fontWeight: 800, color: '#7B61FF' }}>Design Summary:</Typography>
                                     <Stack spacing={1}>
                                         <Typography variant="body2" sx={{ opacity: 0.8 }}>• Size: <b>{design.frameSize}</b></Typography>

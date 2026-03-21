@@ -138,7 +138,6 @@ const DraggableImage = ({
                         x={x} y={y}
                         width={width} height={height}
                         rotation={rotation}
-                        draggable
                         filters={getFilters()}
                         brightness={filter === 'vintage' ? 0.1 : 0}
                         onMouseDown={onSelect}
@@ -233,10 +232,12 @@ const FrameCanvasEditor = ({
         return 30;
     }, [borderDesign, frameStyle]);
 
-    const usableX = BORDER_THICKNESS;
-    const usableY = BORDER_THICKNESS;
-    const usableW = CANVAS_W - BORDER_THICKNESS * 2;
-    const usableH = CANVAS_H - BORDER_THICKNESS * 2;
+    // Base padding and thickness
+    const sw = 30; // Border thickness
+    const usableX = sw;
+    const usableY = sw;
+    const usableW = CANVAS_W - sw * 2;
+    const usableH = CANVAS_H - sw * 2;
 
     const innerX = usableX + outerPadding;
     const innerY = usableY + outerPadding;
@@ -321,45 +322,18 @@ const FrameCanvasEditor = ({
 
         switch (layout) {
             case 'two-photo':   return createGrid(1, 2);
-            case 'collage-3': {
-                const halfH = (iH - sp) / 2;
-                const halfW = (iW - sp) / 2;
+            case 'collage-3':  {
+                const hsp = (iH - sp) / 2;
                 return [
-                    { x: iX,          y: iY,           width: halfW, height: halfH },
-                    { x: iX + sp + halfW, y: iY,       width: halfW, height: halfH },
-                    { x: iX, y: iY + sp + halfH,        width: iW,   height: halfH }
+                    { x: iX, y: iY, width: (iW - sp) * 0.6, height: iH },
+                    { x: iX + (iW - sp) * 0.6 + sp, y: iY, width: (iW - sp) * 0.4, height: hsp },
+                    { x: iX + (iW - sp) * 0.6 + sp, y: iY + hsp + sp, width: (iW - sp) * 0.4, height: hsp }
                 ];
             }
             case 'grid-4':  return createGrid(2, 2);
-            case 'grid-5': {
-                const halfH  = (iH - sp) / 2;
-                const thirdW = (iW - sp * 2) / 3;
-                const halfW  = (iW - sp) / 2;
-                return [
-                    { x: iX,                y: iY,        width: thirdW, height: halfH },
-                    { x: iX + sp + thirdW,  y: iY,        width: thirdW, height: halfH },
-                    { x: iX + sp*2 + thirdW*2, y: iY,     width: thirdW, height: halfH },
-                    { x: iX,                y: iY+sp+halfH, width: halfW,  height: halfH },
-                    { x: iX + sp + halfW,   y: iY+sp+halfH, width: halfW, height: halfH }
-                ];
-            }
             case 'grid-6':  return createGrid(2, 3);
-            case 'grid-7': {
-                const halfH  = (iH - sp) / 2;
-                const qrtW   = (iW - sp * 3) / 4;
-                const thirdW = (iW - sp * 2) / 3;
-                return [
-                    { x: iX,                  y: iY,         width: qrtW,  height: halfH },
-                    { x: iX + sp + qrtW,       y: iY,        width: qrtW,  height: halfH },
-                    { x: iX + sp*2 + qrtW*2,   y: iY,        width: qrtW,  height: halfH },
-                    { x: iX + sp*3 + qrtW*3,   y: iY,        width: qrtW,  height: halfH },
-                    { x: iX,                  y: iY+sp+halfH, width: thirdW,height: halfH },
-                    { x: iX + sp + thirdW,    y: iY+sp+halfH, width: thirdW,height: halfH },
-                    { x: iX + sp*2 + thirdW*2,y: iY+sp+halfH, width: thirdW,height: halfH }
-                ];
-            }
-            case 'grid-8':  return createGrid(2, 4);
             case 'grid-9':  return createGrid(3, 3);
+            case 'single':
             default:
                 return [{ x: iX, y: iY, width: iW, height: iH }];
         }
