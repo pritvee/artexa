@@ -1,25 +1,15 @@
-import React, { useState, useEffect, useCallback, useMemo, Suspense, lazy, useRef, useReducer } from 'react';
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { useState, useEffect, useCallback, Suspense, lazy, useRef } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import {
-    Container, Grid, Box, Typography, Button, CircularProgress,
-    TextField, MenuItem, Select, FormControl, InputLabel,
-    Slider, Divider, Paper, Tabs, Tab, Chip, IconButton,
-    Tooltip, Alert, Snackbar, Stack, Checkbox, FormControlLabel, Skeleton
+    Box, Typography, Button, CircularProgress,
+    TextField, Slider, Divider, Chip, IconButton,
+    Alert, Snackbar, Stack, Checkbox, FormControlLabel
 } from '@mui/material';
-import { motion, AnimatePresence } from 'framer-motion';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import ViewInArIcon from '@mui/icons-material/ViewInAr';
-import EditIcon from '@mui/icons-material/Edit';
-import FileUploadIcon from '@mui/icons-material/FileUpload';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import DeleteIcon from '@mui/icons-material/Delete';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
-import FavoriteIcon from '@mui/icons-material/Favorite';
 import TextFieldsIcon from '@mui/icons-material/TextFields';
-import FormatAlignLeftIcon from '@mui/icons-material/FormatAlignLeft';
-import FormatAlignCenterIcon from '@mui/icons-material/FormatAlignCenter';
-import FormatAlignRightIcon from '@mui/icons-material/FormatAlignRight';
 import LayersIcon from '@mui/icons-material/Layers';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
@@ -30,7 +20,6 @@ import BrushIcon from '@mui/icons-material/Brush';
 
 import api, { getPublicUrl } from '../api/axios';
 import { useAuth } from '../store/AuthContext';
-import { sanitizeUrl } from '../api/security';
 import { useCart } from '../store/CartContext';
 import { Reorder } from 'framer-motion';
 
@@ -39,7 +28,6 @@ import ImageEnhancerPanel from '../components/Customization/Shared/ImageEnhancer
 import PremiumCustomizerLayout from '../components/Customization/Shared/PremiumCustomizerLayout';
 import CustomizerStepManager from '../components/Customization/Shared/CustomizerStepManager';
 import VisualOptionCard from '../components/Customization/Shared/VisualOptionCard';
-import InstagramSupportButton from '../components/Shared/InstagramSupportButton';
 import LoadingState from '../components/Shared/LoadingState';
 import ErrorState from '../components/Shared/ErrorState';
 import UiverseCartButton from '../components/Shared/UiverseCartButton';
@@ -126,7 +114,6 @@ const INITIAL_DESIGN = {
 const FrameCustomizerPage = () => {
     const { id, cartItemId } = useParams();
     const navigate = useNavigate();
-    const location = useLocation();
     const { user } = useAuth();
     const { updateCartItem } = useCart();
 
@@ -136,6 +123,7 @@ const FrameCustomizerPage = () => {
     const [previewTab, setPreviewTab] = useState(1); // 1 = 3D
     const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
     const [isUploading, setIsUploading] = useState(false);
+    const [selectedImageIdx, setSelectedImageIdx] = useState(0);
     const stageRef = useRef(null);
 
     const [design, setDesign] = useState(INITIAL_DESIGN);
@@ -206,9 +194,13 @@ const FrameCustomizerPage = () => {
         try {
             const res = await api.post('/products/upload-customization', formData);
             const url = res.data.image_url || res.data.url;
-            updateDesign({ uploadedFileUrls: [...design.uploadedFileUrls, getPublicUrl(url)], originalPaths: [...(design.originalPaths || []), url] });
+            const absoluteUrl = getPublicUrl(url);
+            updateDesign({ 
+                uploadedFileUrls: [...design.uploadedFileUrls, absoluteUrl], 
+                originalPaths: [...(design.originalPaths || []), url] 
+            });
+            setSelectedImageIdx(design.uploadedFileUrls.length); // Point to the newly uploaded image
             setSnackbar({ open: true, message: 'Image uploaded!', severity: 'success' });
-            if (currentStep === 1) setCurrentStep(2);
         } catch (err) { setSnackbar({ open: true, message: 'Upload failed', severity: 'error' }); } finally { setIsUploading(false); }
     };
 
@@ -265,11 +257,11 @@ const FrameCustomizerPage = () => {
     if (!product) return <ErrorState message="Product not found" onRetry={() => navigate('/shop')} />;
 
     const steps = [
-        { id: 'type', label: 'Frame Type', icon: <InventoryIcon /> },
-        { id: 'photo', label: 'Upload Photo', icon: <PhotoLibraryIcon /> },
-        { id: 'text', label: 'Messages', icon: <TextFieldsIcon /> },
-        { id: 'style', label: 'Frame Style', icon: <BrushIcon /> },
-        { id: 'review', label: 'Review', icon: <ViewInArIcon /> }
+        { id: 'type', label: 'Setup', icon: <InventoryIcon /> },
+        { id: 'photo', label: 'Photos', icon: <PhotoLibraryIcon /> },
+        { id: 'text', label: 'Decorate', icon: <TextFieldsIcon /> },
+        { id: 'style', label: 'Finish', icon: <BrushIcon /> },
+        { id: 'review', label: 'Order', icon: <ViewInArIcon /> }
     ];
 
     const currentSize = DEFAULT_FRAME_SIZES.find(s => s.value === design.frameSize) || DEFAULT_FRAME_SIZES[2];
@@ -291,7 +283,7 @@ const FrameCustomizerPage = () => {
                                 <FrameCanvasEditor
                                     {...design}
                                     frameSize={currentSize}
-                                    userImages={design.uploadedFileUrls}
+                                    userImages={design.uploadedFileUrls.map(url => getPublicUrl(url))}
                                     setTextLayers={setTextLayers}
                                     setStickers={setStickers}
                                     setImgProps={setImgProps}
@@ -337,73 +329,128 @@ const FrameCustomizerPage = () => {
                                     </Box>
                                 </Box>
                                 <Box>
-                                    <Typography variant="h3" sx={{ mb: 2 }}>Layout</Typography>
-                                    <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
-                                        {LAYOUTS.map(l => (
-                                            <Chip key={l.value} label={l.label} onClick={() => {
-                                                const slots = l.slots || 1;
-                                                const layerOrder = Array.from({length: slots}, (_, i) => `img-${i}`);
-                                                updateDesign({ layout: l.value, layerOrder });
-                                            }} variant={design.layout === l.value ? 'filled' : 'outlined'} color={design.layout === l.value ? 'primary' : 'default'} />
-                                        ))}
-                                    </Box>
+                                    <Typography variant="body2" sx={{ opacity: 0.6, mb: 2 }}>Setup your basic frame properties before adding photos.</Typography>
+                                    <Button fullWidth variant="contained" onClick={() => setCurrentStep(1)} sx={{ borderRadius: '12px', py: 1.5 }}>Continue to Photos & Layout</Button>
                                 </Box>
                             </Stack>
                         )}
                         {currentStep === 1 && (
                             <Stack spacing={3}>
-                                <Typography variant="h3">Upload Photos</Typography>
-                                <Button fullWidth variant="outlined" component="label" startIcon={isUploading ? <CircularProgress size={20} /> : <CloudUploadIcon />} sx={{ py: 6, borderStyle: 'dashed', borderRadius: '20px', borderColor: 'rgba(255,255,255,0.2)' }}>
-                                    {isUploading ? "Uploading..." : "Click to select a photo"}
-                                    <input type="file" hidden accept="image/*" onChange={handleImageUpload} />
-                                </Button>
+                                <Box>
+                                    <Typography variant="h3" sx={{ mb: 1 }}>Layout & Photos</Typography>
+                                    <Typography variant="caption" sx={{ opacity: 0.6, display: 'block', mb: 2 }}>Select how many photos you want to display.</Typography>
+                                    <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', mb: 3 }}>
+                                        {LAYOUTS.map(l => (
+                                            <Chip 
+                                                key={l.value} 
+                                                label={l.label} 
+                                                onClick={() => {
+                                                    const slots = l.slots || 1;
+                                                    const imgLayers = Array.from({length: slots}, (_, i) => `img-${i}`);
+                                                    const decorations = design.layerOrder.filter(id => !id.startsWith('img-'));
+                                                    updateDesign({ 
+                                                        layout: l.value, 
+                                                        layerOrder: [...imgLayers, ...decorations] 
+                                                    });
+                                                }} 
+                                                variant={design.layout === l.value ? 'filled' : 'outlined'} 
+                                                color={design.layout === l.value ? 'primary' : 'default'} 
+                                                sx={{ borderRadius: '10px' }}
+                                            />
+                                        ))}
+                                    </Box>
+                                </Box>
+
+                                <Box>
+                                    <Typography variant="subtitle2" sx={{ mb: 1.5, fontWeight: 700 }}>Upload Photos</Typography>
+                                    <Button fullWidth variant="outlined" component="label" startIcon={isUploading ? <CircularProgress size={20} /> : <CloudUploadIcon />} sx={{ py: 4, borderStyle: 'dashed', borderRadius: '20px', borderColor: 'rgba(255,255,255,0.2)' }}>
+                                        {isUploading ? "Uploading..." : "Add New Photo"}
+                                        <input type="file" hidden accept="image/*" onChange={handleImageUpload} />
+                                    </Button>
+                                </Box>
+
                                 {design.uploadedFileUrls.length > 0 && (
-                                    <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 1 }}>
-                                        {design.uploadedFileUrls.map((url, i) => {
-                                            const safeFrameUrl = sanitizeUrl(url);
-                                            return (
-                                                <Box key={i} sx={{ position: 'relative', pt: '100%', borderRadius: '8px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.1)' }}>
-                                                    <img 
-                                                        src={safeFrameUrl} 
-                                                        alt="upload" 
-                                                        style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover' }} 
-                                                    />
-                                                    <IconButton size="small" onClick={() => updateDesign({ uploadedFileUrls: design.uploadedFileUrls.filter((_, idx) => idx !== i) })} sx={{ position: 'absolute', top: 2, right: 2, bgcolor: 'rgba(0,0,0,0.5)' }}><DeleteIcon sx={{ fontSize: 14 }} /></IconButton>
-                                                </Box>
-                                            );
-                                        })}
+                                    <Box>
+                                        <Typography variant="caption" sx={{ mb: 1, display: 'block' }}>Photo Library (Click to Enhance)</Typography>
+                                        <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(80px, 1fr))', gap: 1.5 }}>
+                                            {design.uploadedFileUrls.map((url, i) => {
+                                                const displayUrl = getPublicUrl(url);
+                                                
+                                                return (
+                                                    <Box 
+                                                        key={i} 
+                                                        onClick={() => setSelectedImageIdx(i)}
+                                                        sx={{ 
+                                                            position: 'relative', 
+                                                            pt: '100%', 
+                                                            borderRadius: '12px', 
+                                                            overflow: 'hidden', 
+                                                            cursor: 'pointer',
+                                                            border: selectedImageIdx === i ? '2px solid #7B61FF' : '1px solid rgba(255,255,255,0.1)',
+                                                            transform: selectedImageIdx === i ? 'scale(1.05)' : 'none',
+                                                            transition: 'all 0.2s'
+                                                        }}
+                                                    >
+                                                        <img 
+                                                            src={displayUrl} 
+                                                            alt={`upload-${i}`} 
+                                                            style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover' }} 
+                                                            onError={(e) => { e.target.src = 'https://placehold.co/100?text=Error'; }}
+                                                        />
+                                                        <IconButton 
+                                                            size="small" 
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                const newUrls = design.uploadedFileUrls.filter((_, idx) => idx !== i);
+                                                                updateDesign({ uploadedFileUrls: newUrls });
+                                                                if (selectedImageIdx >= newUrls.length) setSelectedImageIdx(Math.max(0, newUrls.length - 1));
+                                                            }} 
+                                                            sx={{ position: 'absolute', top: 2, right: 2, bgcolor: 'rgba(0,0,0,0.6)', p: 0.5 }}
+                                                        >
+                                                            <DeleteIcon sx={{ fontSize: 12, color: '#fff' }} />
+                                                        </IconButton>
+                                                    </Box>
+                                                );
+                                            })}
+                                        </Box>
                                     </Box>
                                 )}
-                                <ImageEnhancerPanel 
-                                    originalImage={design.uploadedFileUrls[design.uploadedFileUrls.length - 1]}
-                                    onEnhanced={(newUrl) => {
-                                        const newUrls = [...design.uploadedFileUrls];
-                                        newUrls[newUrls.length - 1] = newUrl;
-                                        updateDesign({ uploadedFileUrls: newUrls });
-                                    }}
-                                />
+
+                                {design.uploadedFileUrls.length > 0 && (
+                                    <Box sx={{ pt: 1 }}>
+                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
+                                            <AutoFixHighIcon sx={{ fontSize: 18, color: '#7B61FF' }} />
+                                            <Typography variant="subtitle2">Image Enhancer (AI)</Typography>
+                                        </Box>
+                                        <ImageEnhancerPanel 
+                                            originalImageSrc={design.uploadedFileUrls[selectedImageIdx]}
+                                            onEnhancedImage={(newUrl) => {
+                                                const newUrls = [...design.uploadedFileUrls];
+                                                newUrls[selectedImageIdx] = newUrl;
+                                                updateDesign({ uploadedFileUrls: newUrls });
+                                            }}
+                                        />
+                                    </Box>
+                                )}
                             </Stack>
                         )}
                         {currentStep === 2 && (
                             <Stack spacing={3}>
-                                <Typography variant="h3">Add Messages & Stickers</Typography>
-                                <Box sx={{ display: 'flex', gap: 1 }}>
+                                <Typography variant="h3">Messages & Elements</Typography>
+                                <Box sx={{ display: 'flex', gap: 1.5 }}>
                                     <Button fullWidth variant="outlined" startIcon={<TextFieldsIcon />} onClick={() => {
                                         const id = `text-${Date.now()}`;
                                         updateDesign({ 
-                                            textLayers: [...design.textLayers, { id, text: 'New Message', fontFamily: 'Poppins', fontSize: 40, color: '#000000', x: 200, y: 200, rotation: 0 }],
+                                            textLayers: [...design.textLayers, { id, text: 'Your Message', fontFamily: 'Poppins', fontSize: 40, color: '#000000', x: 200, y: 200, rotation: 0 }],
                                             layerOrder: [...design.layerOrder, id]
                                         });
-                                    }} sx={{ py: 1.5, borderRadius: '12px' }}>Add Text</Button>
-                                    <Button fullWidth variant="outlined" startIcon={<AutoFixHighIcon />} onClick={() => {
-                                        setPreviewTab(0);
-                                        // Open sticker selector logic could go here, but let's just add a sample one for now or show a list
-                                    }} sx={{ py: 1.5, borderRadius: '12px' }}>Stickers</Button>
+                                    }} sx={{ py: 1.5, borderRadius: '12px', borderStyle: 'dashed' }}>Add Text</Button>
+                                    <Button fullWidth variant="outlined" startIcon={<AutoFixHighIcon />} onClick={() => setPreviewTab(0)} sx={{ py: 1.5, borderRadius: '12px', borderStyle: 'dashed' }}>Stickers</Button>
                                 </Box>
                                 
                                 <Box>
-                                    <Typography variant="caption">Sticker Collection</Typography>
-                                    <Box sx={{ display: 'flex', gap: 1, overflowX: 'auto', pb: 1, mt: 1 }}>
+                                    <Typography variant="caption" sx={{ mb: 1, display: 'block' }}>Quick Emojis</Typography>
+                                    <Box sx={{ display: 'flex', gap: 1, overflowX: 'auto', pb: 1 }}>
                                         {Object.entries(STICKER_ICONS).map(([key, emoji]) => (
                                             <IconButton key={key} onClick={() => {
                                                 const id = `sticker-${Date.now()}`;
@@ -411,52 +458,149 @@ const FrameCustomizerPage = () => {
                                                     stickers: [...design.stickers, { id, type: key, x: 150, y: 150, size: 80, rot: 0, opacity: 1 }],
                                                     layerOrder: [...design.layerOrder, id]
                                                 });
-                                            }} sx={{ border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', minWidth: '48px' }}>
+                                            }} sx={{ border: '1px solid rgba(255,255,255,0.05)', borderRadius: '12px', minWidth: '48px', height: '48px', bgcolor: 'rgba(255,255,255,0.02)' }}>
                                                 {emoji}
                                             </IconButton>
                                         ))}
                                     </Box>
                                 </Box>
 
-                                {design.textLayers.length > 0 && (
-                                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                                        <Typography variant="caption">Active Layers</Typography>
-                                        <Reorder.Group axis="y" values={design.layerOrder} onReorder={(newOrder) => updateDesign({ layerOrder: newOrder })}>
+                                <Box>
+                                    <Typography variant="caption" sx={{ mb: 1.5, display: 'block' }}>Decorative Sticker Packs</Typography>
+                                    {STICKER_PACKS.map(pack => (
+                                        <Box key={pack.name} sx={{ mb: 2 }}>
+                                            <Typography variant="subtitle2" sx={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '1px', opacity: 0.6, mb: 1 }}>{pack.name}</Typography>
+                                            <Box sx={{ display: 'flex', gap: 1.5, overflowX: 'auto', pb: 1 }}>
+                                                {pack.pack.map((s, idx) => (
+                                                    <Box 
+                                                        key={idx} 
+                                                        onClick={() => {
+                                                            const id = `sticker-${Date.now()}`;
+                                                            updateDesign({ 
+                                                                stickers: [...design.stickers, { id, url: getPublicUrl(s.url), type: 'url', x: 200, y: 200, size: 100, rot: 0, opacity: 1 }],
+                                                                layerOrder: [...design.layerOrder, id]
+                                                            });
+                                                        }}
+                                                        sx={{ 
+                                                            minWidth: 60, height: 60, borderRadius: '12px', 
+                                                            bgcolor: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)',
+                                                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                                            cursor: 'pointer', '&:hover': { bgcolor: 'rgba(255,255,255,0.08)' }
+                                                        }}
+                                                    >
+                                                        <img src={s.url} alt={s.label} style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
+                                                    </Box>
+                                                ))}
+                                            </Box>
+                                        </Box>
+                                    ))}
+                                </Box>
+
+                                <Box sx={{ mt: 2 }}>
+                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
+                                        <LayersIcon sx={{ fontSize: 18, color: '#7B61FF' }} />
+                                        <Typography variant="subtitle2">Manage Layers</Typography>
+                                    </Box>
+                                    <Reorder.Group axis="y" values={design.layerOrder} onReorder={(newOrder) => updateDesign({ layerOrder: newOrder })}>
+                                        <Stack spacing={1}>
                                             {design.layerOrder.map(layerId => {
                                                 const isText = layerId.startsWith('text-');
                                                 const isSticker = layerId.startsWith('sticker-');
-                                                if (!isText && !isSticker) return null;
-                                                const item = isText ? design.textLayers.find(l => l.id === layerId) : design.stickers.find(s => s.id === layerId);
-                                                if (!item) return null;
+                                                const isImg = layerId.startsWith('img-');
+                                                
+                                                let label = "Unknown Layer";
+                                                let icon = <LayersIcon />;
+                                                
+                                                if (isText) {
+                                                    const t = design.textLayers.find(l => l.id === layerId);
+                                                    label = t?.text || "Text Layer";
+                                                    icon = <TextFieldsIcon />;
+                                                } else if (isSticker) {
+                                                    const s = design.stickers.find(l => l.id === layerId);
+                                                    label = `Sticker: ${STICKER_ICONS[s?.type] || s?.type}`;
+                                                    icon = <AutoFixHighIcon />;
+                                                } else if (isImg) {
+                                                    const idx = parseInt(layerId.split('-')[1]);
+                                                    label = `Photo Slot ${idx + 1}`;
+                                                    icon = <PhotoLibraryIcon />;
+                                                }
 
                                                 return (
                                                     <Reorder.Item key={layerId} value={layerId}>
-                                                        <Box className="glass" sx={{ p: 1.5, borderRadius: '12px', display: 'flex', alignItems: 'center', gap: 2, mb: 1 }}>
-                                                            <LayersIcon sx={{ fontSize: 16, opacity: 0.5 }} />
-                                                            {isText ? (
-                                                                <TextField size="small" fullWidth value={item.text} onChange={e => {
-                                                                    const newLayers = design.textLayers.map(l => l.id === layerId ? { ...l, text: e.target.value } : l);
-                                                                    updateDesign({ textLayers: newLayers });
-                                                                }} />
-                                                            ) : (
-                                                                <Typography variant="body2" sx={{ flexGrow: 1 }}>Sticker: {STICKER_ICONS[item.type]}</Typography>
+                                                        <Box className="glass" sx={{ 
+                                                            px: 2, py: 1.5, borderRadius: '16px', 
+                                                            display: 'flex', alignItems: 'center', gap: 2,
+                                                            cursor: 'grab', '&:active': { cursor: 'grabbing' },
+                                                            border: '1px solid rgba(255,255,255,0.08)'
+                                                        }}>
+                                                            <Box sx={{ color: 'rgba(255,255,255,0.4)' }}>{icon}</Box>
+                                                            <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', gap: 0.5 }}>
+                                                                {isText ? (
+                                                                    <Stack spacing={1}>
+                                                                        <TextField 
+                                                                            variant="standard"
+                                                                            size="small" 
+                                                                            fullWidth 
+                                                                            value={label} 
+                                                                            onChange={e => {
+                                                                                const newLayers = design.textLayers.map(l => l.id === layerId ? { ...l, text: e.target.value } : l);
+                                                                                updateDesign({ textLayers: newLayers });
+                                                                            }}
+                                                                            InputProps={{ disableUnderline: true, sx: { fontSize: '13px', fontWeight: 600 } }}
+                                                                        />
+                                                                        <Stack direction="row" spacing={1}>
+                                                                            <select 
+                                                                                style={{ background: 'none', border: 'none', color: '#fff', fontSize: '10px', opacity: 0.6 }}
+                                                                                value={design.textLayers.find(l => l.id === layerId)?.fontFamily || 'Poppins'}
+                                                                                onChange={e => {
+                                                                                    const newLayers = design.textLayers.map(l => l.id === layerId ? { ...l, fontFamily: e.target.value } : l);
+                                                                                    updateDesign({ textLayers: newLayers });
+                                                                                }}
+                                                                            >
+                                                                                {FONTS.map(f => <option key={f} value={f} style={{ color: '#000' }}>{f}</option>)}
+                                                                            </select>
+                                                                            <input 
+                                                                                type="color" 
+                                                                                style={{ width: 15, height: 15, border: 'none', padding: 0, borderRadius: 2 }}
+                                                                                value={design.textLayers.find(l => l.id === layerId)?.color || '#000000'}
+                                                                                onChange={e => {
+                                                                                    const newLayers = design.textLayers.map(l => l.id === layerId ? { ...l, color: e.target.value } : l);
+                                                                                    updateDesign({ textLayers: newLayers });
+                                                                                }}
+                                                                            />
+                                                                        </Stack>
+                                                                    </Stack>
+                                                                ) : (
+                                                                    <Typography sx={{ fontSize: '13px', fontWeight: 600 }}>{label}</Typography>
+                                                                )}
+                                                            </Box>
+                                                            <IconButton 
+                                                                size="small" 
+                                                                onClick={() => {
+                                                                    const hidden = new Set(design.hiddenLayers);
+                                                                    if (hidden.has(layerId)) hidden.delete(layerId);
+                                                                    else hidden.add(layerId);
+                                                                    updateDesign({ hiddenLayers: hidden });
+                                                                }}
+                                                            >
+                                                                {design.hiddenLayers.has(layerId) ? <VisibilityOffIcon sx={{ fontSize: 18 }} /> : <VisibilityIcon sx={{ fontSize: 18 }} />}
+                                                            </IconButton>
+                                                            {!isImg && (
+                                                                <IconButton size="small" color="error" onClick={() => {
+                                                                    updateDesign({ 
+                                                                        textLayers: design.textLayers.filter(l => l.id !== layerId), 
+                                                                        stickers: design.stickers.filter(s => s.id !== layerId),
+                                                                        layerOrder: design.layerOrder.filter(id => id !== layerId)
+                                                                    });
+                                                                }}><DeleteIcon sx={{ fontSize: 18 }} /></IconButton>
                                                             )}
-                                                            <IconButton size="small" color="error" onClick={() => {
-                                                                const newLayers = isText ? design.textLayers.filter(l => l.id !== layerId) : design.textLayers;
-                                                                const newStickers = isSticker ? design.stickers.filter(s => s.id !== layerId) : design.stickers;
-                                                                updateDesign({ 
-                                                                    textLayers: newLayers, 
-                                                                    stickers: newStickers,
-                                                                    layerOrder: design.layerOrder.filter(id => id !== layerId)
-                                                                });
-                                                            }}><DeleteIcon /></IconButton>
                                                         </Box>
                                                     </Reorder.Item>
                                                 );
                                             })}
-                                        </Reorder.Group>
-                                    </Box>
-                                )}
+                                        </Stack>
+                                    </Reorder.Group>
+                                </Box>
                             </Stack>
                         )}
                         {currentStep === 3 && (
@@ -464,30 +608,8 @@ const FrameCustomizerPage = () => {
                                 <Typography variant="h3">Advanced Styling</Typography>
                                 
                                 <Box>
-                                    <Typography variant="caption">Border Design</Typography>
-                                    <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 2, mt: 1 }}>
-                                        {['minimal', 'vintage', 'floral', 'modern geometric'].map(b => (
-                                            <VisualOptionCard key={b} label={b.charAt(0).toUpperCase() + b.slice(1)} value={b} selected={design.borderDesign === b} onClick={v => updateDesign({ borderDesign: v })} />
-                                        ))}
-                                    </Box>
-                                </Box>
-
-                                <Box>
-                                    <Typography variant="caption">Matting (Inner Border)</Typography>
-                                    <Stack direction="row" spacing={2} alignItems="center" sx={{ mt: 1 }}>
-                                        <Typography variant="body2" sx={{ minWidth: 40 }}>{design.matThickness}px</Typography>
-                                        <Slider value={design.matThickness} min={0} max={60} onChange={(_, v) => updateDesign({ matThickness: v })} />
-                                    </Stack>
-                                    <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap', mt: 1.5 }}>
-                                        {['#ffffff', '#000000', '#f5f5dc', '#e6e6fa', '#f0fff0'].map(c => (
-                                            <Box key={c} onClick={() => updateDesign({ matColor: c })} sx={{ width: 28, height: 28, borderRadius: '50%', bgcolor: c, border: design.matColor === c ? '2px solid #7B61FF' : '1px solid rgba(255,255,255,0.2)', cursor: 'pointer' }} />
-                                        ))}
-                                    </Box>
-                                </Box>
-
-                                <Box>
-                                    <Typography variant="caption">Material & Color</Typography>
-                                    <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', gap: 2, mt: 1 }}>
+                                    <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.5)' }}>Material & Color</Typography>
+                                    <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', gap: 2, mt: 1.5 }}>
                                         {DEFAULT_FRAME_STYLES.map(s => (
                                             <VisualOptionCard key={s.value} label={s.label} value={s.value} selected={design.frameStyle === s.value} onClick={v => updateDesign({ frameStyle: v })} subtitle={s.description} />
                                         ))}
@@ -500,40 +622,46 @@ const FrameCustomizerPage = () => {
                                 </Box>
 
                                 <Box>
-                                    <Typography variant="caption">Photo Filter</Typography>
-                                    <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', mt: 1 }}>
-                                        {['none', 'bw', 'vintage', 'warm', 'cool'].map(f => (
-                                            <Chip key={f} label={f.toUpperCase()} onClick={() => updateDesign({ photoFilter: f })} variant={design.photoFilter === f ? 'filled' : 'outlined'} color={design.photoFilter === f ? 'primary' : 'default'} size="small" />
+                                    <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.5)' }}>Border Design</Typography>
+                                    <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 2, mt: 1.5 }}>
+                                        {['minimal', 'vintage', 'floral', 'modern geometric'].map(b => (
+                                            <VisualOptionCard key={b} label={b.charAt(0).toUpperCase() + b.slice(1)} value={b} selected={design.borderDesign === b} onClick={v => updateDesign({ borderDesign: v })} />
                                         ))}
                                     </Box>
                                 </Box>
 
                                 <Box>
-                                    <Typography variant="caption">Advanced Spacing & Thickness</Typography>
-                                    <Box sx={{ mt: 1 }}>
-                                        <Typography variant="body2" sx={{ fontSize: '10px', opacity: 0.6 }}>Frame Thickness</Typography>
-                                        <Slider value={design.frameThickness} min={0.5} max={2} step={0.1} onChange={(_, v) => updateDesign({ frameThickness: v })} />
+                                    <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.5)' }}>Inner Matting (Border)</Typography>
+                                    <Stack direction="row" spacing={2} alignItems="center" sx={{ mt: 1.5 }}>
+                                        <Typography variant="body2" sx={{ minWidth: 40, fontWeight: 700 }}>{design.matThickness}px</Typography>
+                                        <Slider value={design.matThickness} min={0} max={60} onChange={(_, v) => updateDesign({ matThickness: v })} />
+                                    </Stack>
+                                    <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap', mt: 1.5 }}>
+                                        {['#ffffff', '#000000', '#f5f5dc', '#e6e6fa', '#f0fff0'].map(c => (
+                                            <Box key={c} onClick={() => updateDesign({ matColor: c })} sx={{ width: 28, height: 28, borderRadius: '50%', bgcolor: c, border: design.matColor === c ? '2px solid #7B61FF' : '1px solid rgba(255,255,255,0.2)', cursor: 'pointer' }} />
+                                        ))}
                                     </Box>
-                                    <Box sx={{ mt: 1 }}>
-                                        <Typography variant="body2" sx={{ fontSize: '10px', opacity: 0.6 }}>Image Spacing</Typography>
-                                        <Slider value={design.innerSpacing} min={0} max={100} onChange={(_, v) => updateDesign({ innerSpacing: v })} />
-                                    </Box>
-                                    <Box sx={{ mt: 1 }}>
-                                        <Typography variant="body2" sx={{ fontSize: '10px', opacity: 0.6 }}>Outer Padding</Typography>
-                                        <Slider value={design.outerPadding} min={0} max={100} onChange={(_, v) => updateDesign({ outerPadding: v })} />
+                                </Box>
+
+                                <Box>
+                                    <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.5)' }}>Photo Filters</Typography>
+                                    <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', mt: 1.5 }}>
+                                        {['none', 'bw', 'vintage', 'warm', 'cool'].map(f => (
+                                            <Chip key={f} label={f.toUpperCase()} onClick={() => updateDesign({ photoFilter: f })} variant={design.photoFilter === f ? 'filled' : 'outlined'} color={design.photoFilter === f ? 'primary' : 'default'} sx={{ borderRadius: '8px' }} />
+                                        ))}
                                     </Box>
                                 </Box>
 
                                 <Divider sx={{ opacity: 0.1 }} />
 
                                 <Box>
-                                    <Typography variant="caption">Preview Settings</Typography>
-                                    <FormControlLabel control={<Checkbox checked={design.glassReflection} onChange={e => updateDesign({ glassReflection: e.target.checked })} />} label={<Typography variant="body2">Realistic Glass Reflection</Typography>} />
-                                    <Box sx={{ mt: 1 }}>
-                                        <Typography variant="body2" sx={{ mb: 1, fontSize: '0.75rem', opacity: 0.7 }}>Wall Environment</Typography>
+                                    <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.5)' }}>Realistic Preview</Typography>
+                                    <FormControlLabel control={<Checkbox checked={design.glassReflection} onChange={e => updateDesign({ glassReflection: e.target.checked })} />} label={<Typography variant="body2" sx={{ fontWeight: 600, opacity: 0.8 }}>3D Glass Reflections</Typography>} />
+                                    <Box sx={{ mt: 2 }}>
+                                        <Typography variant="body2" sx={{ mb: 1, fontSize: '0.75rem', opacity: 0.7, fontWeight: 700 }}>Show on Wall:</Typography>
                                         <Box sx={{ display: 'flex', gap: 1 }}>
                                             {['none', 'living room', 'bedroom', 'office'].map(w => (
-                                                <Button key={w} size="small" variant={design.wallPreview === w ? "contained" : "outlined"} onClick={() => updateDesign({ wallPreview: w })} sx={{ fontSize: '10px', borderRadius: '8px' }}>{w}</Button>
+                                                <Button key={w} size="small" variant={design.wallPreview === w ? "contained" : "outlined"} onClick={() => updateDesign({ wallPreview: w })} sx={{ fontSize: '11px', borderRadius: '10px', textTransform: 'capitalize' }}>{w}</Button>
                                             ))}
                                         </Box>
                                     </Box>
@@ -543,14 +671,19 @@ const FrameCustomizerPage = () => {
                         {currentStep === 4 && (
                             <Stack spacing={3}>
                                 <Typography variant="h3">Preview Ready</Typography>
-                                <Box className="glass" sx={{ p: 2, borderRadius: '16px' }}>
-                                    <Typography variant="subtitle2" sx={{ mb: 1 }}>Design Summary:</Typography>
-                                    <Typography variant="body2" sx={{ opacity: 0.7 }}>• Size: {design.frameSize}</Typography>
-                                    <Typography variant="body2" sx={{ opacity: 0.7 }}>• Style: {design.frameStyle}</Typography>
-                                    <Typography variant="body2" sx={{ opacity: 0.7 }}>• Layout: {design.layout}</Typography>
-                                    <Typography variant="body2" sx={{ opacity: 0.7 }}>• Photos: {design.uploadedFileUrls.length}</Typography>
+                                <Box className="glass" sx={{ p: 3, borderRadius: '24px', border: '1px solid rgba(255,255,255,0.1)' }}>
+                                    <Typography variant="subtitle2" sx={{ mb: 2, fontWeight: 800, color: '#7B61FF' }}>Design Summary:</Typography>
+                                    <Stack spacing={1}>
+                                        <Typography variant="body2" sx={{ opacity: 0.8 }}>• Size: <b>{design.frameSize}</b></Typography>
+                                        <Typography variant="body2" sx={{ opacity: 0.8 }}>• Style: <b>{design.frameStyle}</b></Typography>
+                                        <Typography variant="body2" sx={{ opacity: 0.8 }}>• Layout: <b>{design.layout}</b></Typography>
+                                        <Typography variant="body2" sx={{ opacity: 0.8 }}>• Photos: <b>{design.uploadedFileUrls.length}</b></Typography>
+                                        <Typography variant="body2" sx={{ opacity: 0.8 }}>• Decorations: <b>{design.textLayers.length + design.stickers.length}</b></Typography>
+                                    </Stack>
                                 </Box>
-                                <Typography variant="body2" sx={{ color: 'text.secondary', textAlign: 'center' }}>Butter smooth 3D preview is active. Rotate to see the depth.</Typography>
+                                <Alert severity="info" variant="outlined" sx={{ borderRadius: '16px', color: '#fff', '& .MuiAlert-icon': { color: '#7B61FF' } }}>
+                                    Your 3D design is ready! Use the toggle above to switch between 2D Editor and 3D Showcase.
+                                </Alert>
                             </Stack>
                         )}
                     </CustomizerStepManager>
