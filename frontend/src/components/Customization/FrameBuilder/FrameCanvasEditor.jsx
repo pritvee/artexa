@@ -497,10 +497,11 @@ const FrameCanvasEditor = ({
                             const idx = parseInt(id.split('-')[1]);
                             const rect = imageRects[idx];
                             if (!rect) return null;
+                            const imageIdx = imgProps[idx]?.imageIdx ?? idx;
                             return (
                                 <DraggableImage
                                     key={id}
-                                    src={userImages[idx]}
+                                    src={userImages[imageIdx]}
                                     id={id}
                                     clipRect={rect}
                                     x={imgProps[idx]?.x ?? rect.x}

@@ -287,7 +287,12 @@ const FrameCustomizerPage = () => {
                                 <FrameCanvasEditor
                                     {...design}
                                     frameSize={currentSize}
-                                    userImages={design.uploadedFileUrls.map(url => getPublicUrl(url))}
+                                    userImages={design.uploadedFileUrls.map(url => {
+                                        const base = getPublicUrl(url);
+                                        // Add a cache-buster to prevent browser from using the non-CORS 
+                                        // cached thumbnail for the CORS-required canvas image.
+                                        return base.includes('?') ? `${base}&t=canvas` : `${base}?t=canvas`;
+                                    })}
                                     setTextLayers={setTextLayers}
                                     setStickers={setStickers}
                                     setImgProps={setImgProps}
@@ -562,6 +567,23 @@ const FrameCustomizerPage = () => {
                                                                 >
                                                                     {isHidden ? <VisibilityOffIcon sx={{ fontSize: 18 }} /> : <VisibilityIcon sx={{ fontSize: 18 }} />}
                                                                 </IconButton>
+                                                                {isImg && (
+                                                                    <IconButton
+                                                                        size="small"
+                                                                        title="Assign Image"
+                                                                        onClick={(e) => {
+                                                                            e.stopPropagation();
+                                                                            const slotIdx = parseInt(layerId.split('-')[1]);
+                                                                            const currentImageIdx = design.imgProps[slotIdx]?.imageIdx ?? slotIdx;
+                                                                            const nextImageIdx = (currentImageIdx + 1) % design.uploadedFileUrls.length;
+                                                                            const newImgProps = [...design.imgProps];
+                                                                            newImgProps[slotIdx] = { ...newImgProps[slotIdx], imageIdx: nextImageIdx };
+                                                                            updateDesign({ imgProps: newImgProps });
+                                                                        }}
+                                                                    >
+                                                                        <PhotoLibraryIcon sx={{ fontSize: 18, color: '#7B61FF' }} />
+                                                                    </IconButton>
+                                                                )}
                                                                 {!isImg && (
                                                                     <IconButton 
                                                                         size="small" 
