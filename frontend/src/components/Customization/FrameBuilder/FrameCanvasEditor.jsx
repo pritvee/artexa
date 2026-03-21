@@ -64,7 +64,7 @@ const DraggableSticker = ({
 
 /* ─── DraggableImage sub-component ─── */
 const DraggableImage = ({
-    src, id, x, y, width, height, rotation, clipRect,
+    src, id, x: posX, y: posY, width, height, rotation, clipRect,
     onSelect, onDragEnd, onTransformEnd,
     filter = 'none', matThickness = 0, matColor = '#fff',
     innerBorderColor = '#ffffff',
@@ -103,14 +103,14 @@ const DraggableImage = ({
         return [];
     };
 
-    const clipX = clipRect.x + matThickness;
-    const clipY = clipRect.y + matThickness;
-    const clipW = Math.max(0, clipRect.width - matThickness * 2);
-    const clipH = Math.max(0, clipRect.height - matThickness * 2);
+    const clipX = (clipRect?.x ?? 0) + matThickness;
+    const clipY = (clipRect?.y ?? 0) + matThickness;
+    const clipW = Math.max(0, (clipRect?.width ?? 0) - matThickness * 2);
+    const clipH = Math.max(0, (clipRect?.height ?? 0) - matThickness * 2);
 
     return (
         <Group>
-            {matThickness > 0 && (
+            {matThickness > 0 && clipRect && (
                 <Rect
                     x={clipRect.x} y={clipRect.y}
                     width={clipRect.width} height={clipRect.height}
@@ -119,7 +119,7 @@ const DraggableImage = ({
                 />
             )}
 
-            {matThickness > 0 && (
+            {matThickness > 0 && clipRect && (
                 <Rect
                     x={clipX} y={clipY}
                     width={clipW} height={clipH}
@@ -134,7 +134,7 @@ const DraggableImage = ({
                         ref={imgRef}
                         id={id}
                         image={img}
-                        x={x} y={y}
+                        x={posX} y={posY}
                         width={width} height={height}
                         rotation={rotation}
                         filters={getFilters()}
