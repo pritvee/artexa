@@ -89,12 +89,16 @@ const DraggableImage = ({
     }, [img, filter, width, height]);
 
     useEffect(() => {
-        if (img) {
-            if (onAutoAdjust) onAutoAdjust(img);
-            if (onImageLoaded) onImageLoaded();
+        if (img && onImageLoaded) {
+            onImageLoaded();
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [img, clipRect.width, clipRect.height, fitRevision]);
+    }, [img]); // Only call on load
+
+    useEffect(() => {
+        if (img && onAutoAdjust) {
+            onAutoAdjust(img);
+        }
+    }, [img, clipRect.width, clipRect.height, fitRevision]); // Call on load, resize, or manual trigger
 
     const getFilters = () => {
         if (filter === 'bw') return [Konva.Filters.Grayscale];
