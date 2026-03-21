@@ -72,10 +72,6 @@ const PremiumBackground = () => {
     const cursorRef = useRef(null); // follows pointer, hue-rotate color
     const topRef    = useRef(null); // route color, moves AWAY from pointer
     const btmRef    = useRef(null); // route color, moves WITH pointer
-    const w1Ref     = useRef(null); // water wave blob 1
-    const w2Ref     = useRef(null); // water wave blob 2
-    const w3Ref     = useRef(null); // water wave blob 3 (extra depth layer)
-    const w4Ref     = useRef(null); // water wave blob 4 (extra depth layer)
     const noiseRef  = useRef(null); // noise texture scroll
 
     // ── RAF animation engine (runs once, lives for component lifetime) ──
@@ -101,103 +97,50 @@ const PremiumBackground = () => {
 
         const tick = () => {
             if (!alive) return;
-            t += 0.007;                           // ≈ full cycle every ~14 s at 60 fps
+            t += 0.005;
 
-            // Lerp pointer — 0.055 = silky smooth, responsive enough
-            cx = lerp(cx, tx, 0.055);
-            cy = lerp(cy, ty, 0.055);
+            cx = lerp(cx, tx, 0.04);
+            cy = lerp(cy, ty, 0.04);
 
-            // Ripple decay — multiplicative so it feels like genuine energy dissipating
-            ripple = ripple > 0.002 ? ripple * 0.90 : 0;
+            ripple = ripple > 0.002 ? ripple * 0.85 : 0;
 
             const W = window.innerWidth;
             const H = window.innerHeight;
 
-            // ── Water-flow sin offsets (4 blobs, independent freq + phase) ──
-            // Each blob has a completely different period → organic, non-repeating look
-            const s1x = Math.sin(t * 0.65)            * 60;
-            const s1y = Math.cos(t * 0.48 + 1.2)      * 45;
+            // Simplified sine paths for only 3 blobs
+            const s1x = Math.sin(t * 0.5) * 40;
+            const s1y = Math.cos(t * 0.4) * 30;
+            const s2x = Math.sin(t * 0.7 + 2) * 35;
+            const s2y = Math.cos(t * 0.3 + 3) * 25;
 
-            const s2x = Math.sin(t * 0.90 + 2.3)      * 50;
-            const s2y = Math.cos(t * 0.55 + 3.7)      * 40;
+            const brt = 1 + ripple * 1.5;
 
-            const s3x = Math.sin(t * 0.50 + 4.8)      * 70;
-            const s3y = Math.cos(t * 0.72 + 0.6)      * 50;
-
-            const s4x = Math.sin(t * 0.78 + 5.4)      * 45;
-            const s4y = Math.cos(t * 0.38 + 2.0)      * 35;
-
-            const s5x = Math.sin(t * 0.60 + 1.8)      * 55;
-            const s5y = Math.cos(t * 0.85 + 6.1)      * 45;
-
-            const brt  = 1 + ripple * 2.2;   // max 3.2× bright on click
-
-            // ── NOISE ANIMATION ──────────────────────────────────────
-            if (noiseRef.current) {
-                const nx = (t * 50) % 1000;
-                const ny = (t * 30) % 1000;
-                noiseRef.current.style.transform = `translate3d(${nx}px,${ny}px,0)`;
-            }
-
-            // ── CURSOR GLOW ──────────────────────────────────────────
+            // NOISE REMAINS STATIC (Huge performance boost)
+            
+            // CURSOR GLOW (Simplified)
             if (cursorRef.current) {
-                const gx  = cx * W;
-                const gy  = cy * H;
-                const dx  = cx - 0.5, dy = cy - 0.5;
-                const ang = Math.atan2(dy, dx) * (180 / Math.PI);
-                const hue = ((ang + 360) % 360);
-                const dist = Math.sqrt(dx * dx + dy * dy);
-                // opacity: min 0.12 at centre, rises to 0.35 at edges, flash on click
-                const op  = Math.min(0.38, 0.15 + dist * 0.30 + ripple * 0.25);
-
-                // Position: follows pointer + tiny water-shimmer offset
+                const gx = cx * W;
+                const gy = cy * H;
+                const op = Math.min(0.25, 0.12 + ripple * 0.2);
                 cursorRef.current.style.transform = `translate3d(${gx - 400 + s1x * 0.3}px,${gy - 400 + s1y * 0.3}px,0)`;
-                cursorRef.current.style.filter    = `blur(80px) hue-rotate(${hue}deg) brightness(${brt})`;
-                cursorRef.current.style.opacity   = op;
+                cursorRef.current.style.opacity = op;
+                cursorRef.current.style.filter = `blur(60px) brightness(${brt})`;
             }
 
-            // ── TOP GLOW (far layer — moves OPPOSITE pointer + wave) ─
+            // TOP GLOW (Far)
             if (topRef.current) {
-                const px = (0.5 - cx) * 120 + s2x;
-                const py = (0.5 - cy) * 90  + s2y;
+                const px = (0.5 - cx) * 80 + s1x;
+                const py = (0.5 - cy) * 60 + s1y;
                 topRef.current.style.transform = `translate3d(${px}px,${py}px,0)`;
-                topRef.current.style.filter    = `blur(130px) brightness(${1 + ripple * 1.0})`;
+                topRef.current.style.filter = `blur(90px) brightness(${1 + ripple * 0.8})`;
             }
 
-            // ── BOTTOM GLOW (near layer — moves WITH pointer + wave) ─
+            // BOTTOM GLOW (Near)
             if (btmRef.current) {
-                const px = (cx - 0.5) * 150 + s3x;
-                const py = (cy - 0.5) * 110  + s3y;
+                const px = (cx - 0.5) * 100 + s2x;
+                const py = (cy - 0.5) * 80 + s2y;
                 btmRef.current.style.transform = `translate3d(${px}px,${py}px,0)`;
-                btmRef.current.style.filter    = `blur(140px) brightness(${1 + ripple * 1.0})`;
-            }
-
-            // ── WATER WAVE BLOB 1 (pure sine — ambient, centre-left) ─
-            if (w1Ref.current) {
-                w1Ref.current.style.transform = `translate3d(${s4x}px,${s4y}px,0)`;
-                w1Ref.current.style.filter    = `blur(110px) brightness(${1 + ripple * 0.5})`;
-            }
-
-            // ── WATER WAVE BLOB 2 (pure sine — ambient, centre-right) ─
-            if (w2Ref.current) {
-                w2Ref.current.style.transform = `translate3d(${s5x}px,${s5y}px,0)`;
-                w2Ref.current.style.filter    = `blur(105px) brightness(${1 + ripple * 0.5})`;
-            }
-
-            // ── WATER WAVE BLOB 3 (pure sine — mid-screen blue ambient) ──
-            if (w3Ref.current) {
-                const wx = Math.sin(t * 0.42 + 7.2) * 60;
-                const wy = Math.cos(t * 0.67 + 2.8) * 45;
-                w3Ref.current.style.transform = `translate3d(${wx}px,${wy}px,0)`;
-                w3Ref.current.style.filter    = `blur(100px) brightness(${1 + ripple * 0.4})`;
-            }
-
-            // ── WATER WAVE BLOB 4 (pure sine — bottom-left accent) ──
-            if (w4Ref.current) {
-                const wx = Math.cos(t * 0.35 + 1.5) * 55;
-                const wy = Math.sin(t * 0.58 + 4.2) * 40;
-                w4Ref.current.style.transform = `translate3d(${wx}px,${wy}px,0)`;
-                w4Ref.current.style.filter    = `blur(120px) brightness(${1 + ripple * 0.5})`;
+                btmRef.current.style.filter = `blur(100px) brightness(${1 + ripple * 0.8})`;
             }
 
             rafId = requestAnimationFrame(tick);
@@ -215,15 +158,11 @@ const PremiumBackground = () => {
         };
     }, []); // intentionally empty — runs once per mount only
 
-    // ── Sync route palette → glow divs (CSS transition does the colour blend) ──
+    // Sync route palette → glow divs
     useEffect(() => {
         const bg = (c) => `radial-gradient(circle, ${c} 0%, transparent 70%)`;
         if (topRef.current) topRef.current.style.background = bg(palette.top);
         if (btmRef.current) btmRef.current.style.background = bg(palette.btm);
-        if (w1Ref.current) w1Ref.current.style.background = bg(palette.accent);
-        if (w2Ref.current) w2Ref.current.style.background = bg(palette.secondary);
-        if (w3Ref.current) w3Ref.current.style.background = bg(palette.blue || 'rgba(14, 165, 233, 0.35)');
-        if (w4Ref.current) w4Ref.current.style.background = bg(palette.accent || 'rgba(255, 77, 157, 0.3)');
     }, [palette]);
 
     // ── Shared cursor glow div ─────────────────────────────────────────────
@@ -311,88 +250,32 @@ const PremiumBackground = () => {
             background: 'linear-gradient(135deg, #05070D 0%, #020408 100%)',
         }}>
             {NoiseOverlay}
-            {/* TOP GLOW (Far) — Purple route-aware, parallaxes away from pointer */}
+            {/* TOP GLOW (Far) */}
             <div ref={topRef} style={{
                 position: 'absolute',
                 top: '-15%', left: '0%',
                 width: 'min(75vw, 950px)', height: 'min(75vw, 950px)',
                 borderRadius: '50%',
                 background: `radial-gradient(circle, ${palette.top} 0%, transparent 70%)`,
-                filter: 'blur(130px)',
-                opacity: 0.32,
+                filter: 'blur(90px)',
+                opacity: 0.3,
                 transition: 'background 1.1s cubic-bezier(0.25,0.46,0.45,0.94)',
-                willChange: 'transform, filter, background',
+                willChange: 'transform, filter',
                 zIndex: 1,
             }} />
 
-            {/* BOTTOM GLOW (Near) — Pink/Orange route-aware, parallaxes with pointer */}
+            {/* BOTTOM GLOW (Near) */}
             <div ref={btmRef} style={{
                 position: 'absolute',
                 bottom: '-15%', right: '-5%',
                 width: 'min(65vw, 820px)', height: 'min(65vw, 820px)',
                 borderRadius: '50%',
                 background: `radial-gradient(circle, ${palette.btm} 0%, transparent 70%)`,
-                filter: 'blur(140px)',
-                opacity: 0.28,
-                transition: 'background 1.1s cubic-bezier(0.25,0.46,0.45,0.94)',
-                willChange: 'transform, filter, background',
-                zIndex: 3,
-            }} />
-
-            {/* WATER BLOB 1 (Mid) — Ambient primary, drifts centre-left */}
-            <div ref={w1Ref} style={{
-                position: 'absolute',
-                top: '20%', left: '-10%',
-                width: 'min(48vw, 600px)', height: 'min(48vw, 600px)',
-                borderRadius: '50%',
-                background: `radial-gradient(circle, ${palette.accent} 0%, transparent 70%)`,
-                filter: 'blur(110px)',
-                opacity: 0.22,
-                transition: 'background 1.1s cubic-bezier(0.25,0.46,0.45,0.94)',
-                willChange: 'transform, filter, background',
-                zIndex: 2,
-            }} />
-
-            {/* WATER BLOB 2 (Mid) — Ambient secondary, drifts centre-right */}
-            <div ref={w2Ref} style={{
-                position: 'absolute',
-                top: '40%', right: '0%',
-                width: 'min(40vw, 500px)', height: 'min(40vw, 500px)',
-                borderRadius: '50%',
-                background: `radial-gradient(circle, ${palette.secondary} 0%, transparent 70%)`,
-                filter: 'blur(105px)',
-                opacity: 0.18,
-                transition: 'background 1.1s cubic-bezier(0.25,0.46,0.45,0.94)',
-                willChange: 'transform, filter, background',
-                zIndex: 2,
-            }} />
-
-            {/* WATER BLOB 3 (Center) — Subtle Ambient Blue, mid-screen accent */}
-            <div ref={w3Ref} style={{
-                position: 'absolute',
-                top: '55%', left: '30%',
-                width: 'min(35vw, 450px)', height: 'min(35vw, 450px)',
-                borderRadius: '50%',
-                background: `radial-gradient(circle, ${palette.blue || 'rgba(14, 165, 233, 0.35)'} 0%, transparent 70%)`,
                 filter: 'blur(100px)',
-                opacity: 0.15,
+                opacity: 0.25,
                 transition: 'background 1.1s cubic-bezier(0.25,0.46,0.45,0.94)',
-                willChange: 'transform, filter, background',
-                zIndex: 2,
-            }} />
-
-            {/* WATER BLOB 4 (Bottom-Left) — Accent Orange/Purple */}
-            <div ref={w4Ref} style={{
-                position: 'absolute',
-                bottom: '10%', left: '5%',
-                width: 'min(40vw, 550px)', height: 'min(40vw, 550px)',
-                borderRadius: '50%',
-                background: `radial-gradient(circle, ${palette.accent} 0%, transparent 70%)`,
-                filter: 'blur(120px)',
-                opacity: 0.12,
-                transition: 'background 1.1s cubic-bezier(0.25,0.46,0.45,0.94)',
-                willChange: 'transform, filter, background',
-                zIndex: 2,
+                willChange: 'transform, filter',
+                zIndex: 3,
             }} />
 
             {/* CURSOR GLOW — hue-rotate full colour wheel, click flash */}

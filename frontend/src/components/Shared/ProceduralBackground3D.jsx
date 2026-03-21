@@ -79,7 +79,7 @@ const makeShape = (type, isMobile) => {
     const seg = isMobile ? 2 : 3;
     switch (type) {
         case 'torusKnot':
-            return new THREE.TorusKnotGeometry(0.55, 0.18, isMobile ? 60 : 100, isMobile ? 10 : 16, 2, 3);
+            return new THREE.TorusKnotGeometry(0.55, 0.18, isMobile ? 32 : 48, isMobile ? 8 : 12, 2, 3);
         case 'icosahedron':
             return new THREE.IcosahedronGeometry(0.7, seg - 1);
         case 'octahedron':
@@ -167,8 +167,8 @@ const ProceduralBackground3D = () => {
         scene.add(ptLight2);
 
         // ── Object definitions ──────────────────────────────────────
-        const SHAPE_TYPES = ['torusKnot', 'icosahedron', 'octahedron', 'torus', 'dodecahedron', 'tetrahedron'];
-        const COUNT = isMobile ? 6 : 11;
+        const SHAPE_TYPES = ['torusKnot', 'icosahedron', 'octahedron', 'torus'];
+        const COUNT = isMobile ? 3 : 5;
 
         const toDispose = [];   // geometries + materials for cleanup
         const objects   = [];   // { mesh(wireframe), solidMesh, params }
@@ -260,7 +260,7 @@ const ProceduralBackground3D = () => {
         }
 
         // ── 5. Particle System (Bubbles/Stars) ──
-        const partCount = isMobile ? 160 : 400; // slightly lower for performance
+        const partCount = isMobile ? 80 : 150; // halved for performance
         const partGeo   = new THREE.BufferGeometry();
         const partPos   = new Float32Array(partCount * 3);
         const partVels  = new Float32Array(partCount);
@@ -336,7 +336,7 @@ const ProceduralBackground3D = () => {
             ptLight2.position.y = -4 + Math.sin(t * 0.35) * 2;
 
             objects.forEach((obj) => {
-                const { group, wireMat, solidMat, baseColor, phase, freqX, freqY, freqZ,
+                const { group, wireMat, solidMat, phase, freqX, freqY, freqZ,
                         rotSpeedX, rotSpeedY, rotSpeedZ, driftAmpX, driftAmpY, driftAmpZ,
                         originX, originY, originZ, colorPhase, colorSpeed } = obj;
 

@@ -120,8 +120,6 @@ const getDesignTokens = (mode) => ({
         },
         MuiCssBaseline: {
             styleOverrides: (theme) => `
-                @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
-                
                 html {
                     scroll-behavior: smooth;
                     -webkit-font-smoothing: antialiased;

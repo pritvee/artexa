@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import {
     Container, Typography, Grid, Box, Button,
     Card, Paper, Stack, Rating, Avatar,
@@ -8,9 +8,6 @@ import { motion, useScroll, useTransform, useSpring, useMotionValue } from 'fram
 import { useNavigate, Link as RouterLink } from 'react-router-dom';
 import { useProducts } from '../store/ProductContext';
 import ProductCard from '../components/ProductCard';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 import { getPublicUrl } from '../api/axios';
 
@@ -43,47 +40,55 @@ const Home = () => {
     const navigate = useNavigate();
     const { products, fetchProducts, loading } = useProducts();
     
-    // Smooth Mouse Parallax Engine (Instant Response)
+    // Smooth Mouse Parallax Engine (Optimized for performance)
     const mouseX = useMotionValue(0);
     const mouseY = useMotionValue(0);
-    const smoothMouseX = useSpring(mouseX, { stiffness: 200, damping: 40, mass: 0.1 });
-    const smoothMouseY = useSpring(mouseY, { stiffness: 200, damping: 40, mass: 0.1 });
-    const rotateXHero = useTransform(smoothMouseY, (v) => v * -0.05);
-    const rotateYHero = useTransform(smoothMouseX, (v) => v * 0.05);
-    const rotateXProduct = useTransform(smoothMouseY, (v) => v * 0.35);
-    const rotateYProduct = useTransform(smoothMouseX, (v) => v * -0.35);
+    const smoothMouseX = useSpring(mouseX, { stiffness: 100, damping: 30, mass: 0.2 });
+    const smoothMouseY = useSpring(mouseY, { stiffness: 100, damping: 30, mass: 0.2 });
+    const rotateXHero = useTransform(smoothMouseY, (v) => v * -0.03);
+    const rotateYHero = useTransform(smoothMouseX, (v) => v * 0.03);
+    const rotateXProduct = useTransform(smoothMouseY, (v) => v * 0.15);
+    const rotateYProduct = useTransform(smoothMouseX, (v) => v * -0.15);
 
-    // Scroll-based animations (Lightweight & Accurate)
+    // Scroll-based animations (Tightened for stability)
     const { scrollY } = useScroll();
-    const springConfig = { stiffness: 150, damping: 30, mass: 0.6 };
+    const springConfig = { stiffness: 180, damping: 40, mass: 1 }; // Increased stiffness/damping to stop "grouping"
     
-    // Stabilized "Cinema Depth" Zoom (Form Change - No Blur Crash)
-    const foregroundScale = useSpring(useTransform(scrollY, [0, 200], [1, 1.25]), springConfig);
-    const foregroundOpacity = useSpring(useTransform(scrollY, [0, 150], [1, 0]), springConfig);
-    const foregroundY = useSpring(useTransform(scrollY, [0, 200], [0, -50]), springConfig);
+    // Clean non-zoom Scroll Animations (Clamped to prevent overscroll artifacts)
+    const foregroundOpacity = useSpring(useTransform(scrollY, [0, 150], [1, 0], { clamp: true }), springConfig);
+    const foregroundY = useSpring(useTransform(scrollY, [0, 200], [0, -60], { clamp: true }), springConfig);
     
-    const backgroundScale = useSpring(useTransform(scrollY, [0, 600], [0.92, 1]), springConfig);
-    const backgroundZ = useSpring(useTransform(scrollY, [0, 600], [-150, 0]), springConfig);
+    const backgroundScale = 1;
+    const backgroundZ = 0;
+    const dynamicPerspective = useSpring(useTransform(scrollY, [0, 500], [2000, 3000]), springConfig);
+    const glowExpansion = useSpring(useTransform(scrollY, [0, 600], [1, 1.1], { clamp: true }), springConfig);
     
-    const glowExpansion = useSpring(useTransform(scrollY, [0, 600], [1, 1.3]), springConfig);
-    
-    // Safety Fallbacks
-    const card1Float = useSpring(0, springConfig);
-    const card2Float = useSpring(0, springConfig);
+    // Dynamic Parallax for Model Cards
+    const card1Y = useSpring(useTransform(scrollY, [0, 400], [0, -40], { clamp: true }), springConfig);
+    const card2Y = useSpring(useTransform(scrollY, [0, 400], [0, 50], { clamp: true }), springConfig);
 
     useEffect(() => {
         fetchProducts(1, 10, null, '', true); 
         
         const handleMouseMove = (e) => {
             const { clientX, clientY } = e;
-            const x = (clientX / window.innerWidth - 0.5) * 20;
-            const y = (clientY / window.innerHeight - 0.5) * 20;
+            const x = (clientX / window.innerWidth - 0.5) * 10; // Lowered from 20
+            const y = (clientY / window.innerHeight - 0.5) * 10;
             mouseX.set(x);
             mouseY.set(y);
         };
         window.addEventListener('mousemove', handleMouseMove, { passive: true });
         return () => window.removeEventListener('mousemove', handleMouseMove);
-    }, []);
+    }, [fetchProducts, mouseX, mouseY]);
+
+    const itemVariants = {
+        hidden: { opacity: 0, y: 15 },
+        show: { 
+            opacity: 1, 
+            y: 0,
+            transition: { duration: 0.35, ease: [0.16, 1, 0.3, 1] }
+        }
+    };
 
     const glassStyle = {
         background: 'rgba(255, 255, 255, 0.03)',
@@ -128,87 +133,98 @@ const Home = () => {
                 </motion.div>
             </Box>
 
-            <Container maxWidth="xl" sx={{ px: { xs: 2, sm: 3, md: 5 }, perspective: '2000px' }}>
+            <Container maxWidth="xl" component={motion.div} style={{ perspective: dynamicPerspective }} sx={{ px: { xs: 2, sm: 3, md: 5 } }}>
                 {/* HERO SECTION */}
                 <Box 
                     component={motion.div}
-                    initial={{ opacity: 0, scale: 0.98 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.8, ease: "easeOut" }}
+                    initial="hidden"
+                    animate="show"
+                    style={{ 
+                        opacity: foregroundOpacity, 
+                        y: foregroundY
+                    }}
+                    variants={{
+                        hidden: { opacity: 0 },
+                        show: { 
+                            opacity: 1,
+                            transition: { staggerChildren: 0.1, delayChildren: 0.15 }
+                        }
+                    }}
                     sx={{ 
                         py: { xs: 8, md: 24 }, display: 'flex', flexDirection: { xs: 'column', md: 'row' }, 
                         alignItems: 'center', gap: { xs: 12, md: 10 }, position: 'relative', zIndex: 2,
-                        transformStyle: 'preserve-3d'
+                        willChange: 'transform, opacity'
                     }}
                 >
                     <Box 
-                        component={motion.div}
-                        style={{ 
-                            scale: foregroundScale, 
-                            opacity: foregroundOpacity, 
-                            y: foregroundY
-                        }}
-                        sx={{ flex: 1.3, zIndex: 20, willChange: 'transform, opacity' }}
+                        sx={{ flex: 1.3, zIndex: 20, perspective: '2000px' }}
                     >
                         <motion.div 
                             style={{ rotateX: rotateXHero, rotateY: rotateYHero, transformStyle: 'preserve-3d' }}
                         >
-                            <Box sx={{ 
-                                display: 'inline-flex', alignItems: 'center', gap: 1.5, px: 3, py: 1.2, 
-                                borderRadius: '100px', background: 'rgba(108, 99, 255, 0.1)', 
-                                border: '1px solid rgba(108, 99, 255, 0.2)', mb: 6, backdropFilter: 'blur(12px)',
-                                transform: 'translateZ(20px)'
-                            }}>
-                                <motion.div animate={{ scale: [1, 1.4, 1] }} transition={{ duration: 2.5, repeat: Infinity }}>
-                                    <Box sx={{ width: 12, height: 12, borderRadius: '50%', bgcolor: '#6C63FF', boxShadow: '0 0 25px rgba(108, 99, 255, 1)' }} />
-                                </motion.div>
-                                <Typography variant="caption" sx={{ color: '#A5B4FC', fontWeight: 950, letterSpacing: '0.2em', fontSize: '11px' }}>PREMIUM CUSTOM GIFTS</Typography>
-                            </Box>
+                            <motion.div variants={itemVariants}>
+                                <Box sx={{ 
+                                    display: 'inline-flex', alignItems: 'center', gap: 1.5, px: 3, py: 1.2, 
+                                    borderRadius: '100px', background: 'rgba(108, 99, 255, 0.1)', 
+                                    border: '1px solid rgba(108, 99, 255, 0.2)', mb: 6, backdropFilter: 'blur(12px)'
+                                }}>
+                                    <motion.div animate={{ scale: [1, 1.4, 1] }} transition={{ duration: 2.5, repeat: Infinity }}>
+                                        <Box sx={{ width: 12, height: 12, borderRadius: '50%', bgcolor: '#6C63FF', boxShadow: '0 0 25px rgba(108, 99, 255, 1)' }} />
+                                    </motion.div>
+                                    <Typography variant="caption" sx={{ color: '#A5B4FC', fontWeight: 950, letterSpacing: '0.2em', fontSize: '11px' }}>PREMIUM CUSTOM GIFTS</Typography>
+                                </Box>
+                            </motion.div>
                             
-                            <Typography variant="h1" sx={{ 
-                                fontSize: { xs: '58px', md: '108px' }, fontWeight: 950, mb: 4, lineHeight: 0.85,
-                                letterSpacing: '-0.075em', color: '#fff', transform: 'translateZ(60px)'
-                            }}>
-                                Gift the <Box component="span" sx={{ 
-                                    background: 'linear-gradient(135deg, #6C63FF 0%, #FF4D9D 50%, #FF7A59 100%)',
-                                    WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
-                                    filter: 'drop-shadow(0 0 50px rgba(108, 99, 255, 0.45))'
-                                }}>Extraordinary</Box>
-                            </Typography>
+                            <motion.div variants={itemVariants}>
+                                <Typography variant="h1" sx={{ 
+                                    fontSize: { xs: '58px', md: '108px' }, fontWeight: 950, mb: 4, lineHeight: 0.85,
+                                    letterSpacing: '-0.075em', color: '#fff'
+                                }}>
+                                    Gift the <Box component="span" sx={{ 
+                                        background: 'linear-gradient(135deg, #6C63FF 0%, #FF4D9D 50%, #FF7A59 100%)',
+                                        WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
+                                        filter: 'drop-shadow(0 0 50px rgba(108, 99, 255, 0.45))'
+                                    }}>Extraordinary</Box>
+                                </Typography>
+                            </motion.div>
                             
-                            <Typography variant="h3" sx={{ 
-                                mb: 8, fontWeight: 400, maxWidth: 680, fontSize: { xs: '20px', md: '26px' },
-                                color: 'rgba(255, 255, 255, 0.8)', lineHeight: 1.6, transform: 'translateZ(40px)', opacity: 0.85
-                            }}>
-                                Elevate your memories with Artexa's premium custom photo gifts. Designed for those who appreciate the finer things.
-                            </Typography>
+                            <motion.div variants={itemVariants}>
+                                <Typography variant="h3" sx={{ 
+                                    mb: 10, fontWeight: 400, maxWidth: 680, fontSize: { xs: '20px', md: '26px' },
+                                    color: 'rgba(255, 255, 255, 0.8)', lineHeight: 1.6, opacity: 0.85
+                                }}>
+                                    Elevate your memories with Artexa&apos;s premium custom photo gifts. Designed for those who appreciate the finer things.
+                                </Typography>
+                            </motion.div>
 
-                            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={4} sx={{ width: { xs: '100%', sm: 'auto' }, transform: 'translateZ(50px)' }}>
-                                <Button 
-                                    component={RouterLink} to="/shop" variant="contained" 
-                                    sx={{ 
-                                        height: '80px', px: 8, borderRadius: '24px', fontSize: '21px', fontWeight: 950,
-                                        background: 'linear-gradient(135deg, #6C63FF 0%, #FF4D9D 100%)',
-                                        boxShadow: '0 30px 60px rgba(108, 99, 255, 0.45)', transition: '0.5s ease',
-                                        '&:hover': { transform: 'translateY(-10px) scale(1.04)', boxShadow: '0 40px 80px rgba(108, 99, 255, 0.6)' }
-                                    }}
-                                >
-                                    Start Creating
-                                </Button>
-                                <Button 
-                                    component={RouterLink} to="/shop?category=frames" variant="outlined" 
-                                    sx={{ 
-                                        height: '80px', px: 8, borderRadius: '24px', fontSize: '21px', fontWeight: 950,
-                                        border: '1.5px solid rgba(255, 255, 255, 0.25)', background: 'rgba(255, 255, 255, 0.05)',
-                                        backdropFilter: 'blur(40px)', color: '#fff', transition: '0.5s ease',
-                                        '&:hover': { background: 'rgba(255, 255, 255, 0.1)', transform: 'translateY(-10px) scale(1.04)' }
-                                    }}
-                                >
-                                    Explore Gallery
-                                </Button>
-                            </Stack>
+                            <motion.div variants={itemVariants}>
+                                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={4} sx={{ width: { xs: '100%', sm: 'auto' } }}>
+                                    <Button 
+                                        component={RouterLink} to="/shop" variant="contained" 
+                                        sx={{ 
+                                            height: '80px', px: 8, borderRadius: '24px', fontSize: '21px', fontWeight: 950,
+                                            background: 'linear-gradient(135deg, #6C63FF 0%, #FF4D9D 100%)',
+                                            boxShadow: '0 30px 60px rgba(108, 99, 255, 0.45)', transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+                                            '&:hover': { transform: 'translateY(-8px) scale(1.03)', boxShadow: '0 40px 80px rgba(108, 99, 255, 0.6)' }
+                                        }}
+                                    >
+                                        Start Creating
+                                    </Button>
+                                    <Button 
+                                        component={RouterLink} to="/shop?category=frames" variant="outlined" 
+                                        sx={{ 
+                                            height: '80px', px: 8, borderRadius: '24px', fontSize: '21px', fontWeight: 950,
+                                            border: '1.5px solid rgba(255, 255, 255, 0.25)', background: 'rgba(255, 255, 255, 0.05)',
+                                            backdropFilter: 'blur(40px)', color: '#fff', transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+                                            '&:hover': { background: 'rgba(255, 255, 255, 0.1)', transform: 'translateY(-8px) scale(1.03)', border: '1.5px solid #fff' }
+                                        }}
+                                    >
+                                        Explore Gallery
+                                    </Button>
+                                </Stack>
+                            </motion.div>
 
-                            <Stack direction="row" spacing={8} sx={{ mt: 14, transform: 'translateZ(30px)' }}>
+                            <Stack direction="row" spacing={8} sx={{ mt: 14 }}>
                                 {[
                                     { label: 'Happy Users', val: '10k+' },
                                     { label: 'Total Gifts', val: '50k+' },
@@ -250,7 +266,7 @@ const Home = () => {
                                     transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
                                     style={{ 
                                         x: useTransform(smoothMouseX, (v) => v * 2.5),
-                                        y: card1Float,
+                                        y: card1Y,
                                         position: 'absolute', top: '-15%', right: '-12%', width: '210px',
                                         background: 'rgba(255, 255, 255, 0.1)', backdropFilter: 'blur(10px)',
                                         padding: '16px', borderRadius: '40px', border: '1px solid rgba(255, 255, 255, 0.2)',
@@ -265,7 +281,7 @@ const Home = () => {
                                     transition={{ duration: 9, repeat: Infinity, ease: "easeInOut", delay: 1 }}
                                     style={{ 
                                         x: useTransform(smoothMouseX, (v) => v * -1.8),
-                                        y: card2Float,
+                                        y: card2Y,
                                         position: 'absolute', bottom: '10%', left: '-18%', width: '190px',
                                         background: 'rgba(255, 255, 255, 0.1)', backdropFilter: 'blur(10px)',
                                         padding: '16px', borderRadius: '40px', border: '1px solid rgba(255, 255, 255, 0.2)',
@@ -290,13 +306,13 @@ const Home = () => {
                     <Grid container spacing={{ xs: 3, md: 5 }} justifyContent="center">
                         {CATEGORIES_DATA.map((cat, i) => (
                             <Grid item xs={12} sm={6} md={3} key={cat.name}>
-                                <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}>
+                                <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.06 }}>
                                     <Card 
                                         onClick={() => navigate(cat.path)}
                                         sx={{ 
                                             borderRadius: '24px', cursor: 'pointer', p: { xs: 5, md: 6 }, textAlign: 'center',
                                             background: 'rgba(255, 255, 255, 0.04)', border: '1px solid rgba(255, 255, 255, 0.1)', 
-                                            transition: 'all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1)', transform: 'translate3d(0,0,0)',
+                                            transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)', transform: 'translate3d(0,0,0)',
                                             '&:hover': { background: 'rgba(255, 255, 255, 0.08)', transform: 'translate3d(0,-8px,0) scale(1.05)' }
                                         }}
                                     >
@@ -324,7 +340,7 @@ const Home = () => {
                         {loading ? ([1,2,3,4].map(i => <Grid item xs={6} sm={4} md={3} key={i}><Box sx={{ height: 350, bgcolor: 'rgba(255,255,255,0.03)', borderRadius: '24px' }} /></Grid>)) : (
                             products.slice(0, 4).map((product, index) => (
                                 <Grid item xs={6} sm={4} md={3} key={product.id}>
-                                    <motion.div variants={fadeUp} initial="hidden" whileInView="show" transition={{ delay: index * 0.1 }}>
+                                    <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }} transition={{ delay: index * 0.06 }}>
                                         <ProductCard product={product} />
                                     </motion.div>
                                 </Grid>
@@ -349,7 +365,7 @@ const Home = () => {
                             <motion.div key={rev.name} initial={{ opacity: 0, x: 50 }} whileInView={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.15 }}>
                                 <Card sx={{ ...glassStyle, minWidth: { xs: 300, md: 380 }, p: 5, borderRadius: '40px' }}>
                                     <Rating value={rev.rating} readOnly size="small" sx={{ mb: 3 }} />
-                                    <Typography variant="body1" sx={{ fontWeight: 500, mb: 5, color: '#fff' }}>"{rev.text}"</Typography>
+                                    <Typography variant="body1" sx={{ fontWeight: 500, mb: 5, color: '#fff' }}>&quot;{rev.text}&quot;</Typography>
                                     <Stack direction="row" spacing={2} alignItems="center">
                                         <Avatar>{rev.avatar}</Avatar>
                                         <Typography variant="body1" sx={{ fontWeight: 900, color: '#fff' }}>{rev.name}</Typography>

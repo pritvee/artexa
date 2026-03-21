@@ -1,8 +1,8 @@
 import React from 'react';
 import {
-    AppBar, Toolbar, Typography, Button, Container,
+    AppBar, Toolbar, Typography, Button, 
     IconButton, Badge, Box, Drawer, List, ListItem,
-    ListItemText, ListItemIcon, Stack, Avatar, Divider
+    ListItemText, ListItemIcon, Avatar, Divider
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import HomeIcon from '@mui/icons-material/Home';
@@ -10,10 +10,7 @@ import StoreIcon from '@mui/icons-material/Store';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import LogoutIcon from '@mui/icons-material/Logout';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
-import DarkModeIcon from '@mui/icons-material/DarkMode';
-import LightModeIcon from '@mui/icons-material/LightMode';
 import CloseIcon from '@mui/icons-material/Close';
 import { useLocation, Link as RouterLink, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -30,7 +27,7 @@ const NAV_LINKS = [
 const Navbar = () => {
     const { user, logout } = useAuth();
     const { cart } = useCart();
-    const { mode, toggleTheme } = useThemeMode();
+    useThemeMode();
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -198,6 +195,7 @@ const Navbar = () => {
                 anchor="right"
                 open={drawerOpen}
                 onClose={() => setDrawerOpen(false)}
+                sx={{ zIndex: 3000 }}
                 PaperProps={{
                     sx: {
                         width: { xs: '100%', sm: 320 },

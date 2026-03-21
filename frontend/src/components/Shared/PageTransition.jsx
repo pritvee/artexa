@@ -1,4 +1,3 @@
-import React, { useRef } from 'react';
 import { motion } from 'framer-motion';
 
 /**
@@ -22,38 +21,26 @@ import { motion } from 'framer-motion';
  *   – Duration ≤ 0.48s enter, ≤ 0.26s exit — snappy and never sluggish
  */
 
-const zoomVariants = {
-    hidden: {
-        opacity: 0,
-        scale: 0.94,
-        z: -50,                // moves back into the screen
-        y: 15,
-        filter: 'blur(8px)',
+const glideVariants = {
+    hidden: { 
+        opacity: 0, 
+        x: 20,
     },
-    show: {
-        opacity: 1,
-        scale: 1,
-        z: 0,                  // moves back to center
-        y: 0,
-        filter: 'blur(0px)',
+    show: { 
+        opacity: 1, 
+        x: 0,
         transition: {
-            duration: 0.52,
-            type: "spring",
-            stiffness: 260,
-            damping: 26,
-            opacity: { duration: 0.38 },
-            filter: { duration: 0.35 }
+            duration: 0.24,
+            ease: [0.16, 1, 0.3, 1], // Ultra Snappy
+            staggerChildren: 0.04,
         },
     },
-    exit: {
-        opacity: 0,
-        scale: 1.05,
-        z: 60,                 // zooms out towards the user
-        y: -12,
-        filter: 'blur(6px)',
+    exit: { 
+        opacity: 0, 
+        x: -20,
         transition: {
-            duration: 0.3,
-            ease: "easeInOut"
+            duration: 0.18,
+            ease: "easeIn"
         },
     },
 };
@@ -67,24 +54,19 @@ const perspectiveStyle = {
 
 const motionStyle = {
     width: '100%',
-    transformStyle: 'preserve-3d',
-    backfaceVisibility: 'hidden',           // WebKit anti-flicker
-    WebkitBackfaceVisibility: 'hidden',
-    willChange: 'opacity, transform, filter',
+    willChange: 'opacity, transform',
 };
 
 const PageTransition = ({ children }) => (
-    <div style={perspectiveStyle}>
-        <motion.div
-            variants={zoomVariants}
-            initial="hidden"
-            animate="show"
-            exit="exit"
-            style={motionStyle}
-        >
-            {children}
-        </motion.div>
-    </div>
+    <motion.div
+        variants={glideVariants}
+        initial="hidden"
+        animate="show"
+        exit="exit"
+        style={motionStyle}
+    >
+        {children}
+    </motion.div>
 );
 
 export default PageTransition;

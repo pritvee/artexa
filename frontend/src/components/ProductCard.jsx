@@ -1,15 +1,12 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardMedia, Typography, Box, Button, IconButton, Chip, Stack, Rating } from '@mui/material';
-import { FavoriteBorder as FavoriteBorderIcon, Favorite as FavoriteIcon, ShoppingCartOutlined as CartIcon } from '@mui/icons-material';
+import { useState } from 'react';
+import { Card, CardMedia, Typography, Box, Button, IconButton, Chip, Stack, Rating } from '@mui/material';
+import { FavoriteBorder as FavoriteBorderIcon, Favorite as FavoriteIcon } from '@mui/icons-material';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
-import { useNavigate, Link as RouterLink } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { getPublicUrl } from '../api/axios';
-import { useCart } from '../store/CartContext';
-import ThreeDButton from './Shared/ThreeDButton';
 
 const ProductCard = ({ product }) => {
     const navigate = useNavigate();
-    const { addToCart } = useCart();
     const [wishlist, setWishlist] = useState(false);
 
     // Tilt effect logic
@@ -59,15 +56,16 @@ const ProductCard = ({ product }) => {
                     background: 'rgba(255, 255, 255, 0.03)',
                     backdropFilter: 'blur(10px)',
                     border: '1.2px solid rgba(255, 255, 255, 0.1)',
-                    transition: 'all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1)',
+                    transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
                     transformStyle: "preserve-3d",
                     transform: 'translate3d(0,0,0)',
                     boxShadow: '0 20px 40px rgba(0,0,0,0.3)',
                     '&:hover': {
-                        borderColor: 'rgba(108, 99, 255, 0.6)',
+                        borderColor: 'rgba(108, 99, 255, 0.65)',
                         background: 'rgba(255, 255, 255, 0.08)',
-                        boxShadow: '0 50px 100px rgba(0,0,0,0.8), 0 0 40px rgba(108, 99, 255, 0.2)',
-                        '& .product-image-container': { transform: 'translateZ(50px) scale(1.04)' },
+                        boxShadow: '0 45px 90px rgba(0,0,0,0.6), 0 0 35px rgba(108, 99, 255, 0.25)',
+                        transform: 'translate3d(0,-6px,0) scale(1.02)',
+                        '& .product-image-container': { transform: 'translateZ(40px) scale(1.05)' },
                         '& .glow-effect': { opacity: 1 }
                     },
                     '&::before': { // Top edge highlight

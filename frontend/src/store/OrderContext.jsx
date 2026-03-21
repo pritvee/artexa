@@ -84,20 +84,29 @@ export const OrderProvider = ({ children }) => {
     };
 
     const updateOrderStatus = async (orderId, status) => {
+        // Optimistic update for UI smoothness
+        const originalOrders = [...orders];
+        setOrders(prev => prev.map(o => o.id === orderId ? { ...o, status } : o));
+
         try {
             await api.patch(`/admin/orders/${orderId}/status`, { status });
-            fetchMyOrders();
+            // No need for a full refresh if optimistic update succeeded
         } catch (error) {
+            setOrders(originalOrders);
             console.error("Error updating order status:", error);
             throw error;
         }
     };
 
     const updateOrderTracking = async (orderId, trackingData) => {
+        // Optimistic update
+        const originalOrders = [...orders];
+        setOrders(prev => prev.map(o => o.id === orderId ? { ...o, ...trackingData } : o));
+
         try {
             await api.patch(`/delivery/${orderId}/update-tracking`, null, { params: trackingData });
-            fetchMyOrders();
         } catch (error) {
+            setOrders(originalOrders);
             console.error("Error updating tracking:", error);
         }
     };

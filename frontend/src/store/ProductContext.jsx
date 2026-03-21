@@ -100,36 +100,46 @@ export const ProductProvider = ({ children }) => {
 
 
     const addProduct = useCallback(async (newProduct) => {
+        // Optimistic update isn't ideal for add because we don't have the new ID
+        // But we can still refresh efficiently
         try {
             const response = await api.post('/admin/products', newProduct);
-            // Always refresh the list using the latest stable page from ref
-            fetchProducts(paginationRef.current.page);
-            return response.data;
+            const created = response.data;
+            setProducts(prev => [created, ...prev]); // Prepend new product
+            return created;
         } catch (error) {
             console.error("Error adding product:", error);
             throw error;
         }
-    }, [fetchProducts]);
+    }, []);
 
     const updateProduct = useCallback(async (id, updatedProduct) => {
+        // Optimistic update
+        const originalProducts = [...products];
+        setProducts(prev => prev.map(p => p.id === id ? { ...p, ...updatedProduct } : p));
+        
         try {
             await api.patch(`/admin/products/${id}`, updatedProduct);
-            fetchProducts(paginationRef.current.page);
         } catch (error) {
+            setProducts(originalProducts); // Rollback on error
             console.error("Error updating product:", error);
             throw error;
         }
-    }, [fetchProducts]);
+    }, [products]);
 
     const deleteProduct = useCallback(async (id) => {
+        // Optimistic delete
+        const originalProducts = [...products];
+        setProducts(prev => prev.filter(p => p.id !== id));
+        
         try {
             await api.delete(`/admin/products/${id}`);
-            fetchProducts(paginationRef.current.page);
         } catch (error) {
+            setProducts(originalProducts); // Rollback on error
             console.error("Error deleting product:", error);
             throw error;
         }
-    }, [fetchProducts]);
+    }, [products]);
 
     const contextValue = useMemo(() => ({
         products,
