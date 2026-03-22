@@ -18,6 +18,7 @@ import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import PhotoLibraryIcon from '@mui/icons-material/PhotoLibrary';
 import BrushIcon from '@mui/icons-material/Brush';
+import CropFreeIcon from '@mui/icons-material/CropFree';
 
 import api, { getPublicUrl } from '../api/axios';
 import { useAuth } from '../store/AuthContext';
@@ -429,23 +430,7 @@ const FrameCustomizerPage = () => {
 
                                 {design.uploadedFileUrls.length > 0 && (
                                     <Box>
-                                        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
-                                            <Typography variant="caption" sx={{ display: 'block' }}>Photo Library (Click to Enhance)</Typography>
-                                            <Button 
-                                                size="small" 
-                                                variant="outlined"
-                                                onClick={() => {
-                                                    const newProps = [...design.imgProps];
-                                                    // Reset props to null so Canvas forces object-fit recalculations
-                                                    design.uploadedFileUrls.forEach((_, idx) => newProps[idx] = null);
-                                                    updateDesign({ imgProps: newProps });
-                                                    setFitRevision(v => v + 1);
-                                                }}
-                                                sx={{ fontSize: '12px', py: 0.2, px: 1, borderRadius: '8px', textTransform: 'none', borderColor: 'rgba(255,255,255,0.2)', color: '#fff' }}
-                                            >
-                                                Auto Adjust Fit
-                                            </Button>
-                                        </Box>
+                                        <Typography variant="caption" sx={{ mb: 1, display: 'block' }}>Photo Library (Click to Enhance)</Typography>
                                         <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(80px, 1fr))', gap: 1.5 }}>
                                             {design.uploadedFileUrls.map((url, i) => {
                                                 // Blob URLs must bypass getPublicUrl
@@ -483,6 +468,20 @@ const FrameCustomizerPage = () => {
                                                             sx={{ position: 'absolute', top: 2, right: 2, bgcolor: 'rgba(0,0,0,0.6)', p: 0.5 }}
                                                         >
                                                             <DeleteIcon sx={{ fontSize: 12, color: '#fff' }} />
+                                                        </IconButton>
+                                                        <IconButton 
+                                                            size="small"
+                                                            title="Auto Fit This Photo"
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                const newProps = [...design.imgProps];
+                                                                newProps[i] = null;
+                                                                updateDesign({ imgProps: newProps });
+                                                                setFitRevision(v => v + 1);
+                                                            }} 
+                                                            sx={{ position: 'absolute', bottom: 2, right: 2, bgcolor: 'rgba(0,0,0,0.6)', p: 0.5, '&:hover': { bgcolor: '#7B61FF' } }}
+                                                        >
+                                                            <CropFreeIcon sx={{ fontSize: 12, color: '#fff' }} />
                                                         </IconButton>
                                                     </Box>
                                                 );
