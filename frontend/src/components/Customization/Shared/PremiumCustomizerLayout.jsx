@@ -77,17 +77,27 @@ const PremiumCustomizerLayout = ({
                 )}
 
                 <Grid container spacing={4} sx={{ flexGrow: 1 }}>
-                    {/* PREVIEW SIDE */}
+                    {/* PREVIEW SIDE: Perfect Square Layout for Mobile & Desktop */}
                     <Grid item xs={12} md={7} sx={{ 
-                        height: { xs: '350px', md: 'calc(100vh - 280px)' }, 
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: { xs: 'center', md: 'flex-start' },
                         position: { md: 'sticky' }, 
-                        top: { md: 100 } 
+                        top: { md: 100 },
+                        minHeight: { md: 'calc(100vh - 200px)' }
                     }}>
                         <motion.div 
                             initial={{ opacity: 0, scale: 0.95 }}
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{ duration: 0.8, ease: "easeOut" }}
-                            style={{ height: '100%', width: '100%' }}
+                            style={{ 
+                                width: '100%',
+                                // Use aspect-ratio 1/1 but max-out at available viewport height
+                                aspectRatio: '1 / 1',
+                                maxHeight: 'calc(100vh - 260px)',
+                                maxWidth: 'calc(100vh - 260px)',
+                                margin: '0 auto'
+                            }}
                         >
                             <Box sx={{ 
                                 ...glassStyle, 

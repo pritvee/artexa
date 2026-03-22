@@ -1,4 +1,4 @@
-import React, { useRef, useState, useMemo, Suspense } from 'react';
+import { useRef, useState, useMemo, Suspense, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Canvas, useFrame, useLoader } from '@react-three/fiber';
 import { OrbitControls, RoundedBox, Text, Float } from '@react-three/drei';
@@ -64,7 +64,7 @@ const Bow = ({ color, scale = 1 }) => {
     );
 };
 
-const RibbonSystem = ({ dim, settings, isOpen, isLidPart }) => {
+const RibbonSystem = ({ dim, settings, isLidPart }) => {
     if (!settings || !settings.enabled) return null;
     const { style, color, width, showBow } = settings;
 
@@ -165,7 +165,7 @@ const RibbonSystem = ({ dim, settings, isOpen, isLidPart }) => {
 /* ─── 3D Item inside the box ─── */
 
 // Frame with photo
-const FrameItemWithPhoto = ({ cfg, scale, photoUrl }) => {
+const FrameItemWithPhoto = ({ scale, photoUrl }) => {
     const texture = useLoader(THREE.TextureLoader, photoUrl, (loader) => {
         loader.setCrossOrigin('anonymous');
     });
@@ -184,7 +184,7 @@ const FrameItemWithPhoto = ({ cfg, scale, photoUrl }) => {
     );
 };
 
-const FrameItemEmpty = ({ cfg, scale }) => (
+const FrameItemEmpty = ({ scale }) => (
     <group rotation={[-Math.PI/2, 0, 0]} position={[0, scale*0.1, 0]}>
         <mesh castShadow position={[0, 0, -scale*0.1]}>
             <boxGeometry args={[scale*2.2, scale*2.2, scale*0.2]} />
@@ -584,7 +584,7 @@ const ProceduralRectBox = ({ dim, boxColor, mat, isOpen, faceDesigns, foamColor,
     );
 };
 
-const GiftBoxScene = ({ boxColor, mat, isOpen, dim, faceDesigns, foamColor, ribbonSettings }) => {
+const GiftBoxScene = ({ boxColor, mat, isOpen, dim, faceDesigns, foamColor, ribbonSettings, autoRotate }) => {
     const groupRef = useRef();
 
     useFrame((state) => {
@@ -627,7 +627,7 @@ const GiftBoxScene = ({ boxColor, mat, isOpen, dim, faceDesigns, foamColor, ribb
                 makeDefault
                 dampingFactor={0.1}
                 enableDamping
-                autoRotate
+                autoRotate={autoRotate}
                 autoRotateSpeed={0.5}
             />
         </group>
@@ -640,6 +640,7 @@ const GiftBox3DPreview = ({
 }) => {
     const [canvasKey, setCanvasKey] = useState(0);
     const [isOpen, setIsOpen] = useState(false);
+    const [isRotating, setIsRotating] = useState(true);
     const foamColor = externalFoamColor || '#f0dde8';
     const dim = useMemo(() => scaleDim(boxDimensions), [boxDimensions]);
 
@@ -691,8 +692,34 @@ const GiftBox3DPreview = ({
                     faceDesigns={faceDesigns}
                     foamColor={foamColor}
                     ribbonSettings={ribbonSettings}
+                    autoRotate={isRotating}
                 />
             </Canvas>
+
+            <div style={{ position: 'absolute', bottom: 16, right: 16, zIndex: 100 }}>
+                    <button
+                        onClick={() => setIsRotating(!isRotating)}
+                        style={{
+                            background: isRotating ? 'rgba(33, 150, 243, 0.2)' : 'rgba(255, 255, 255, 0.1)',
+                            border: `1px solid ${isRotating ? 'rgba(33, 150, 243, 0.5)' : 'rgba(255, 255, 255, 0.2)'}`,
+                            color: isRotating ? '#2196f3' : '#ffffff',
+                            padding: '8px 16px',
+                            borderRadius: '20px',
+                            cursor: 'pointer',
+                            backdropFilter: 'blur(10px)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '8px',
+                            fontSize: '13px',
+                            fontWeight: 600,
+                            transition: 'all 0.3s ease',
+                            boxShadow: '0 4px 12px rgba(0,0,0,0.2)'
+                        }}
+                    >
+                        <span>{isRotating ? '⏸' : '▶'}</span>
+                        {isRotating ? 'Stop' : 'Rotate'}
+                    </button>
+            </div>
 
             <div style={{ position: 'absolute', bottom: 25, left: '50%', transform: 'translateX(-50%)', zIndex: 100 }}>
                 <button

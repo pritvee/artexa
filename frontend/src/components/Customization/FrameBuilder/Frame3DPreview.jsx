@@ -180,6 +180,7 @@ const PhotoFrame = React.memo(({ frameColor, frameStyle, textureCanvas, frameSiz
         </group>
     );
 }); // Close React.memo
+PhotoFrame.displayName = 'PhotoFrame';
 
 PhotoFrame.propTypes = {
     frameColor: PropTypes.string,
@@ -271,77 +272,106 @@ const Frame3DPreview = React.memo(({
         };
     }, [triggerContextRecovery, wallColor]);
 
+    const [isRotating, setIsRotating] = useState(autoRotate ?? true);
+
     return (
         <ErrorBoundary>
-            <Canvas
-                key={canvasKey}
-                id="three-canvas"
-                shadows
-                dpr={[1, 2]}
-                style={{ width: '100%', height: '100%' }}
-                gl={glConfig}
-                onCreated={handleCanvasCreated}
-            >
-                <PerspectiveCamera makeDefault position={[0, tiltAngle * 0.1, 4.5]} fov={50} />
+            <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+                <Canvas
+                    key={canvasKey}
+                    id="three-canvas"
+                    shadows
+                    dpr={[1, 2]}
+                    style={{ width: '100%', height: '100%' }}
+                    gl={glConfig}
+                    onCreated={handleCanvasCreated}
+                >
+                    <PerspectiveCamera makeDefault position={[0, tiltAngle * 0.1, 4.5]} fov={50} />
 
-                {/* Lighting */}
-                <ambientLight intensity={0.5} />
-                <spotLight position={[5, 10, 5]} angle={0.2} penumbra={1} intensity={1.5} castShadow />
-                <pointLight position={[-10, 10, -5]} intensity={0.5} color="#6C63FF" />
-                <Environment preset="city" />
+                    {/* Lighting */}
+                    <ambientLight intensity={0.5} />
+                    <spotLight position={[5, 10, 5]} angle={0.2} penumbra={1} intensity={1.5} castShadow />
+                    <pointLight position={[-10, 10, -5]} intensity={0.5} color="#6C63FF" />
+                    <Environment preset="city" />
 
-                {/* Photo Frame */}
-                <Suspense fallback={null}>
-                    <PhotoFrame
-                        frameColor={frameColor}
-                        frameStyle={frameStyle}
-                        frameSize={parsedFrameSize}
-                        textureCanvas={textureCanvas}
-                        glassReflection={glassReflection}
-                        orientation={orientation}
-                        frameThicknessMultiplier={frameThickness}
-                    />
-
-                    {/* Floor Glow / Soft shadow Area */}
-                    <mesh position={[0, -2.5, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-                        <planeGeometry args={[10, 10]} />
-                        <meshStandardMaterial 
-                            transparent 
-                            opacity={0.15} 
-                            color="#6C63FF" 
-                            roughness={1} 
+                    {/* Photo Frame */}
+                    <Suspense fallback={null}>
+                        <PhotoFrame
+                            frameColor={frameColor}
+                            frameStyle={frameStyle}
+                            frameSize={parsedFrameSize}
+                            textureCanvas={textureCanvas}
+                            glassReflection={glassReflection}
+                            orientation={orientation}
+                            frameThicknessMultiplier={frameThickness}
                         />
-                    </mesh>
 
-                    <ContactShadows
-                        position={[0, -2.8, 0]}
-                        opacity={0.6}
-                        scale={8}
-                        blur={2.4}
-                        far={4}
+                        {/* Floor Glow / Soft shadow Area */}
+                        <mesh position={[0, -2.5, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+                            <planeGeometry args={[10, 10]} />
+                            <meshStandardMaterial 
+                                transparent 
+                                opacity={0.15} 
+                                color="#6C63FF" 
+                                roughness={1} 
+                            />
+                        </mesh>
+
+                        <ContactShadows
+                            position={[0, -2.8, 0]}
+                            opacity={0.6}
+                            scale={8}
+                            blur={2.4}
+                            far={4}
+                        />
+
+                        {/* Background Wall if enabled */}
+                        <mesh position={[0, 0, -2]}>
+                            <planeGeometry args={[20, 20]} />
+                            <meshStandardMaterial color={wallColor} roughness={1} metalness={0} />
+                        </mesh>
+                    </Suspense>
+
+                    {/* Controls */}
+                    <OrbitControls
+                        enablePan={false}
+                        minDistance={3}
+                        maxDistance={10}
+                        minPolarAngle={Math.PI / 4}
+                        maxPolarAngle={Math.PI / 1.5}
+                        autoRotate={isRotating}
+                        autoRotateSpeed={1.0}
                     />
-
-                    {/* Background Wall if enabled */}
-                    <mesh position={[0, 0, -2]}>
-                        <planeGeometry args={[20, 20]} />
-                        <meshStandardMaterial color={wallColor} roughness={1} metalness={0} />
-                    </mesh>
-                </Suspense>
-
-                {/* Controls */}
-                <OrbitControls
-                    enablePan={false}
-                    minDistance={3}
-                    maxDistance={10}
-                    minPolarAngle={Math.PI / 4}
-                    maxPolarAngle={Math.PI / 1.5}
-                    autoRotate={autoRotate}
-                    autoRotateSpeed={0.8}
-                />
-            </Canvas>
+                </Canvas>
+                <div style={{ position: 'absolute', bottom: 16, right: 16, zIndex: 10 }}>
+                    <button
+                        onClick={() => setIsRotating(!isRotating)}
+                        style={{
+                            background: isRotating ? 'rgba(33, 150, 243, 0.2)' : 'rgba(255, 255, 255, 0.1)',
+                            border: `1px solid ${isRotating ? 'rgba(33, 150, 243, 0.5)' : 'rgba(255, 255, 255, 0.2)'}`,
+                            color: isRotating ? '#2196f3' : '#ffffff',
+                            padding: '8px 16px',
+                            borderRadius: '20px',
+                            cursor: 'pointer',
+                            backdropFilter: 'blur(10px)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '8px',
+                            fontSize: '13px',
+                            fontWeight: 600,
+                            transition: 'all 0.3s ease',
+                            boxShadow: '0 4px 12px rgba(0,0,0,0.2)'
+                        }}
+                    >
+                        <span>{isRotating ? '⏸' : '▶'}</span>
+                        {isRotating ? 'Stop' : 'Rotate'}
+                    </button>
+                </div>
+            </div>
         </ErrorBoundary>
     );
 });
+Frame3DPreview.displayName = 'Frame3DPreview';
 
 Frame3DPreview.propTypes = {
     frameColor: PropTypes.string,

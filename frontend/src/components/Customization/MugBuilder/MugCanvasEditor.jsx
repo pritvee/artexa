@@ -28,6 +28,26 @@ const MugCanvasEditor = ({
 
     const [userImage] = useImage(userImageSrc, 'anonymous');
 
+    const CANVAS_W = 800; // Standard mug wrap width ratio
+    const CANVAS_H = 360; // Standard mug wrap height ratio
+
+    const containerRef = useRef();
+    const [scale, setScale] = useState(1);
+
+    useEffect(() => {
+        if (!containerRef.current) return;
+        const observer = new ResizeObserver(entries => {
+            const { width, height } = entries[0].contentRect;
+            if (width > 0 && height > 0) {
+                // Determine scale based on container width so it fits perfectly
+                const fitScale = Math.min((width - 32) / CANVAS_W, (height - 32) / CANVAS_H);
+                setScale(Math.max(0.1, fitScale));
+            }
+        });
+        observer.observe(containerRef.current);
+        return () => observer.disconnect();
+    }, [CANVAS_W, CANVAS_H]);
+
     // Fit image natural aspect ratio initially
     useEffect(() => {
         if (userImage && !isImageLoaded) {
@@ -43,9 +63,6 @@ const MugCanvasEditor = ({
             if (onImageScaleChange) onImageScaleChange(100);
         }
     }, [userImage, isImageLoaded]);
-
-    const CANVAS_W = 800; // Standard mug wrap width ratio
-    const CANVAS_H = 360; // Standard mug wrap height ratio
 
     // Get background color based on mugColor
     const getBgColor = useCallback(() => {
@@ -71,18 +88,15 @@ const MugCanvasEditor = ({
     }, [selectedId, textProps?.text]);
 
     // Export canvas for 3D texture whenever anything changes
-    // 500ms debounce prevents rapid-fire GPU snapshots that cause WebGL Context Loss
     useEffect(() => {
         const timer = setTimeout(() => {
             if (stageRef.current && onTextureUpdate) {
-                // To ensure the 3D texture is CLEAN, we hide transformers temporarily
                 const transformers = stageRef.current.find('Transformer');
                 transformers.forEach(tr => tr.hide());
 
                 const canvas = stageRef.current.toCanvas({ pixelRatio: 2 });
                 onTextureUpdate(canvas);
 
-                // Restore visibility if an ID is selected
                 if (selectedId) {
                     transformers.forEach(tr => tr.show());
                 }
@@ -97,30 +111,42 @@ const MugCanvasEditor = ({
         }
     };
 
-    // Curved text function using Konva's text along path isn't native, 
-    // so we'll simulate by rendering text with slight rotation
     const { text, fontFamily, fontSize, color } = textProps || {};
 
     return (
-        <div style={{ position: 'relative', width: CANVAS_W, height: CANVAS_H, margin: '0 auto' }}>
-            <Stage
-                ref={(node) => {
-                    stageRef.current = node;
-                    if (node && onStageReady) onStageReady(node);
-                }}
-                width={CANVAS_W}
-                height={CANVAS_H}
-                onMouseDown={handleDeselect}
-                onTouchStart={handleDeselect}
-                style={{
-                    border: '1px solid rgba(255,255,255,0.1)',
-                    borderRadius: '12px',
-                    cursor: 'crosshair',
-                    backgroundColor: getBgColor(),
-                    boxShadow: '0 12px 48px rgba(0,0,0,0.6)',
-                    overflow: 'hidden'
-                }}
-            >
+        <div 
+            ref={containerRef}
+            style={{ 
+                width: '100%', 
+                height: '100%', 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'center',
+                overflow: 'hidden',
+                position: 'relative'
+            }}
+        >
+            <div style={{ width: CANVAS_W * scale, height: CANVAS_H * scale, position: 'relative' }}>
+                <Stage
+                    ref={(node) => {
+                        stageRef.current = node;
+                        if (node && onStageReady) onStageReady(node);
+                    }}
+                    width={CANVAS_W * scale}
+                    height={CANVAS_H * scale}
+                    scaleX={scale}
+                    scaleY={scale}
+                    onMouseDown={handleDeselect}
+                    onTouchStart={handleDeselect}
+                    style={{
+                        border: '1px solid rgba(255,255,255,0.1)',
+                        borderRadius: '12px',
+                        cursor: 'crosshair',
+                        backgroundColor: getBgColor(),
+                        boxShadow: '0 12px 48px rgba(0,0,0,0.6)',
+                        overflow: 'hidden'
+                    }}
+                >
                 {/* Content Layer (Canvas is transparent so 3D decal overlay works correctly) */}
                 <Layer>
                     {/* Explicit background for high-quality export */}
@@ -280,7 +306,8 @@ const MugCanvasEditor = ({
                     TARGET MUG PRINT AREA
                 </div>
             </div>
-        </div >
+            </div>
+        </div>
     );
 };
 

@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { Stage, Layer, Rect, Text, Group, Transformer, Circle, Line, Image as KonvaImage } from 'react-konva';
 import useImage from 'use-image';
 
@@ -32,25 +32,39 @@ const EditableItem = ({ dec, isSelected, onSelect, onTransformEnd, itemCfg }) =>
             <Circle radius={(dec.size || 40) + 6} fill="rgba(0,0,0,0.2)" y={4} />
             {/* Background bubble / Photo */}
             {dec.photoUrl && img ? (
-                <Group>
-                    <Rect
-                        width={size * 2}
-                        height={size * 2}
-                        x={-size}
-                        y={-size}
-                        fill="#fff"
-                        stroke={isSelected ? '#FFD93D' : 'rgba(255,255,255,0.2)'}
-                        strokeWidth={isSelected ? 2 : 1}
-                        cornerRadius={4}
-                    />
-                    <KonvaImage
-                        image={img}
-                        width={size * 1.8}
-                        height={size * 1.8}
-                        x={-size * 0.9}
-                        y={-size * 0.9}
-                    />
-                </Group>
+                (() => {
+                    let imgW = size * 1.8;
+                    let imgH = size * 1.8;
+                    if (img.width && img.height) {
+                        const aspect = img.width / img.height;
+                        if (aspect > 1) {
+                            imgH = imgW / aspect;
+                        } else {
+                            imgW = imgH * aspect;
+                        }
+                    }
+                    return (
+                        <Group>
+                            <Rect
+                                width={size * 2}
+                                height={size * 2}
+                                x={-size}
+                                y={-size}
+                                fill="#fff"
+                                stroke={isSelected ? '#FFD93D' : 'rgba(255,255,255,0.2)'}
+                                strokeWidth={isSelected ? 2 : 1}
+                                cornerRadius={4}
+                            />
+                            <KonvaImage
+                                image={img}
+                                width={imgW}
+                                height={imgH}
+                                x={-imgW / 2}
+                                y={-imgH / 2}
+                            />
+                        </Group>
+                    );
+                })()
             ) : (
                 <Circle
                     radius={size}

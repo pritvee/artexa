@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import PropTypes from 'prop-types';
@@ -174,10 +174,12 @@ const Mug3DPreview = ({
         };
     }, []);
 
+    const [isRotating, setIsRotating] = useState(autoRotate ?? true);
+
     // 2. Reactive Updates: AutoRotate & Hidden State
     useEffect(() => {
         if (controlsRef.current) {
-            controlsRef.current.autoRotate = autoRotate && !isHidden;
+            controlsRef.current.autoRotate = isRotating && !isHidden;
         }
         
         const container = containerRef.current;
@@ -193,7 +195,7 @@ const Mug3DPreview = ({
             container.removeAttribute('inert');
             container.removeAttribute('aria-hidden');
         }
-    }, [autoRotate, isHidden]);
+    }, [isRotating, isHidden]);
 
     // 3. Geometry/Color Updates (optimized)
     useEffect(() => {
@@ -295,18 +297,47 @@ const Mug3DPreview = ({
     }, [mugColor, insideColor, textureUrl, mugType]);
 
     return (
-        <div 
-            ref={containerRef} 
-            className="mug-3d-preview-container"
-            style={{ 
-                width: '100%', 
-                height: '100%', 
-                position: 'relative',
-                borderRadius: '24px',
-                overflow: 'hidden',
-                background: 'transparent'
-            }}
-        />
+        <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+            <div 
+                ref={containerRef} 
+                className="mug-3d-preview-container"
+                style={{ 
+                    width: '100%', 
+                    height: '100%', 
+                    position: 'absolute',
+                    top: 0, left: 0,
+                    borderRadius: '24px',
+                    overflow: 'hidden',
+                    background: 'transparent'
+                }}
+            />
+            {!isHidden && (
+                <div style={{ position: 'absolute', bottom: 16, right: 16, zIndex: 10 }}>
+                    <button
+                        onClick={() => setIsRotating(!isRotating)}
+                        style={{
+                            background: isRotating ? 'rgba(33, 150, 243, 0.2)' : 'rgba(255, 255, 255, 0.1)',
+                            border: `1px solid ${isRotating ? 'rgba(33, 150, 243, 0.5)' : 'rgba(255, 255, 255, 0.2)'}`,
+                            color: isRotating ? '#2196f3' : '#ffffff',
+                            padding: '8px 16px',
+                            borderRadius: '20px',
+                            cursor: 'pointer',
+                            backdropFilter: 'blur(10px)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '8px',
+                            fontSize: '13px',
+                            fontWeight: 600,
+                            transition: 'all 0.3s ease',
+                            boxShadow: '0 4px 12px rgba(0,0,0,0.2)'
+                        }}
+                    >
+                        <span>{isRotating ? '⏸' : '▶'}</span>
+                        {isRotating ? 'Stop' : 'Rotate'}
+                    </button>
+                </div>
+            )}
+        </div>
     );
 };
 

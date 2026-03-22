@@ -341,11 +341,17 @@ const FrameCanvasEditor = ({
         const imageRatio  = nw / nh;
         let fitW = 0, fitH = 0, fitX = 0, fitY = 0;
         if (imageRatio > targetRatio) {
-            fitH = rect.height; fitW = fitH * imageRatio;
-            fitY = rect.y;      fitX = rect.x - (fitW - rect.width) / 2;
+            // Contain: Fit to width
+            fitW = rect.width;  
+            fitH = fitW / imageRatio;
+            fitX = rect.x;     
+            fitY = rect.y + (rect.height - fitH) / 2;
         } else {
-            fitW = rect.width;  fitH = fitW / imageRatio;
-            fitX = rect.x;     fitY = rect.y - (fitH - rect.height) / 2;
+            // Contain: Fit to height
+            fitH = rect.height; 
+            fitW = fitH * imageRatio;
+            fitY = rect.y;      
+            fitX = rect.x + (rect.width - fitW) / 2;
         }
         setImgProps(prev => {
             const current = prev[idx];
