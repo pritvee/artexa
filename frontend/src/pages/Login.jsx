@@ -102,6 +102,7 @@ const Login = () => {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
+                        autoComplete="username"
                     />
                     <TextField
                         id="login-password"
@@ -112,6 +113,7 @@ const Login = () => {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
+                        autoComplete="current-password"
                     />
                     <Button id="login-submit" fullWidth variant="contained" size="large" type="submit" sx={{ mt: 3 }}>
                         Login
