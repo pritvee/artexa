@@ -274,11 +274,13 @@ const Frame3DPreview = React.memo(({
 
     const [isRotating, setIsRotating] = useState(autoRotate ?? true);
 
+    console.log("CANVAS:", textureCanvas);
+
     return (
         <ErrorBoundary>
             <div style={{ position: 'relative', width: '100%', height: '100%' }}>
                 <Canvas
-                    key={canvasKey}
+                    key={canvasKey + (textureCanvas ? '-' + Date.now() : '')}
                     id="three-canvas"
                     shadows
                     dpr={[1, 2]}

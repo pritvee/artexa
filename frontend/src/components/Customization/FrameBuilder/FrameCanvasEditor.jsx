@@ -85,6 +85,15 @@ const DraggableImage = ({
         }
     }, [img, filter, width, height]);
 
+    // MANDATORY FIX: FORCE KONVA STAGE UPDATE + DEBUG LOG
+    useEffect(() => {
+        console.log("IMG:", img);
+        const stage = imgRef.current?.getStage();
+        if (stage) {
+           stage.batchDraw();
+        }
+    }, [img]);
+
     useEffect(() => {
         if (img && onImageLoaded) {
             onImageLoaded();
@@ -209,7 +218,6 @@ const FrameCanvasEditor = ({
     const trRef = useRef();
     const containerRef = useRef();
 
-    const [dimensions, setDimensions] = useState({ width: 800, height: 600 });
     const [imageLoadTick, setImageLoadTick] = useState(0);
 
     const { CANVAS_W, CANVAS_H } = useMemo(() => {
@@ -225,8 +233,6 @@ const FrameCanvasEditor = ({
         return { CANVAS_W: base.h, CANVAS_H: base.w };
     }, [frameSize, orientation]);
 
-    /* BORDER_THICKNESS calculation removed as it was unused */
-
     // Base padding and thickness
     const sw = 30; // Border thickness
     const usableX = sw;
@@ -239,26 +245,14 @@ const FrameCanvasEditor = ({
     const innerW = usableW - outerPadding * 2;
     const innerH = usableH - outerPadding * 2;
 
-    useEffect(() => {
-        const updateSize = () => {
-            if (containerRef.current) {
-                setDimensions({
-                    width:  containerRef.current.clientWidth,
-                    height: containerRef.current.clientHeight
-                });
-            }
-        };
-        updateSize();
-        window.addEventListener('resize', updateSize);
-        return () => window.removeEventListener('resize', updateSize);
-    }, []);
-
     const handleRef = (node) => {
         stageRef.current = node;
         if (node && onStageReady) onStageReady(node);
     };
 
     useEffect(() => {
+        if (!stageRef.current) return;
+        console.log("STAGE:", stageRef.current);
         const timer = setTimeout(() => {
             if (stageRef.current && onTextureUpdate) {
                 const transformers = stageRef.current.find('Transformer');
@@ -267,7 +261,7 @@ const FrameCanvasEditor = ({
                 onTextureUpdate(canvas);
                 if (selectedId) transformers.forEach(tr => tr.show());
             }
-        }, 500);
+        }, 300); // 300ms as requested
         return () => clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [userImages, textLayers, layout, frameSize, orientation, imgProps, stickers,
@@ -453,7 +447,9 @@ const FrameCanvasEditor = ({
         setImageLoadTick(t => t + 1);
     }, []);
 
-    const scale = Math.min((dimensions.width - 40) / CANVAS_W, (dimensions.height - 40) / CANVAS_H);
+    // FIX MOBILE + DESKTOP ISSUE responsive scaling
+    const size = typeof window !== 'undefined' ? Math.min(window.innerWidth, 500) : 500;
+    const scale = Math.min((size - 40) / CANVAS_W, (size - 40) / CANVAS_H);
 
     return (
         <div ref={containerRef} className="w-full max-w-[500px] aspect-square mx-auto" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
