@@ -3,10 +3,9 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import {
     Container, Grid, Box, Typography, Button, CircularProgress,
     TextField, MenuItem, Select, FormControl, InputLabel,
-    Divider, Paper, Radio, FormControlLabel, Snackbar, Alert, Stack
+    Paper, Radio, FormControlLabel, Snackbar, Alert, Stack
 } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 import api, { getPublicUrl } from '../api/axios';
 import { useAuth } from '../store/AuthContext';
 import { sanitizeUrl } from '../api/security';
@@ -29,6 +28,7 @@ const ProductCustomizerPage = () => {
     const [totalPrice, setTotalPrice] = useState(0);
     const [itemQuantity, setItemQuantity] = useState(1);
     const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
+    const [previewTab, setPreviewTab] = useState(0);
 
     // UI state
     const [userImageSrc, setUserImageSrc] = useState(null);
@@ -249,7 +249,7 @@ const ProductCustomizerPage = () => {
         <Container sx={{ py: 10, textAlign: 'center', px: 3 }}>
             <Typography fontSize={56} mb={1}>😕</Typography>
             <Typography variant="h2" sx={{ mb: 1 }}>Oops! Product not available</Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 4 }}>We couldn't find this product.</Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 4 }}>We couldn&apos;t find this product.</Typography>
             <Stack direction="row" spacing={2} justifyContent="center">
                 <Button variant="contained" onClick={() => navigate('/shop')} sx={{ borderRadius: '12px', height: '48px' }}>Back to Shop</Button>
                 <Button variant="outlined" onClick={() => window.location.reload()} sx={{ borderRadius: '12px', height: '48px', borderColor: 'rgba(255,255,255,0.2)' }}>Retry</Button>
@@ -258,8 +258,6 @@ const ProductCustomizerPage = () => {
     );
 
     const schema = product.customization_schema || {};
-
-    const [previewTab, setPreviewTab] = React.useState(0);
 
     return (
         <Box sx={{ 

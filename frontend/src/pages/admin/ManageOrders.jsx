@@ -1,16 +1,14 @@
-import React, { useState, useEffect, Suspense, lazy } from 'react';
+import { useState, useEffect, Suspense, lazy } from 'react';
 import {
     Container, Typography, Paper, Table, TableBody, TableCell,
     TableContainer, TableHead, TableRow, Chip, Box,
     Drawer, Stack, TextField, Button, Select, MenuItem,
-    FormControl, InputLabel, Alert, Avatar, Divider, IconButton,
+    FormControl, InputLabel, Avatar, Divider, IconButton,
     Stepper, Step, StepLabel, Tooltip, Pagination, Grid,
     Dialog, DialogTitle, DialogContent, CircularProgress,
     Snackbar
 } from '@mui/material';
-import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import CloseIcon from '@mui/icons-material/Close';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import EditIcon from '@mui/icons-material/Edit';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import DownloadIcon from '@mui/icons-material/Download';
@@ -138,12 +136,12 @@ const InvoiceProductDetails = ({ details }) => {
                 <Box sx={{ mt: 1, pt: 1, borderTop: '1px dashed #cbd5e1' }}>
                     {details.text && (
                         <Typography variant="caption" sx={{ fontStyle: 'italic', bgcolor: '#fff', p: '2px 6px', borderRadius: 0.5, border: '1px solid #e2e8f0', display: 'inline-block', mr: 1, mt: 0.5, color: '#334155' }}>
-                            <strong style={{ opacity: 0.6 }}>Text:</strong> "{details.text}"
+                            <strong style={{ opacity: 0.6 }}>Text:</strong> &quot;{details.text}&quot;
                         </Typography>
                     )}
                     {details.caption && (
                         <Typography variant="caption" sx={{ fontStyle: 'italic', bgcolor: '#fff', p: '2px 6px', borderRadius: 0.5, border: '1px solid #e2e8f0', display: 'inline-block', mt: 0.5, color: '#334155' }}>
-                            <strong style={{ opacity: 0.6 }}>Caption:</strong> "{details.caption}"
+                            <strong style={{ opacity: 0.6 }}>Caption:</strong> &quot;{details.caption}&quot;
                         </Typography>
                     )}
                 </Box>
@@ -243,6 +241,7 @@ const ManageOrders = () => {
         }
     };
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => { loadOrders(1); }, [showDeleted]);
 
     const handleDeleteOrder = async () => {
@@ -501,7 +500,7 @@ const ManageOrders = () => {
                                         {selectedOrder.gift_note && (
                                             <Box sx={{ mt: 2, p: 1.5, bgcolor: 'rgba(236, 72, 153, 0.08)', borderRadius: 1.5, border: '1px solid rgba(236, 72, 153, 0.2)' }}>
                                                 <Typography variant="caption" sx={{ fontWeight: 800, color: '#EC4899', display: 'block', mb: 0.5, letterSpacing: 0.5 }}>PERSONAL GIFT NOTE</Typography>
-                                                <Typography variant="body1" sx={{ fontStyle: 'italic', fontWeight: 600, color: '#111' }}>"{selectedOrder.gift_note}"</Typography>
+                                                <Typography variant="body1" sx={{ fontStyle: 'italic', fontWeight: 600, color: '#111' }}>&quot;{selectedOrder.gift_note}&quot;</Typography>
                                             </Box>
                                         )}
                                     </Box>
@@ -601,7 +600,7 @@ const ManageOrders = () => {
                                                                 <Box sx={{ p: 1.5, bgcolor: 'rgba(0,0,0,0.02)', borderRadius: 2, border: '1px solid rgba(0,0,0,0.05)' }}>
                                                                     <Typography variant="caption" color="text.secondary" display="block">USER MESSAGE / TEXT</Typography>
                                                                     <Typography variant="body1" sx={{ fontWeight: 800, fontFamily: item.customization_details.font || 'inherit', color: item.customization_details.text_color || 'inherit' }}>
-                                                                        "{item.customization_details.text}"
+                                                                        &quot;{item.customization_details.text}&quot;
                                                                     </Typography>
                                                                     <Typography variant="caption" sx={{ color: 'text.disabled', fontStyle: 'italic' }}>
                                                                         Config: {item.customization_details.font}, Size: {item.customization_details.text_size}px

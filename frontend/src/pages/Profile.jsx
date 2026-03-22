@@ -1,17 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { Container, Typography, Grid, Paper, Box, Avatar, TextField, Button, Divider, IconButton, List, ListItem, ListItemText, ListItemSecondaryAction, Stack } from '@mui/material';
+import { useState, useEffect } from 'react';
+import { Container, Typography, Grid, Paper, Box, Avatar, TextField, Button, IconButton, List, ListItem, ListItemText, ListItemSecondaryAction, Stack, Alert } from '@mui/material';
 import LockResetIcon from '@mui/icons-material/LockReset';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import { useAuth } from '../store/AuthContext';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import api from '../api/axios';
 
 const Profile = () => {
     const { user, logout } = useAuth();
+    const navigate = useNavigate();
     const [name, setName] = useState(user?.name || "");
-    const [email, setEmail] = useState(user?.email || "");
+    const email = user?.email || "";
     const [phone, setPhone] = useState(user?.phone || "");
     const [addresses, setAddresses] = useState([]);
     const [newAddress, setNewAddress] = useState({ street: '', city: '', state: '', zip_code: '' });
@@ -58,7 +60,7 @@ const Profile = () => {
         }
     };
 
-    if (!user) return <ErrorState message="Please login to view your profile." onRetry={() => navigate('/login')} />;
+    if (!user) return <Alert severity="error" action={<Button color="inherit" size="small" onClick={() => navigate('/login')}>Login</Button>}>Please login to view your profile.</Alert>;
 
     return (
         <Container maxWidth="lg" sx={{ py: { xs: 4, md: 8 } }}>

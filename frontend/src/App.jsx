@@ -1,6 +1,6 @@
 import React from 'react';
-import { Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
-import { Box, IconButton } from '@mui/material';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { Box } from '@mui/material';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 const Home = React.lazy(() => import('./pages/Home'));
@@ -25,9 +25,8 @@ const AdminChat = React.lazy(() => import('./pages/admin/AdminChat'));
 
 import ChatWidget from './components/Shared/ChatWidget';
 import { useAuth } from './store/AuthContext';
-import { useThemeMode } from './store/ThemeContext';
-import { ArrowBack as ArrowBackIcon } from '@mui/icons-material';
 import { AnimatePresence } from 'framer-motion';
+
 import PageTransition from './components/Shared/PageTransition';
 import ErrorBoundary from './components/Shared/ErrorBoundary';
 import PremiumBackground from './components/Shared/PremiumBackground';
@@ -50,9 +49,7 @@ const ProtectedRoute = ({ children, adminOnly = false }) => {
 };
 
 function App() {
-    const { mode } = useThemeMode();
     const location = useLocation();
-    const navigate = useNavigate();
     
     const isFrameCustomizer = location.pathname.startsWith('/customize/frame');
     const isGiftBoxCustomizer = location.pathname.startsWith('/customize/giftbox');
@@ -60,7 +57,6 @@ function App() {
     const isMugCustomizer = location.pathname.startsWith('/customize/mug');
     const isGenericCustomizer = location.pathname.startsWith('/customize/') && !isFrameCustomizer && !isGiftBoxCustomizer && !isHamperCustomizer && !isMugCustomizer;
     const isFullscreen = isFrameCustomizer || isGiftBoxCustomizer || isHamperCustomizer || isMugCustomizer || isGenericCustomizer;
-    const isHome = location.pathname === '/';
     
     React.useEffect(() => {
         window.scrollTo(0, 0);

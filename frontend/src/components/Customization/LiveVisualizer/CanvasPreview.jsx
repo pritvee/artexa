@@ -1,13 +1,11 @@
-import React, { useRef, useEffect } from 'react';
-import { Stage, Layer, Image as KonvaImage, Text, Transformer, Rect, Group } from 'react-konva';
+import { useRef, useEffect } from 'react';
+import { Stage, Layer, Image as KonvaImage, Text, Rect, Group } from 'react-konva';
 import useImage from 'use-image';
 
 const CanvasPreview = ({ bgImageSrc, userImageSrc, textProps, customizationData = {}, schemaType, onReady }) => {
     const [bgImage] = useImage(bgImageSrc);
     const [userImage] = useImage(userImageSrc);
     const stageRef = useRef();
-    const shapeRef = useRef();
-    const trRef = useRef();
 
     useEffect(() => {
         if (stageRef.current && onReady) {

@@ -1,21 +1,22 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
     Box, Grid, Paper, Typography, List, ListItem,
     ListItemText, ListItemAvatar, Avatar, Badge,
-    Divider, TextField, IconButton, Chip, CircularProgress,
-    Tooltip
+    TextField, IconButton, CircularProgress
 } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import ChatIcon from '@mui/icons-material/Chat';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import PeopleIcon from '@mui/icons-material/People';
+import AssessmentIcon from '@mui/icons-material/Assessment';
+import ViewInArIcon from '@mui/icons-material/ViewInAr';
 import { useAuth } from '../../store/AuthContext';
 import { useThemeMode } from '../../store/ThemeContext';
-import api, { BASE_URL, API_BASE_URL } from '../../api/axios';
+import api, { API_BASE_URL } from '../../api/axios';
 
 const AdminChat = () => {
-    const { user, token } = useAuth();
+    const { user } = useAuth();
     const { mode } = useThemeMode();
     const [conversations, setConversations] = useState([]);
     const [selectedUser, setSelectedUser] = useState(null);
@@ -48,6 +49,7 @@ const AdminChat = () => {
                 ws.current = null;
             }
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const fetchConversations = async () => {
@@ -112,7 +114,9 @@ const AdminChat = () => {
                 try {
                     const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2354/2354-preview.mp3');
                     audio.play();
-                } catch (e) {}
+                } catch (e) {
+                    console.error("Audio play failed");
+                }
             } catch (e) {
                 console.warn("[AdminWS] Failed to parse message", e);
             }

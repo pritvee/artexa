@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import {
-    Container, Typography, Grid, Button, CircularProgress,
-    Box, Chip, Card, Avatar, Stack, Divider, IconButton,
-    Tooltip, Paper, useTheme
+    Container, Typography, Grid, Button,
+    Box, Chip, Card, Avatar, Stack, Divider,
+    Paper, useTheme
 } from '@mui/material';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link as RouterLink } from 'react-router-dom';
@@ -11,7 +11,6 @@ import Inventory2Icon from '@mui/icons-material/Inventory2';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import InfoIcon from '@mui/icons-material/Info';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PaymentIcon from '@mui/icons-material/Payment';
@@ -26,6 +25,7 @@ const MyOrders = () => {
 
     useEffect(() => {
         fetchMyOrders();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     if (loading && orders.length === 0) {
@@ -63,7 +63,7 @@ const MyOrders = () => {
                     <Inventory2Icon sx={{ fontSize: 100, color: 'primary.main', mb: 3, opacity: 0.2 }} />
                     <Typography variant="h4" sx={{ fontWeight: 800, mb: 2 }}>No orders yet</Typography>
                     <Typography variant="body1" sx={{ color: 'text.secondary', mb: 4, maxWidth: 400, mx: 'auto' }}>
-                        Your journey with Artexa hasn't started yet. Create something beautiful today!
+                        Your journey with Artexa hasn&apos;t started yet. Create something beautiful today!
                     </Typography>
                     <Button 
                         variant="contained" 
@@ -239,7 +239,7 @@ const MyOrders = () => {
                                                                         <CardGiftcardIcon sx={{ color: '#EC4899', fontSize: '1.4rem' }} />
                                                                         <Box>
                                                                             <Typography variant="caption" sx={{ fontWeight: 800, color: '#EC4899', display: 'block', letterSpacing: 1 }}>GIFT NOTE</Typography>
-                                                                            <Typography variant="body2" sx={{ fontWeight: 600, fontStyle: 'italic' }}>"{order.gift_note}"</Typography>
+                                                                            <Typography variant="body2" sx={{ fontWeight: 600, fontStyle: 'italic' }}>&quot;{order.gift_note}&quot;</Typography>
                                                                         </Box>
                                                                     </Box>
                                                                 )}

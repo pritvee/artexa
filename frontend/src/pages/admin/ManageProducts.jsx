@@ -211,21 +211,7 @@ const ManageProducts = () => {
         });
     };
 
-    const addSchemaItem = (category, defaultItem) => {
-        setForm(prev => {
-            const newSchema = { ...prev.customization_schema };
-            newSchema[category] = [...(newSchema[category] || []), defaultItem];
-            return { ...prev, customization_schema: newSchema };
-        });
-    };
 
-    const removeSchemaItem = (category, index) => {
-        setForm(prev => {
-            const newSchema = { ...prev.customization_schema };
-            newSchema[category] = (newSchema[category] || []).filter((_, i) => i !== index);
-            return { ...prev, customization_schema: newSchema };
-        });
-    };
 
     const handleFileUpload = async (e) => {
         const file = e.target.files[0];
@@ -249,35 +235,7 @@ const ManageProducts = () => {
         }
     };
 
-    const handleSecondaryFileUpload = async (e) => {
-        const files = Array.from(e.target.files);
-        if (files.length === 0) return;
 
-        setUploading(true);
-        try {
-            const newImages = [...form.secondary_images];
-            for (const file of files) {
-                const formData = new FormData();
-                formData.append('file', file);
-                const res = await api.post('/products/upload-image', formData, {
-                    headers: { 'Content-Type': 'multipart/form-data' }
-                });
-                newImages.push(res.data.image_url || res.data.url);
-            }
-            setForm(prev => ({ ...prev, secondary_images: newImages }));
-        } catch (err) {
-            console.error("Secondary upload failed", err);
-        } finally {
-            setUploading(false);
-        }
-    };
-
-    const removeSecondaryImage = (idx) => {
-        setForm(prev => ({
-            ...prev,
-            secondary_images: prev.secondary_images.filter((_, i) => i !== idx)
-        }));
-    };
 
     const handleSave = async () => {
         if (!form.name || form.price === '' || !form.category_id) {

@@ -1,15 +1,13 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { 
     Container, Grid, Typography, Box, Button,
     Paper, Divider, Skeleton, Chip, Stack, IconButton,
-    Rating, Tabs, Tab, Snackbar, Alert
+    Rating, Snackbar, Alert
 } from '@mui/material';
 import { useParams, useNavigate, useLocation, Link as RouterLink } from 'react-router-dom';
 import ViewInArIcon from '@mui/icons-material/ViewInAr';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import ShareIcon from '@mui/icons-material/Share';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import VerifiedIcon from '@mui/icons-material/Verified';
 import ReplayIcon from '@mui/icons-material/Replay';
@@ -94,7 +92,7 @@ const ProductDetail = () => {
             <Typography fontSize={56} mb={1}>😕</Typography>
             <Typography variant="h2" sx={{ mb: 1 }}>Oops! Product not available</Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 4 }}>
-                The item you're looking for might have been moved or deleted.
+                The item you&apos;re looking for might have been moved or deleted.
             </Typography>
             <Stack direction="row" spacing={2} justifyContent="center">
                 <Button variant="contained" onClick={() => navigate('/shop')} sx={{ borderRadius: '12px', height: '48px', px: 3 }}>
@@ -109,7 +107,7 @@ const ProductDetail = () => {
             <Typography fontSize={56} mb={1}>⚠️</Typography>
             <Typography variant="h2" sx={{ mb: 1 }}>Connection Error</Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 4 }}>
-                We couldn't load this product. Please check your connection and try again.
+                We couldn&apos;t load this product. Please check your connection and try again.
             </Typography>
             <Stack direction="row" spacing={2} justifyContent="center">
                 <Button variant="contained" startIcon={<ReplayIcon />} onClick={fetchProduct}

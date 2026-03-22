@@ -1,4 +1,3 @@
-import React from 'react';
 import {
     Container, Typography, Grid, Button, CircularProgress,
     Box, Stepper, Step, StepLabel, Divider, Chip,
@@ -12,7 +11,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import DirectionsBikeIcon from '@mui/icons-material/DirectionsBike';
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import { motion } from 'framer-motion';
-import { useParams, useSearchParams, Link as RouterLink } from 'react-router-dom';
+import { useSearchParams, Link as RouterLink } from 'react-router-dom';
 import { useOrders, ORDER_STATUSES } from '../store/OrderContext';
 import { getPublicUrl } from '../api/axios';
 

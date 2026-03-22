@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { 
     Container, Typography, Grid, Paper, TextField, Button, Box, 
-    Divider, MenuItem, Checkbox, FormControlLabel, RadioGroup, 
-    Radio, FormControl, FormLabel, Stack, Chip, IconButton,
-    Alert, Zoom, Fade, Card
+    Divider, RadioGroup, 
+    Radio, Stack,
+    Fade, Card
 } from '@mui/material';
 import { 
-    HomeOutlined as HomeIcon, 
     Add as AddIcon, 
     CheckCircle as CheckCircleIcon,
     ArrowBack as ArrowBackIcon,
@@ -28,7 +27,7 @@ const Checkout = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const { user } = useAuth();
-    const { cart, fetchCart, clearCart } = useCart();
+    const { cart, fetchCart } = useCart();
     const { createOrder, verifyPayment } = useOrders();
 
     const selectedItemIds = location.state?.selectedItemIds || [];
@@ -362,7 +361,7 @@ const Checkout = () => {
                                     <Typography variant="h5" sx={{ fontWeight: 800 }}>Add a Gift Message</Typography>
                                 </Stack>
                                 <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-                                    Add a personal touch to your gift. We'll print this beautiful note for you.
+                                    Add a personal touch to your gift. We&apos;ll print this beautiful note for you.
                                 </Typography>
                                 <TextField
                                     fullWidth multiline rows={3}

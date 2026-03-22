@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Container, Paper, Typography, TextField, Button, Box, Link, Alert } from '@mui/material';
 import { Link as RouterLink, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../store/AuthContext';
 
 
 import api from '../api/axios';
-import { useEffect } from 'react';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -30,6 +29,7 @@ const Login = () => {
         if (token && user) {
             navigate(from, { replace: true });
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [token, user, navigate]);
 
     const handleSubmit = async (e) => {
@@ -120,7 +120,7 @@ const Login = () => {
 
                 <Box sx={{ mt: 3, textAlign: 'center' }}>
                     <Typography variant="body2">
-                        Don't have an account?{' '}
+                        Don&apos;t have an account?{' '}
                         <Link component={RouterLink} to="/register">Register</Link>
                     </Typography>
                 </Box>

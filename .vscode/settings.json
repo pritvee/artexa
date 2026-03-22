@@ -11,5 +11,7 @@
     "python.analysis.extraPaths": [
         "d:/project/photoframe website/backend"
     ],
-    "python.defaultInterpreterPath": "d:/project/photoframe website/backend/venv/Scripts/python.exe"
+    "python.defaultInterpreterPath": "d:/project/photoframe website/backend/venv/Scripts/python.exe",
+    "snyk.advanced.organization": "cb6e2270-bea6-47e8-a974-1a9b6f723040",
+    "snyk.advanced.autoSelectOrganization": true
 }
