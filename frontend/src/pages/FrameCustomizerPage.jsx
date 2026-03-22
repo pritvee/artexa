@@ -134,7 +134,16 @@ const FrameCustomizerPage = () => {
     }, [history, historyIndex]);
 
     const updateDesign = useCallback((updates) => {
-        const hasChange = Object.keys(updates).some(key => updates[key] !== design[key]);
+        const hasChange = Object.keys(updates).some(key => {
+            const newVal = updates[key];
+            const oldVal = design[key];
+            if (newVal === oldVal) return false;
+            // For objects/arrays, we do a simple string comparison for safety against loops
+            if (typeof newVal === 'object' && newVal !== null) {
+                return JSON.stringify(newVal) !== JSON.stringify(oldVal);
+            }
+            return true;
+        });
         if (hasChange) {
             saveHistory({ ...design, ...updates });
         }

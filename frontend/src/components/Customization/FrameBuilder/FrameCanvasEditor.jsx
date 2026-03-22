@@ -64,7 +64,7 @@ const DraggableSticker = ({
 
 /* ─── DraggableImage sub-component ─── */
 const DraggableImage = ({
-    src, id, x: posX, y: posY, width, height, rotation, clipRect,
+    src, id, x, y, width, height, rotation, clipRect,
     onSelect, onDragEnd, onTransformEnd,
     filter = 'none', matThickness = 0, matColor = '#fff',
     innerBorderColor = '#ffffff',
@@ -134,9 +134,10 @@ const DraggableImage = ({
                         ref={imgRef}
                         id={id}
                         image={img}
-                        x={posX} y={posY}
+                        x={x} y={y}
                         width={width} height={height}
                         rotation={rotation}
+                        draggable={true}
                         filters={getFilters()}
                         brightness={filter === 'vintage' ? 0.1 : 0}
                         onMouseDown={onSelect}
