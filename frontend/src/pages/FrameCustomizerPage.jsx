@@ -181,6 +181,7 @@ const FrameCustomizerPage = () => {
                 uploadedFileUrls: [...cur.uploadedFileUrls, localUrl],
                 originalPaths: [...(cur.originalPaths || []), localUrl]
             });
+            console.log("[DEBUG] Image:", localUrl);
             setSelectedImageIdx(newIdx);
             setSnackbar({ open: true, message: '📸 Photo ready!', severity: 'success' });
         },

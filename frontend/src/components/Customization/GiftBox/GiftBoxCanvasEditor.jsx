@@ -5,7 +5,8 @@ import useImage from 'use-image';
 /* ─── Editable Item on Canvas ─── */
 const EditableItem = ({ dec, isSelected, onSelect, onTransformEnd, itemCfg }) => {
     const shapeRef = useRef();
-    const [img] = useImage(dec.photoUrl || '', 'anonymous');
+    const isBlob = dec.photoUrl && (dec.photoUrl.startsWith('blob:') || dec.photoUrl.startsWith('data:'));
+    const [img] = useImage(dec.photoUrl || '', isBlob ? undefined : 'anonymous');
     const emoji = itemCfg?.emoji || '🎁';
     const label = itemCfg?.name || itemCfg?.label || dec.type;
     const size = dec.size || 40;

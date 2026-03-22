@@ -26,7 +26,8 @@ const MugCanvasEditor = ({
         }
     }, [onTextureUpdate]);
 
-    const [userImage] = useImage(userImageSrc, 'anonymous');
+    const isBlob = userImageSrc && (userImageSrc.startsWith('blob:') || userImageSrc.startsWith('data:'));
+    const [userImage] = useImage(userImageSrc, isBlob ? undefined : 'anonymous');
 
     const CANVAS_W = 800; // Standard mug wrap width ratio
     const CANVAS_H = 360; // Standard mug wrap height ratio

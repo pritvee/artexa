@@ -9,7 +9,8 @@ const DraggableSticker = ({
     item, onSelect, onDragEnd, onTransformEnd 
 }) => {
     // If it's a URL-based sticker (uploaded or pack)
-    const [img] = useImage(item.url || '', 'anonymous');
+    const isBlob = item.url && (item.url.startsWith('blob:') || item.url.startsWith('data:'));
+    const [img] = useImage(item.url || '', isBlob ? undefined : 'anonymous');
     const shapeRef = useRef();
 
     // Re-cache for performance if opacity or shadow changes
@@ -70,7 +71,8 @@ const DraggableImage = ({
     innerBorderColor = '#ffffff',
     onAutoAdjust, onImageLoaded, fitRevision = 0, idx
 }) => {
-    const [img] = useImage(src, 'anonymous');
+    const isBlob = src && (src.startsWith('blob:') || src.startsWith('data:'));
+    const [img] = useImage(src, isBlob ? undefined : 'anonymous');
     const imgRef = useRef();
 
     useEffect(() => {
@@ -454,7 +456,7 @@ const FrameCanvasEditor = ({
     const scale = Math.min((dimensions.width - 40) / CANVAS_W, (dimensions.height - 40) / CANVAS_H);
 
     return (
-        <div ref={containerRef} style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+        <div ref={containerRef} className="w-full max-w-[500px] aspect-square mx-auto" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
             <Stage
                 ref={handleRef}
                 width={CANVAS_W * scale}

@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { Stage, Layer, Rect, Text, Image as KonvaImage, Transformer, Group, Circle, Ellipse, Line } from 'react-konva';
 import useImage from 'use-image';
 import * as THREE from 'three';
@@ -116,8 +116,9 @@ const DraggableDecoration = ({ dec, isSelected, onSelect, onDragEnd, onTransform
 };
 
 /* ─── Photo Card ─── */
-const DraggablePhoto = ({ photo, isSelected, onSelect, onDragStart, onDrag, onDragEnd, onTransformEnd }) => {
-    const [img] = useImage(photo.src, 'anonymous');
+const DraggablePhoto = ({ photo, onSelect, onDragStart, onDrag, onDragEnd, onTransformEnd }) => {
+    const isBlob = photo.src && (photo.src.startsWith('blob:') || photo.src.startsWith('data:'));
+    const [img] = useImage(photo.src, isBlob ? undefined : 'anonymous');
     return (
         <Group
             id={photo.id}
