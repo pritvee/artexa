@@ -75,11 +75,18 @@ async def global_exception_handler(request: Request, exc: Exception):
 async def ensure_cors_for_all_responses(request: Request, call_next):
     response = await call_next(request)
     origin = request.headers.get("origin")
-    if origin in allowed_origins and "access-control-allow-origin" not in {k.lower() for k in response.headers.keys()}:
-        response.headers["Access-Control-Allow-Origin"] = origin
-        response.headers["Access-Control-Allow-Credentials"] = "true"
-        response.headers["Access-Control-Allow-Methods"] = "*"
-        response.headers["Access-Control-Allow-Headers"] = "*"
+    # Always inject CORS on /uploads static files (needed for canvas crossOrigin)
+    is_upload = request.url.path.startswith("/uploads")
+    if origin in allowed_origins:
+        existing = {k.lower() for k in response.headers.keys()}
+        if "access-control-allow-origin" not in existing or is_upload:
+            response.headers["Access-Control-Allow-Origin"] = origin
+            response.headers["Access-Control-Allow-Credentials"] = "true"
+            response.headers["Access-Control-Allow-Methods"] = "*"
+            response.headers["Access-Control-Allow-Headers"] = "*"
+    elif is_upload:
+        # For uploads, also allow requests with no origin (e.g. direct browser fetch)
+        response.headers["Access-Control-Allow-Origin"] = "*"
     return response
 
 app.add_middleware(

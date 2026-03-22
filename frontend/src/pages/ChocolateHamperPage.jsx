@@ -158,15 +158,31 @@ const ChocolateHamperPage = () => {
     const handlePhotoUpload = async (e) => {
         const file = e.target.files[0];
         if (!file) return;
+        // Instant local preview
+        const localUrl = URL.createObjectURL(file);
+        const newPhoto = { id: `photo-${Date.now()}`, url: localUrl, originalUrl: localUrl, x: 100, y: 100, rotation: 0, scale: 0.4 };
+        setPhotos(prev => [...prev, newPhoto]);
+        setSnackbar({ open: true, message: '📸 Photo added!', severity: 'success' });
+
+        // Upload to backend in background (non-blocking)
         setIsUploading(true);
-        const formData = new FormData();
-        formData.append('file', file);
         try {
+            const formData = new FormData();
+            formData.append('file', file);
             const res = await api.post('/products/upload-customization', formData);
-            const url = res.data.image_url || res.data.url;
-            setPhotos(prev => [...prev, { id: `photo-${Date.now()}`, url: getPublicUrl(url), originalUrl: url, x: 100, y: 100, rotation: 0, scale: 0.4 }]);
-            setSnackbar({ open: true, message: 'Photo uploaded!', severity: 'success' });
-        } catch (err) { setSnackbar({ open: true, message: 'Upload failed', severity: 'error' }); } finally { setIsUploading(false); }
+            const serverUrl = res.data.image_url || res.data.url;
+            if (serverUrl) {
+                const absoluteUrl = getPublicUrl(serverUrl);
+                setPhotos(prev => prev.map(p =>
+                    p.id === newPhoto.id
+                        ? { ...p, url: absoluteUrl, originalUrl: serverUrl }
+                        : p
+                ));
+            }
+        } catch (err) {
+            console.warn('[Hamper] Background upload failed:', err);
+            // Keep local preview even if server upload fails
+        } finally { setIsUploading(false); }
     };
 
     const handleAddToCart = async () => {

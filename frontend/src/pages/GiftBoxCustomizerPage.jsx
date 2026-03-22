@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useRef, useEffect, lazy, Suspense } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
+
 import {
     Container, Grid, Box, Typography, Button, Paper, Tabs, Tab,
     Chip, Stack, Divider, TextField, Select, MenuItem, FormControl,
@@ -16,6 +17,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import ColorLensIcon from '@mui/icons-material/ColorLens';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 
@@ -189,18 +191,39 @@ const GiftBoxCustomizerPage = () => {
     const handlePhotoUpload = async (e, itemId) => {
         const file = e.target.files[0];
         if (!file) return;
-        setIsUploading(true);
-        const formData = new FormData();
-        formData.append('file', file);
+        // Instant local preview
+        const localUrl = URL.createObjectURL(file);
+        setFaceDesigns(prev => ({
+            ...prev,
+            insideBox: prev.insideBox.map(item =>
+                item.id === itemId
+                    ? { ...item, photoUrl: localUrl, originalPhotoPath: localUrl }
+                    : item
+            )
+        }));
+        setSnackbar({ open: true, message: '📸 Photo added!', severity: 'success' });
+
+        // Upload to backend in background (non-blocking)
         try {
+            const formData = new FormData();
+            formData.append('file', file);
             const res = await api.post('/products/upload-customization', formData);
-            const url = res.data.image_url || res.data.url;
-            setFaceDesigns(prev => ({
-                ...prev,
-                insideBox: prev.insideBox.map(item => item.id === itemId ? { ...item, photoUrl: getPublicUrl(url), originalPhotoPath: url } : item)
-            }));
-            setSnackbar({ open: true, message: 'Photo added to item!', severity: 'success' });
-        } catch (err) { setSnackbar({ open: true, message: 'Upload failed', severity: 'error' }); } finally { setIsUploading(false); }
+            const serverUrl = res.data.image_url || res.data.url;
+            if (serverUrl) {
+                const absoluteUrl = getPublicUrl(serverUrl);
+                setFaceDesigns(prev => ({
+                    ...prev,
+                    insideBox: prev.insideBox.map(item =>
+                        item.id === itemId
+                            ? { ...item, photoUrl: absoluteUrl, originalPhotoPath: serverUrl }
+                            : item
+                    )
+                }));
+            }
+        } catch (err) {
+            // Keep local preview even if server upload fails
+            console.warn('[GiftBox] Background upload failed:', err);
+        }
     };
 
     const handleAddToCart = async () => {

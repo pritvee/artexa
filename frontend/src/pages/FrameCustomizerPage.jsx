@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, Suspense, lazy, useRef, useMemo } from 'react';
+import useImageUpload from '../hooks/useImageUpload';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
     Box, Typography, Button, CircularProgress,
@@ -167,24 +168,40 @@ const FrameCustomizerPage = () => {
     const handleUndo = () => historyIndex > 0 && (setHistoryIndex(historyIndex - 1), setDesign(history[historyIndex - 1]));
     const handleRedo = () => historyIndex < history.length - 1 && (setHistoryIndex(historyIndex + 1), setDesign(history[historyIndex + 1]));
 
+    const designRef = useRef(design);
+    useEffect(() => { designRef.current = design; }, [design]);
+
+    const { upload: uploadImage } = useImageUpload({
+        onLocalUrl: (localUrl) => {
+            // Instant display – read fresh design from ref to avoid stale closure
+            const cur = designRef.current;
+            const newIdx = cur.uploadedFileUrls.length;
+            updateDesign({
+                uploadedFileUrls: [...cur.uploadedFileUrls, localUrl],
+                originalPaths: [...(cur.originalPaths || []), localUrl]
+            });
+            setSelectedImageIdx(newIdx);
+            setSnackbar({ open: true, message: '📸 Photo ready!', severity: 'success' });
+        },
+        onServerUrl: ({ localUrl, serverUrl }) => {
+            if (!serverUrl) return;
+            const absoluteUrl = getPublicUrl(serverUrl);
+            // Use functional updater on setDesign directly (race-condition safe)
+            setDesign(prev => ({
+                ...prev,
+                uploadedFileUrls: prev.uploadedFileUrls.map(u => u === localUrl ? absoluteUrl : u),
+                originalPaths: (prev.originalPaths || []).map(u => u === localUrl ? serverUrl : u)
+            }));
+        },
+        onError: (msg) => setSnackbar({ open: true, message: msg, severity: 'warning' }),
+        onUploading: setIsUploading,
+    });
+
     const handleImageUpload = async (e) => {
         if (!user) { navigate('/login'); return; }
         const file = e.target.files[0];
         if (!file) return;
-        setIsUploading(true);
-        const formData = new FormData();
-        formData.append('file', file);
-        try {
-            const res = await api.post('/products/upload-customization', formData);
-            const url = res.data.image_url || res.data.url;
-            const absoluteUrl = getPublicUrl(url);
-            updateDesign({ 
-                uploadedFileUrls: [...design.uploadedFileUrls, absoluteUrl], 
-                originalPaths: [...(design.originalPaths || []), url] 
-            });
-            setSelectedImageIdx(design.uploadedFileUrls.length); // Point to the newly uploaded image
-            setSnackbar({ open: true, message: 'Image uploaded!', severity: 'success' });
-        } catch (err) { setSnackbar({ open: true, message: 'Upload failed', severity: 'error' }); } finally { setIsUploading(false); }
+        await uploadImage(file);
     };
 
     useEffect(() => {
@@ -283,9 +300,10 @@ const FrameCustomizerPage = () => {
 
     const memoizedUserImages = useMemo(() => {
         return design.uploadedFileUrls.map(url => {
+            // Blob URLs (instant local preview) must NOT go through getPublicUrl
+            if (url && url.startsWith('blob:')) return url;
             const base = getPublicUrl(url);
-            // Add a cache-buster to prevent browser from using the non-CORS 
-            // cached thumbnail for the CORS-required canvas image.
+            // Add a cache-buster to prevent browser using non-CORS cached version
             return base.includes('?') ? `${base}&t=canvas` : `${base}?t=canvas`;
         });
     }, [design.uploadedFileUrls]);
@@ -414,7 +432,8 @@ const FrameCustomizerPage = () => {
                                         <Typography variant="caption" sx={{ mb: 1, display: 'block' }}>Photo Library (Click to Enhance)</Typography>
                                         <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(80px, 1fr))', gap: 1.5 }}>
                                             {design.uploadedFileUrls.map((url, i) => {
-                                                const displayUrl = getPublicUrl(url);
+                                                // Blob URLs must bypass getPublicUrl
+                                                const displayUrl = url.startsWith('blob:') ? url : getPublicUrl(url);
                                                 
                                                 return (
                                                     <Box 
