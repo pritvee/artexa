@@ -429,7 +429,23 @@ const FrameCustomizerPage = () => {
 
                                 {design.uploadedFileUrls.length > 0 && (
                                     <Box>
-                                        <Typography variant="caption" sx={{ mb: 1, display: 'block' }}>Photo Library (Click to Enhance)</Typography>
+                                        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
+                                            <Typography variant="caption" sx={{ display: 'block' }}>Photo Library (Click to Enhance)</Typography>
+                                            <Button 
+                                                size="small" 
+                                                variant="outlined"
+                                                onClick={() => {
+                                                    const newProps = [...design.imgProps];
+                                                    // Reset props to null so Canvas forces object-fit recalculations
+                                                    design.uploadedFileUrls.forEach((_, idx) => newProps[idx] = null);
+                                                    updateDesign({ imgProps: newProps });
+                                                    setFitRevision(v => v + 1);
+                                                }}
+                                                sx={{ fontSize: '12px', py: 0.2, px: 1, borderRadius: '8px', textTransform: 'none', borderColor: 'rgba(255,255,255,0.2)', color: '#fff' }}
+                                            >
+                                                Auto Adjust Fit
+                                            </Button>
+                                        </Box>
                                         <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(80px, 1fr))', gap: 1.5 }}>
                                             {design.uploadedFileUrls.map((url, i) => {
                                                 // Blob URLs must bypass getPublicUrl
